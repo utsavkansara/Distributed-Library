@@ -1,0 +1,111 @@
+
+CREATE DATABASE `BookShareDB` /*!40100 DEFAULT CHARACTER SET utf8 */
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `emailId` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `dob` datetime DEFAULT NULL,
+  `category` varchar(45) DEFAULT NULL,
+  `parentId` int(11) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `emailId_UNIQUE` (`emailId`),
+  KEY `Parent_Const` (`parentId`),
+  CONSTRAINT `Parent_Const` FOREIGN KEY (`parentId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8
+
+
+CREATE TABLE `book` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `preface` varchar(200) DEFAULT NULL,
+  `isbn` varchar(45) DEFAULT NULL,
+  `genre` varchar(45) DEFAULT NULL,
+  `publisher` varchar(100) DEFAULT NULL,
+  `categoryId` varchar(45) NOT NULL,
+  `date` datetime DEFAULT NULL,
+  `issue` varchar(45) DEFAULT NULL,
+  `edition` varchar(45) DEFAULT NULL,
+  `count` int(11) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `active` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `bookId` int(11) NOT NULL,
+  `confirmationNumber` varchar(45) NOT NULL,
+  `dateOfOrder` datetime DEFAULT NULL,
+  `startDate` datetime DEFAULT NULL,
+  `endDate` datetime DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userRef_idx` (`userId`),
+  KEY `bookRef_idx` (`bookId`),
+  CONSTRAINT `bookRef` FOREIGN KEY (`bookId`) REFERENCES `book` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `userRef` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `payment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) DEFAULT NULL,
+  `cardNumber` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `cvv` varchar(45) DEFAULT NULL,
+  `validTill` datetime DEFAULT NULL,
+  `cardType` varchar(45) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userRef3_idx` (`userId`),
+  CONSTRAINT `userRef3` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `region` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `subbook` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentId` int(11) NOT NULL,
+  `dateSince` datetime DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  `regionId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`,`parentId`),
+  KEY `parentBook_idx` (`parentId`),
+  KEY `regionRef_idx` (`regionId`),
+  CONSTRAINT `parentBook` FOREIGN KEY (`parentId`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `regionRef` FOREIGN KEY (`regionId`) REFERENCES `region` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `address` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `street` varchar(100) DEFAULT NULL,
+  `aptNo` varchar(45) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `zip` varchar(45) DEFAULT NULL,
+  `attachmentId` varchar(100) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userRef1_idx` (`userId`),
+  CONSTRAINT `userRef1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8
