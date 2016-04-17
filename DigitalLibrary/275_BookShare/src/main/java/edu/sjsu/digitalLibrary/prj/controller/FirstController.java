@@ -1,8 +1,13 @@
 package edu.sjsu.digitalLibrary.prj.controller;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +47,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
@@ -59,7 +66,7 @@ import edu.sjsu.digitalLibrary.prjservices.UserRecordService;
 @Controller
 public class FirstController {
 
-    
+    int passwordDiff = 0;
     //private internalCategory homepageModel;
     private user userModel;
     //private book bookModel;
@@ -129,7 +136,7 @@ public class FirstController {
     
    
     @RequestMapping(value = "/signup",method = RequestMethod.POST)
-    public ModelAndView initN1(@ModelAttribute("userdetails")Registration registrationModel, BindingResult bindingResult, 
+    public ModelAndView initN1(@ModelAttribute("userdetails")Registration registrationModel,  BindingResult bindingResult, 
             HttpServletRequest request,  HttpServletResponse response) 
     {
     	
@@ -143,10 +150,64 @@ public class FirstController {
             ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "emailId", "emailId", "emailId cant be empty");
             //ValidationUtils.r
  
+            passwordDiff = 1;
+            if(!registrationModel.getPassword().equals(registrationModel.getConfirmPassword()))
+            	passwordDiff = -1;
+            
+            
+          ///Address Verification
+        	
+        	
+        	ProcessBuilder p=new ProcessBuilder("curl", "-X","POST",
+                     "https://api.easypost.com/v2/addresses", "-u", "Dp8stkYIT525FJjgvk5bXg:", "-d", "verify_strict[]=delivery", "-d",
+                    "address[street1]="+ registrationModel.getStreet(),  "-d", "address[street2]=" + registrationModel.getAptNo() ,
+                    "-d", "address[city]=" + registrationModel.getCity(),
+                    "-d", "address[state]=" + registrationModel.getState() ,"-d", "address[country]=" + registrationModel.getCountry(),
+                    "-d", "address[zip]=" + registrationModel.getZip());
+        	
+        	
+        	Process process = p.start();
+        	
+        	BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(process.getInputStream()));
+
+        	 BufferedReader stdError = new BufferedReader(new
+                     InputStreamReader(process.getErrorStream()));
+           
+            
+            System.out.println("Addess is:");
+            String s;
+            int count = 0;
+            
+            s = stdInput.readLine();
+            System.out.println("Response for address is: " + s);
+            //while ((s = stdInput.readLine()) != null) {
+              //  System.out.println(s);
+            //}
+
+            // read any errors from the attempted command
+            
+//            System.out.println("Here is the standard error of the command (if any):\n");
+//            while ((s = stdError.readLine()) != null) {
+//                System.out.println(s);
+//            }
+            if(process.isAlive())
+            {
+            	process.destroy();
+            	
+            }
+            
+            
+            //converting response to json object
+            JSONObject jsonResponse = new JSONObject(s);
+            
             JPAUserDAO tempEmail = new JPAUserDAO();
-            System.out.println("Email in reg: " + registrationModel.getEmailId());
             
+            for (ObjectError e : bindingResult.getAllErrors())
+            	System.out.println("this is error: " + e.getDefaultMessage());
             
+            int parentId = tempEmail.getExistingEmail(registrationModel.getParentId());
+            System.out.println("Parent email is: " + registrationModel.getParentId() + " , id is: " + parentId);
              
             if(tempEmail.getExistingEmail(registrationModel.getEmailId()) > 0)
             {
@@ -158,11 +219,22 @@ public class FirstController {
             	 return mv1;
             	 
             }	
-            if (bindingResult.hasErrors())
+            if (bindingResult.hasErrors() || parentId == 0 || passwordDiff == -1)
             {
             	System.out.println("Error in form: " + registrationModel.getDob());
                 //returning the errors on same page if any errors..
+            	
                 return new ModelAndView("signup", "userdetails", registrationModel);
+            }
+            if(jsonResponse.has("error"))
+            {
+            	System.out.println("Address is invalid");
+            	ModelAndView mv1 = new ModelAndView();
+           	 	mv1.addObject("msgAddress", "Invalid address");
+                mv1.setViewName("signup");
+           	
+           	 return mv1;
+        	
             }
             else
             {
@@ -174,16 +246,17 @@ public class FirstController {
             	registrationModel.setActiveUser(1);
             	//System.out.println(PlayPP.sha1(registrationModel.getPassword()));
             	registrationModel.setPassword(PlayPP.sha1(registrationModel.getPassword()));
+            	//Date d = new Date();
             	
             	user registerUser = new user();
             	registerUser.setActive(registrationModel.getActiveUser());
             	registerUser.setCategory(registrationModel.getCategory());
-            	registerUser.setDob(registrationModel.getDob());
+            	//registerUser.setDob(new DateregistrationModel.getDob());
             	registerUser.setEmailId(registrationModel.getEmailId());
             	registerUser.setName(registrationModel.getName());
             	registerUser.setPassword(registrationModel.getPassword());
             	//change here
-            	registerUser.setParentId(1);
+            	registerUser.setParentId(parentId);
             	registerUser.setPhone(registrationModel.getPhone());
             	
             	
@@ -217,6 +290,28 @@ public class FirstController {
             	//address Entry Ends
             	
             	
+            	//file upload
+//            	
+//            	if (!file.isEmpty()) {
+//        			try {
+//        			
+//        			
+//        				BufferedOutputStream stream = new BufferedOutputStream(
+//        						new FileOutputStream(new File("/userFiles/" + newUserId + "/" + file.getName())));
+//                        FileCopyUtils.copy(file.getInputStream(), stream);
+//        				stream.close();
+//        				System.out.println("File uploaded");
+//        			}
+//        			catch (Exception e) {
+//        				System.out.println("File not uploaded: " + e.getMessage());
+//        			}
+//        		}
+            	
+            	
+            	///////file upload ends
+            	
+            	
+            	
             	Login loginModel = new Login();
             	ModelAndView model = new ModelAndView("login");
             	
@@ -236,63 +331,64 @@ public class FirstController {
 
     
     @RequestMapping(value = "/editprofile",method = RequestMethod.POST)
-    public Object editProfile(@ModelAttribute("userdetails")user userModel1, BindingResult bindingResult, 
+    public ModelAndView editProfile(@ModelAttribute("userdetails")user userModel1, BindingResult bindingResult, 
             HttpServletRequest request,  HttpServletResponse response) 
     {
+    	
+    	System.out.println("enter to  edit" );
     	if(!sessionService.checkAuth())
     	{
     		System.out.println("chk class wrked!");
     		Login login = new Login();
         	
     		
-    		return "redirect:/login";
+    	    return new ModelAndView("login", "logindetails", login);
     		
     		
     	}
         try 
         {
         	String msg=null;
-           
-            //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"id","id", "id can not be empty.");
-            ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"name","name", "name not be empty");
-            ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "emailId", "emailId", "emailId cant be empty");
-            //ValidationUtils.r
- 
+           int userId = Integer.parseInt(httpSession.getAttribute("USERID").toString());
+            
+            //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"name","name", "name not be empty");
+          
             JPAUserDAO tempEmail = new JPAUserDAO();
             
-            String one = userModel1.getEmailId();
+            
          	
-            if (bindingResult.hasErrors())
-            {
-                //returning the errors on same page if any errors..
-            	 ModelAndView mv1 = new ModelAndView();
-            	 mv1.addObject("userdetails", userModel1);
-            	 mv1.addObject("path", "editprofile");
-                 mv1.setViewName("profileedit");
-            	
-            	 return mv1;
-                
-            }
-            else
-            {
-            	System.out.println("user model details here --" +userModel1.getName()+userModel1.getPhone());
+//            if (bindingResult.hasErrors())
+//            {
+//            	System.out.println("Edit form has error --" +userModel1.getName()+userModel1.getPhone());
+//                //returning the errors on same page if any errors..
+//            	 ModelAndView mv1 = new ModelAndView();
+//            	 mv1.addObject("userdetails", userModel1);
+//            	 mv1.addObject("path", "editprofile");
+//                 mv1.setViewName("profileedit");
+//            	
+//            	 return mv1;
+//                
+//            }
+//            else
+//            {
+            	System.out.println("user edit model details here --" +userModel1.getEmailId());
             	// insert the record by calling the service
             	//userRecordService.insertUser(userModel1);
             	
             	//userModel1.setActive(1);
-            	System.out.println("???? " + userModel1.getId());
+            	System.out.println("???? " + userId);
             	userModel1.setPassword(PlayPP.sha1(userModel1.getPassword()));
             	JPAUserDAO obj= new JPAUserDAO();
             	
             	
-            	user x =obj.getUser(userModel1.getId());
+            	user x =obj.getUser(userId);
             	//userModel1.setUserId(l);
             	
             	
             	
             	x.setActive(1);
-            	//x.setAddress(userModel1.getAddress());
-            	//x.setAge(userModel1.getAge());
+            	x.setCategory(userModel1.getCategory());
+            	x.setDob(userModel1.getDob());
             	x.setName(userModel1.getName());
             	x.setPassword(userModel1.getPassword());
             	x.setPhone(userModel1.getPhone());
@@ -300,23 +396,28 @@ public class FirstController {
             	obj= new JPAUserDAO();
             	obj.update(x);
             	
+        		ModelAndView mv = new ModelAndView();
+        		// getting data
+        		landingPage = new LandingPage();
+        		JPALandingPageDAO obj1 = new JPALandingPageDAO();
+        		landingPage.setBooks(obj1.getBooks());
+        		landingPage.setCategories(obj1.getCategories());
+        		System.out.println(landingPage);
+        		mv.addObject("pagedetails", landingPage);
+        		mv.setViewName("home");
             	
-            	
+        		return mv;
 
             	
-           	 	return new ModelAndView("redirect: /showuser/" + userModel1.getId());
-          }
+           	 	//return new ModelAndView("redirect: /showuser/" + userId);
+          //}
         } catch (Exception e) {
             System.out.println("Exception in FirstController "+e.getMessage());
             e.printStackTrace();
             return new ModelAndView("signup", "userdetails", userModel1);
         }
-        
     }
-
-    
-    
-    
+   
     /*
      * This method loads the homepage on application startup.
      * Works on "/" mapping.     * */
@@ -397,7 +498,7 @@ public class FirstController {
     public String Search(
     		@RequestParam(value ="searchbox", required = true, defaultValue = "C++") String input,
     		HttpServletRequest request,final RedirectAttributes redirectAttributes) {
-    	System.out.println(input);
+    	//System.out.println(input);
     	//List<book> lis = searchService.getAllResults(input);
     	
 		//redirectAttributes.addFlashAttribute("pagedetails", lis);
@@ -407,15 +508,20 @@ public class FirstController {
     	//Search for book in MongoDB
     	List<MongoBook> searchedBooks = new ArrayList<MongoBook>();
     	searchedBooks = searchService.searchBooksInDB(input);
-    	
+    	//System.out.println(" Count is: " + searchedBooks.size());
     	//End of search in MongoDB
     	
     	//Suppose No book is found
     	
     	//Google API implementation
+//    	
+//    	if(searchedBooks.size() > 0)
+//    	{
+//    		for(MongoBook m : searchedBooks)
+//    			System.out.println("Previous searched: " + m.getBookId());
+//    	}
     	
-    	
-    	if(searchedBooks == null)
+    	if(searchedBooks.size() == 0)
     	{
     		searchService.getBooksFromGoogle(input);
     		searchedBooks = searchService.searchBooksInDB(input);
@@ -424,11 +530,11 @@ public class FirstController {
     	
     	
     	//End
-    	if(searchedBooks != null)
-    	{
-    		for(MongoBook m : searchedBooks)
-    			System.out.println("book id searched: " + m.getBookId());
-    	}
+//    	if(searchedBooks.size() > 0)
+//    	{
+//    		for(MongoBook m : searchedBooks)
+//    			System.out.println("after searched: " + m.getBookId());
+//    	}
 		return "redirect:searchResults";
 
     } 

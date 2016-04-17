@@ -565,18 +565,5 @@ public class DBCrud<T> {
 		
 		return result;
 	}
-	public int insertLatestMongoBookId(int id){
-		s = SessionFactoryObj.getSessionFactory();
-		session = s.openSession();
-		session.beginTransaction();
-		Query query = session.createSQLQuery(
-				"update BookId set id=" + id)
-				.addEntity(BookId.class);
-				
-				int  result = Integer.parseInt((String) query.list().get(0));
-		session.close();
-		s.close();
-		
-		return result;
-	}
+	
 }

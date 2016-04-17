@@ -58,17 +58,17 @@ public class SearchServiceImpl implements SearchService {
 		return catDAO.getCategoriesByBookJonCateg();
 	}
  
-    public List<book> getBooksFromGoogle(String value)
+    public void getBooksFromGoogle(String value)
     {
     	
-    	bookDAO.getBooksFromGoogle( value, getLatestBookId());
-    	return null;
+    	 bookDAO.getBooksFromGoogle( value, getLatestBookId());
+    	
     }
 
 	@Override
 	public List<MongoBook> searchBooksInDB(String input) {
-		bookDAO.searchBooksInDB( input);
-		return null;
+		return bookDAO.searchBooksInDB( input);
+		
 	}
 	private int getLatestBookId(){
 		

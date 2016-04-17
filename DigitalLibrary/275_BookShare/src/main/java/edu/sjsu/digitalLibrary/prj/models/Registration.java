@@ -26,7 +26,7 @@ private String name;
 private String phone;
 
 @Column(name = "dob")
-private Date dob;
+private String dob;
 
 
 
@@ -34,7 +34,7 @@ private Date dob;
 private String category;
 
 @Column(name = "parentId")
-private int parentId;
+private String parentId;
 
 
 @Column(name = "active")
@@ -79,11 +79,11 @@ public void setPhone(String phone) {
 	this.phone = phone;
 }
 
-public Date getDob() {
+public String getDob() {
 	return dob;
 }
 
-public void setDob(Date dob) {
+public void setDob(String dob) {
 	this.dob = dob;
 }
 
@@ -95,11 +95,11 @@ public void setCategory(String category) {
 	this.category = category;
 }
 
-public int getParentId() {
+public String getParentId() {
 	return parentId;
 }
 
-public void setParentId(int parentId) {
+public void setParentId(String parentId) {
 	this.parentId = parentId;
 }
 

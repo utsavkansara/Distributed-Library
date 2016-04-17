@@ -21,6 +21,6 @@ public interface SearchService {
 	public List<category> getCategoriesByBookJonCateg();
 	public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh, String [] condition, int [] categories);
 	
-	public List<book> getBooksFromGoogle(String input);
+	public void getBooksFromGoogle(String input);
 	public List<MongoBook> searchBooksInDB(String input);
 }

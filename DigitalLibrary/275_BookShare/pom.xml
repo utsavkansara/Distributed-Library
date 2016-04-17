@@ -126,7 +126,11 @@
       <artifactId>google-api-services-books</artifactId>
       <version>v1-rev57-1.19.0</version>
     </dependency>
-   
+   <dependency>
+	<groupId>org.json</groupId>
+	<artifactId>json</artifactId>
+	<version>20151123</version>
+</dependency>
 	</dependencies>
 <build>
     <sourceDirectory>src</sourceDirectory>

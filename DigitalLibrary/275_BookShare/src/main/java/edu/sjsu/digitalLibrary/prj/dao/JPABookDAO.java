@@ -147,7 +147,7 @@ public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh
 
 //Amazon API implementation
 
-		public List<book> getBooksFromGoogle(String input, int bookId) {
+		public void getBooksFromGoogle(String input, int bookId) {
 			
 			try {
 				MongoCrud db = new MongoCrud("book");
@@ -158,7 +158,7 @@ public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh
 				e1.printStackTrace();
 			}
 		
-			return null	;
+			
 		}
 
 		//Search book in MongoDB
@@ -180,8 +180,13 @@ public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh
 				public int getLatestBookId()
 				{
 					try {
+						
+						BookId bTemp = new BookId();
+						bTemp.setId(1);
+						
 						DBCrud<BookId> db = new DBCrud<BookId>();
-						return db.getLatestMongoBookId();
+						bTemp = db.get(bTemp, 1);
+					    return bTemp.getBookId();
 						
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
@@ -193,8 +198,11 @@ public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh
 				public void insertLatestBookId(int id)
 				{
 					try {
+						BookId bTemp = new BookId();
+						bTemp.setId(1);
+						bTemp.setBookId(id);
 						DBCrud<BookId> db = new DBCrud<BookId>();
-						 db.insertLatestMongoBookId(id);
+						 db.update(bTemp);
 						
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block

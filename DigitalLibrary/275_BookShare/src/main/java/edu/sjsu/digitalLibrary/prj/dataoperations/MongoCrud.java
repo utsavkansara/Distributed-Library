@@ -7,8 +7,10 @@ import java.net.UnknownHostException;
 
 
 
+
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
+
 
 
 //import java.util.List;
@@ -37,6 +39,7 @@ import com.mongodb.ServerAddress;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
+import java.util.regex.Pattern;
 
 public class MongoCrud {
 	public DBCollection dbCollection;
@@ -49,8 +52,7 @@ public class MongoCrud {
 	 DB db;
 	
 	
-	private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
-	  private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
+	
 	  
 	@SuppressWarnings("deprecation")
 	public MongoCrud(String collectionName) throws UnknownHostException{
@@ -64,7 +66,7 @@ public class MongoCrud {
 					
 			db = mongoClient.getDB("booksharedb");
 			//boolean auth = ((Object) db).authenticate("sjsuTeam16", "1234".toCharArray());
-			System.out.println("mongoClient: " + mongoClient.getConnectPoint());
+			//System.out.println("mongoClient: " + mongoClient.getConnectPoint());
 			
 			
 			
@@ -73,13 +75,13 @@ public class MongoCrud {
 		
 		
 		if (dbCollection == null) {
-			System.out.println("I am here to create");
+			//System.out.println("I am here to create");
 			
 			dbCollection = db.createCollection(collectionName, new BasicDBObject("capped",
 					true).append("size", 1048576));
 		}
 		
-		System.out.println("db name const: " + dbCollection.getName());
+		//System.out.println("db name const: " + dbCollection.getName());
 		
 	}
 	
@@ -111,14 +113,14 @@ public class MongoCrud {
 	        .setGoogleClientRequestInitializer(new BooksRequestInitializer(API_KEY))
 	        .build();
 	    // Set query string and filter only Google eBooks.
-	    System.out.println("Query: [" + query + "]");
+	    //System.out.println("Query: [" + query + "]");
 	    List volumesList = books.volumes().list(query);
 	    //volumesList.setFilter("ebooks");
 
 	    // Execute the query.
 	    Volumes volumes = volumesList.execute();
 	    if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
-	      System.out.println("No matches found.");
+	      //System.out.println("No matches found.");
 	      return;
 	    }
 	    
@@ -157,7 +159,8 @@ public class MongoCrud {
 			      
 			      if(volumeInfo.getAverageRating() != null)
 			    	  objBooks.put("rating", volumeInfo.getAverageRating().doubleValue());
-			      
+			      else
+			    	  objBooks.put("rating",0);
 			      authors = volumeInfo.getCategories();
 			      
 			      if (authors != null && !authors.isEmpty()) {
@@ -175,7 +178,11 @@ public class MongoCrud {
 			      objBooks.put("categories", arrayBooks);
 			      objBooks.put("image", volumeInfo.getImageLinks());
 			      objBooks.put("language", volumeInfo.getLanguage());
-			      objBooks.put("pageCount", volumeInfo.getPrintedPageCount());
+			      if(volumeInfo.getPrintedPageCount() == null)
+			    	  objBooks.put("pageCount", 0);
+			      else
+			    	  objBooks.put("pageCount", volumeInfo.getPrintedPageCount());
+			      
 			      objBooks.put("publisher", volumeInfo.getPublisher());
 			      objBooks.put("price", 0.0);
 			      
@@ -184,7 +191,7 @@ public class MongoCrud {
 					
 					
 					 dbCollection = db.getCollection("book");
-					 System.out.println("db name func: " + dbCollection.getName());
+					 //System.out.println("db name func: " + dbCollection.getName());
 					 dbCollection.insert(dbObj);
 			      
 	    }
@@ -192,7 +199,10 @@ public class MongoCrud {
 	    //insert next bookId in SQL DB BookId table
 	    try {
 			DBCrud<BookId> db = new DBCrud<BookId>();
-			 db.insertLatestMongoBookId(bookId);
+			BookId bTemp = new BookId();
+			bTemp = db.get(bTemp, 1);
+			bTemp.setBookId(bookId);
+			db.update(bTemp);
 			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -208,14 +218,15 @@ public class MongoCrud {
 		java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
 		dbCollection = db.getCollection("book");
 
-		
-
+		System.out.println("heelo i reached: " + dbCollection.getCount() + " -- "  + dbCollection.getFullName() + " -- " + searchString);
+		Pattern regex = Pattern.compile(searchString);
 		BasicDBObject query = null;
-		query = new BasicDBObject("title", searchString);
+		query = new BasicDBObject("title", regex);
 
 		DBCursor cursor = dbCollection.find(query);
 		BasicDBObject object = null;
 		MongoBook mTemp = new MongoBook();
+		System.out.println("look this is what i found: " + cursor.count());
 		try {
 			while (cursor.hasNext()) {
 				mTemp = new MongoBook();

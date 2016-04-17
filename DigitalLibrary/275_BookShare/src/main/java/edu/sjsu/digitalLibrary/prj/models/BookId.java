@@ -18,5 +18,34 @@ public class BookId implements Serializable{
 	 @Id 
 	@Column(name = "id")
     private int id;
+	 
+	 
+	 
+		public int getId() {
+		return id;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
+		@Column(name = "BookId")
+	    private int bookId;
+
+
+
+		public int getBookId() {
+			return bookId;
+		}
+
+
+
+		public void setBookId(int bookId) {
+			this.bookId = bookId;
+		}
 
 }
