@@ -45,7 +45,7 @@ public class MongoCrud {
 	public DBCollection dbCollection;
 	
 	static final String API_KEY =
-		      "AIzaSyAMCWf513E9bF6VpSiOL5U9HfoaqBrLi-I";
+		      "**";
 		     // + MongoCrud.class;
 	private static final String APPLICATION_NAME = "bookshare library";
 	 MongoClient mongoClient;
@@ -58,7 +58,7 @@ public class MongoCrud {
 	public MongoCrud(String collectionName) throws UnknownHostException{
 		
 		
-		String dbURI = "mongodb://bookUser:9876543210@ds015750.mlab.com:15750/booksharedb";
+		String dbURI = "**";
 		
 		if(mongoClient == null)
 		{
