@@ -1,0 +1,10 @@
+*.DS_Store
+bin
+*/target/**
+target/
+target
+*/target/*
+.classpath
+.project
+.settings
+src/main/webapp/META-INF

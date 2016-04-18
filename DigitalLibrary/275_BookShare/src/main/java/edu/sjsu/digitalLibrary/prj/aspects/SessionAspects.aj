@@ -1,4 +1,4 @@
-package edu.sjsu.digitalLibrary.prj.aspects;
+/*package edu.sjsu.digitalLibrary.prj.aspects;
 
 
 import javax.servlet.http.HttpSession;
@@ -58,7 +58,7 @@ public aspect SessionAspects {
 		
 	}
 	
-	/*pointcut shareAccessControl1(int a) :
+	pointcut shareAccessControl1(int a) :
 		execution(public ModelAndView edu.sjsu.digitalLibrary.prj.controller.BookController.updateBook(int a));
 	
 	ModelAndView around () : (shareAccessControl1()) {
@@ -89,5 +89,5 @@ public aspect SessionAspects {
 		}
 		return null;
 		
-	}*/
-}
+	}
+}*/
