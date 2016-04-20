@@ -1,6 +1,7 @@
 package edu.sjsu.digitalLibrary.prj.dao;
 
 import java.sql.*;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -83,10 +84,6 @@ public class JPACategoryDAO implements CategoryDAO{
 	}
 
 
-	/*
-	 * Function to delete address from database
-	 * 
-	 */
 	public int getExistingName(String name) {
 		
 		int result = 0;
@@ -119,6 +116,20 @@ public class JPACategoryDAO implements CategoryDAO{
 		return result;
 	}
 
+	public List<category> getCategories() {
+		
+		
+		try {
+			DBCrud<category> db = new DBCrud<category>();
+			return db.getCategories();
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		return null;
+	}
 
 	
 }

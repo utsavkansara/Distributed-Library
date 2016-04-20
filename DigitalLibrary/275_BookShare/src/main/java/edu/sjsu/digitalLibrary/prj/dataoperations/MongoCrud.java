@@ -8,10 +8,13 @@ import java.net.UnknownHostException;
 
 
 
+
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 
 
+
+import edu.sjsu.digitalLibrary.prj.models.category;
 
 //import java.util.List;
 import org.json.simple.JSONArray;
@@ -45,7 +48,7 @@ public class MongoCrud {
 	public DBCollection dbCollection;
 	
 	static final String API_KEY =
-		      "**";
+		      "AIzaSyAMCWf513E9bF6VpSiOL5U9HfoaqBrLi-I";
 		     // + MongoCrud.class;
 	private static final String APPLICATION_NAME = "bookshare library";
 	 MongoClient mongoClient;
@@ -58,7 +61,7 @@ public class MongoCrud {
 	public MongoCrud(String collectionName) throws UnknownHostException{
 		
 		
-		String dbURI = "**";
+		String dbURI = "mongodb://bookUser:9876543210@ds015750.mlab.com:15750/booksharedb";
 		
 		if(mongoClient == null)
 		{
@@ -112,15 +115,12 @@ public class MongoCrud {
 	        .setApplicationName(APPLICATION_NAME)
 	        .setGoogleClientRequestInitializer(new BooksRequestInitializer(API_KEY))
 	        .build();
-	    // Set query string and filter only Google eBooks.
-	    //System.out.println("Query: [" + query + "]");
+	    
 	    List volumesList = books.volumes().list(query);
-	    //volumesList.setFilter("ebooks");
-
-	    // Execute the query.
+	   
 	    Volumes volumes = volumesList.execute();
 	    if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
-	      //System.out.println("No matches found.");
+	      
 	      return;
 	    }
 	    
@@ -161,21 +161,35 @@ public class MongoCrud {
 			    	  objBooks.put("rating", volumeInfo.getAverageRating().doubleValue());
 			      else
 			    	  objBooks.put("rating",0);
-			      authors = volumeInfo.getCategories();
 			      
+			      //Categories
+			      authors = volumeInfo.getCategories();
+			      DBCrud<category> dbCrudCt = new DBCrud<category>();
+			      category cTemp = new category();
+			      int catCount = 0;
 			      if (authors != null && !authors.isEmpty()) {
 			        System.out.print("Category(s): ");
 			        arrayBooks = new JSONArray();
 			        for (int i = 0; i < authors.size(); ++i) {
 			        	arrayBooks.add(authors.get(i));
-			          System.out.print(authors.get(i));
-			          if (i < authors.size() - 1) {
-			            System.out.print(", ");
-			          }
+			        	dbCrudCt = new DBCrud<category>();
+			        	catCount = dbCrudCt.getExistingCategory(authors.get(i));
+			        	if(catCount == 0)
+			        	{
+			        		cTemp = new category();
+			        		cTemp.setActive(1);
+			        		cTemp.setName(authors.get(i));
+			        		dbCrudCt.Insert(cTemp);
+			        	}
+			        	System.out.print(authors.get(i));
+			        	if (i < authors.size() - 1) {
+			        		System.out.print(", ");
+			        	}
 			        }
 			        System.out.println();
 			      }
 			      objBooks.put("categories", arrayBooks);
+			      
 			      objBooks.put("image", volumeInfo.getImageLinks());
 			      objBooks.put("language", volumeInfo.getLanguage());
 			      if(volumeInfo.getPrintedPageCount() == null)
@@ -198,11 +212,11 @@ public class MongoCrud {
 	    
 	    //insert next bookId in SQL DB BookId table
 	    try {
-			DBCrud<BookId> db = new DBCrud<BookId>();
+			DBCrud<BookId> dbCrud = new DBCrud<BookId>();
 			BookId bTemp = new BookId();
-			bTemp = db.get(bTemp, 1);
+			bTemp = dbCrud.get(bTemp, 1);
 			bTemp.setBookId(bookId);
-			db.update(bTemp);
+			dbCrud.update(bTemp);
 			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -218,11 +232,11 @@ public class MongoCrud {
 		java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
 		dbCollection = db.getCollection("book");
 
-		System.out.println("heelo i reached: " + dbCollection.getCount() + " -- "  + dbCollection.getFullName() + " -- " + searchString);
+		//System.out.println("heelo i reached: " + dbCollection.getCount() + " -- "  + dbCollection.getFullName() + " -- " + searchString);
 		Pattern regex = Pattern.compile(searchString);
 		BasicDBObject query = null;
 		query = new BasicDBObject("title", regex);
-
+		BasicDBObject image = null;
 		DBCursor cursor = dbCollection.find(query);
 		BasicDBObject object = null;
 		MongoBook mTemp = new MongoBook();
@@ -235,7 +249,12 @@ public class MongoCrud {
 				 mTemp.setTitle(object.get("title").toString());
 				 mTemp.setDescription(object.get("description").toString());
 				 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
-				 mTemp.setImage(object.get("image").toString());
+				 image = (BasicDBObject)object.get("image");
+				 if(image.containsField("smallThumbnail"))
+					 mTemp.setImage(image.get("smallThumbnail").toString());
+				 else
+					 mTemp.setImage("");
+				 
 				 mTemp.setLanguage(object.get("language").toString());
 				 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
 				 mTemp.setPublisher(object.get("publisher").toString());
@@ -248,6 +267,67 @@ public class MongoCrud {
 		}
 			return searchedBooks;
 	}
-	
+	public java.util.List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc, String[] categories)
+	{
+		java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
+		dbCollection = db.getCollection("book");
+		BasicDBObject image = null;
+		System.out.println("Adv search here: " + auth + " -- "  + publisher + " -- " + desc + "---" + categories.length);
+		Pattern regexAuth = Pattern.compile(auth);
+		Pattern regexPublisher = Pattern.compile(publisher);
+		Pattern regexDesc = Pattern.compile(desc);
+		String categoryPattern = "";
+		int c = 0;
+//		for (String s : categories){
+//			categoryPattern += s;
+//			c++;
+//			if(c != categories.length)
+//				categoryPattern += ",";
+//		}
+		//Pattern regexCategories = Pattern.compile(auth);
+		BasicDBObject query = new BasicDBObject();
+		if(auth != "ALL")
+			query = new BasicDBObject("authors", regexAuth);
+			
+		if(categories[0] != "-1")
+			query.put("categories", new BasicDBObject("$in", categories)); 
+		 
+		 if(publisher != "ALL")
+			 query.put("publisher", regexPublisher);
+		 
+		 if(desc != "ALL")
+			 query.put("description", regexDesc);
+		 
+		 System.out.println("query is:" + query);
+		 
+		DBCursor cursor = dbCollection.find(query);
+		BasicDBObject object = null;
+		MongoBook mTemp = new MongoBook();
+		System.out.println("Adv search found: " + cursor.count());
+		try {
+			while (cursor.hasNext()) {
+				mTemp = new MongoBook();
+				 object = (BasicDBObject) cursor.next();
+				 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
+				 mTemp.setTitle(object.get("title").toString());
+				 mTemp.setDescription(object.get("description").toString());
+				 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 image = (BasicDBObject)object.get("image");
+				 if(image.containsField("smallThumbnail"))
+					 mTemp.setImage(image.get("smallThumbnail").toString());
+				 else
+					 mTemp.setImage("");
+				 mTemp.setLanguage(object.get("language").toString());
+				 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+				 mTemp.setPublisher(object.get("publisher").toString());
+				 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 searchedBooks.add(mTemp);
+			}
+		} finally {
+			cursor.close();
+
+		}
+			return searchedBooks;
+	}
 
 }

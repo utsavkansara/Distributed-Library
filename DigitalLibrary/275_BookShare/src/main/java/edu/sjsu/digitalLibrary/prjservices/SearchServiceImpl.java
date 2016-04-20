@@ -47,9 +47,9 @@ public class SearchServiceImpl implements SearchService {
 		return bookDAO.getResultsByName(input);
 	}
 
-	public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh,
-			String [] condition, int[] categories) {
-		return bookDAO.doAdvanceSearch(auth, priceLow, priceHigh, condition, categories);
+	public List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc,
+			String[] categories) {
+		return bookDAO.doAdvanceSearch(auth, publisher, desc, categories);
 		
 	}
 	
