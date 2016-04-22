@@ -19,7 +19,8 @@ public interface SearchService {
 	public List<book> getResultsByCategory(List<category> cInput);
 	public List<book> getResultsByName(String input);
 	public List<category> getCategoriesByBookJonCateg();
-	public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh, String [] condition, int [] categories);
+	public List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc,
+			String[] categories);
 	
 	public void getBooksFromGoogle(String input);
 	public List<MongoBook> searchBooksInDB(String input);

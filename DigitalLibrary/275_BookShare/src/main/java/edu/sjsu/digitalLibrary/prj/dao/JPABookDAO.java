@@ -35,7 +35,7 @@ public class JPABookDAO implements BookDAO{
 	List<book> listOfbooks = new ArrayList<book>();
 	public int insert(book book) 
 	{
-		System.out.println("in category jpa");
+		//System.out.println("in category jpa");
 		int addressId= 0;
 		try {
 			DBCrud<book> db = new DBCrud<book>();
@@ -131,21 +131,23 @@ public List<book> getResultsByName(String input) {
 
 		return listOfbooks	;
 	}
-public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh,
-		String [] condition, int[] categories) {
+public List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc,
+		String[] categories) {
 	try {
-		DBCrud<book> db = new DBCrud<book>();
-		listOfbooks=  db.doAdvanceSearch(auth, priceLow, priceHigh, condition, categories);
+		
+		
+		MongoCrud db = new MongoCrud("book");
+		return db.doAdvanceSearch(auth, publisher, desc, categories);
 		
 	} catch (Exception e1) {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
 	}
-			return listOfbooks;
+			return null;
 	
 }
 
-//Amazon API implementation
+//Google API implementation
 
 		public void getBooksFromGoogle(String input, int bookId) {
 			

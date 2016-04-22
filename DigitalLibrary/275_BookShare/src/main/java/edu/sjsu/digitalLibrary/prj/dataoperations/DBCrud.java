@@ -52,7 +52,7 @@ public class DBCrud<T> {
 		}
 		else if(obj instanceof category){
 			category s = (category)obj;
-			id = s.getCategoryId();
+			id = s.getId();
 			System.out.println("in crud category " + id);
 		}
 		else if(obj instanceof book){
@@ -209,7 +209,7 @@ public class DBCrud<T> {
 		session = s.openSession();
 		session.beginTransaction();
 
-		Query query = session.createSQLQuery("select * from category").addEntity(category.class);
+		Query query = session.createSQLQuery("select * from category where active = 1").addEntity(category.class);
 		
 		List<category> result = (List<category>)query.list();
 		session.close();
@@ -408,10 +408,10 @@ public class DBCrud<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<book> doAdvanceSearch(String auth, double priceLow, double priceHigh,
-			String [] condition, int[] categories)
+	public List<book> doAdvanceSearch(String auth, String publisher, String desc,
+			int[] categories)
 			{
-		String params="where";
+		/*String params="where";
 		String Cati=" ( ";
 		String Cat="";
 		
@@ -504,7 +504,8 @@ public class DBCrud<T> {
 				s.close();		
 				System.out.println("----" + lbooks.get(0).getBookId());
 				return lbooks;
-		
+		*/
+		return null;
 			}
 
 	public feedback getFeedbackByTransaction(int txId){
@@ -563,6 +564,24 @@ public class DBCrud<T> {
 		session.close();
 		s.close();
 		
+		return result;
+	}
+	
+	
+	
+	////////New Code 04/17/2016
+	public int getExistingCategory(String category){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery(
+				"select * from category where name = :sCode")
+				.addEntity(category.class)
+				.setParameter("sCode", category);
+				int  result = query.list().size();
+		session.close();
+		s.close();
+		System.out.println("category found----" + result);
 		return result;
 	}
 	

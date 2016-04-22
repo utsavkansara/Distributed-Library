@@ -9,8 +9,8 @@
 			<div class="container-fluid">
 				<c:forEach items="${pagedetails}" var="result"> 
           			<div class="col-md-2">
-          				<a href="${pageContext.request.contextPath}/showbook/${result.bookId}">
-							<img class="img-thumbnail" src="${result.pictureId}" width="300" height="200">
+          				<a href="${pageContext.request.contextPath}/showbook/${result.getBookId()}">
+							<img class="img-thumbnail" src="${result.getImage()}" width="300" height="200">
 						</a>
 						<h4><a href="#">${result.title}</a></h4>
 						<p>Price: $${result.getPrice()}</p>

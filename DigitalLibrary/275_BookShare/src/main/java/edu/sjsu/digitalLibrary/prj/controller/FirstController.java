@@ -3,6 +3,7 @@ package edu.sjsu.digitalLibrary.prj.controller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,12 +50,18 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
 import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.category;
+
+import edu.sjsu.digitalLibrary.prj.models.internalCategory;
 import edu.sjsu.digitalLibrary.prj.models.statistics;
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
@@ -181,9 +188,9 @@ public class FirstController {
             
             s = stdInput.readLine();
             System.out.println("Response for address is: " + s);
-            //while ((s = stdInput.readLine()) != null) {
-              //  System.out.println(s);
-            //}
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
 
             // read any errors from the attempted command
             
@@ -437,42 +444,11 @@ public class FirstController {
 		return mv;
     }
     
- //karan code starts
+
 
     	
    
 
-	 //method to testCassandra
-    @RequestMapping(value = "/Cassandra",method = RequestMethod.GET)
-    public ModelAndView initN09() {
-    	
-    	CassandraConnectionDAO.testCassandra();
-		
-		
-		
-    	return initN();
-    }
-    
-    //method to testredis
-    @RequestMapping(value = "/Redis",method = RequestMethod.GET)
-    public ModelAndView initN10() {
-    	
-    	/*CassandraConnectionDAO.testCassandra();
-    	userModel = new user();
-    	jedis=new Jedis("localhost");
-		jedis.connect();
-		System.out.println("Successfully connected to the redis server");
-		String [] Kar={"karan khanna","sjsu","se"};
-		System.out.println(Kar);
-		jedis.set("karan", "khanna");
-		System.out.println("saving in redis");
-		System.out.println("getting from redis---" + jedis.get("karan"));*/
-		
-		
-		
-       return initN();
-    }
-	//karan code ends
    
     //method to search
     @SuppressWarnings("unchecked")
@@ -495,31 +471,17 @@ public class FirstController {
     } 
     
     @RequestMapping(value = "/search",method = RequestMethod.GET)
-    public String Search(
+    public Object Search(
     		@RequestParam(value ="searchbox", required = true, defaultValue = "C++") String input,
     		HttpServletRequest request,final RedirectAttributes redirectAttributes) {
-    	//System.out.println(input);
-    	//List<book> lis = searchService.getAllResults(input);
-    	
-		//redirectAttributes.addFlashAttribute("pagedetails", lis);
-    	
-    	
     	
     	//Search for book in MongoDB
     	List<MongoBook> searchedBooks = new ArrayList<MongoBook>();
     	searchedBooks = searchService.searchBooksInDB(input);
-    	//System.out.println(" Count is: " + searchedBooks.size());
-    	//End of search in MongoDB
     	
-    	//Suppose No book is found
-    	
-    	//Google API implementation
-//    	
-//    	if(searchedBooks.size() > 0)
-//    	{
-//    		for(MongoBook m : searchedBooks)
-//    			System.out.println("Previous searched: " + m.getBookId());
-//    	}
+    	//End of search in MongoDB    	
+    	//Suppose No book is found    	
+    	//Google API implementation   	
     	
     	if(searchedBooks.size() == 0)
     	{
@@ -529,37 +491,36 @@ public class FirstController {
     	}
     	
     	
-    	//End
-//    	if(searchedBooks.size() > 0)
-//    	{
-//    		for(MongoBook m : searchedBooks)
-//    			System.out.println("after searched: " + m.getBookId());
-//    	}
-		return "redirect:searchResults";
+    	
+    	ModelAndView mv = new ModelAndView();
+    	mv.addObject("pagedetails", searchedBooks);
+  		mv.setViewName("searchResults");
+  		return mv;
 
     } 
-    
     
     @RequestMapping(value = "/advanceSearch",method = RequestMethod.GET)
     public Object SearchA( 
     		HttpServletRequest request) {
     	
     	System.out.println("in advance search get");
-    	//List<category> cat = new ArrayList<category>();
-    	//cat =searchService.getCategoriesByBookJonCateg();
     	
-    //	internalCategory cobj = new internalCategory();
+    	int len =0;
+    	JPACategoryDAO jpaCat = new JPACategoryDAO();
+    	internalCategory cTemp = new internalCategory();
+
+    	List<category> lst = jpaCat.getCategories();
+    	String[] catToDisplay = new String[lst.size()];
+    	for (category c : lst)
+    	{
+    		catToDisplay[len] = c.getName();
+  		
+    		len++;
+    	}
     	
-    	//List<internalCategory> clist = new ArrayList<internalCategory>();
-    	//clist=cobj.change(cat);
-    	
-    	
-    	
-    	//cobj.setCm(clist);
-    	
+    	cTemp.setCatName(catToDisplay);
     	ModelAndView mv = new ModelAndView();
-    	
-    	//mv.addObject("advanceSearchDetails", cobj);
+    	mv.addObject("advanceSearchDetails", cTemp);
   		mv.setViewName("advanceSearch");
   		return mv;
 
@@ -569,89 +530,73 @@ public class FirstController {
     public Object SearchAR(
     		@RequestParam(value ="byAuthChkBox", defaultValue = "Def") String byAuthChkBox,
     		@RequestParam(value ="byAuthTxt",  defaultValue = "Def") String byAuthTxt,
-    		@RequestParam(value ="byCondChkBox",  defaultValue = "Def") String byCondChkBox,
-    		@RequestParam(value ="oldCondCheckbox",  defaultValue = "Def") String oldCondCheckbox,
-    		@RequestParam(value ="newCondCheckbox",  defaultValue = "Def") String newCondCheckbox,
-    		@RequestParam(value ="byPricChkBox",  defaultValue = "Def") String byPricChkBox,
-    		@RequestParam(value ="byPriceLowerTxt",  defaultValue = "0.0") String byPriceLowerTxt,
-    		@RequestParam(value ="byPriceUpperTxt",  defaultValue = "0.0") String byPriceUpperTxt,
+    		
+    		@RequestParam(value ="byPubChkBox",  defaultValue = "Def") String byPubChkBox,
+    		@RequestParam(value ="byPubTxt",  defaultValue = "") String byPubTxt,
+    		
+    		@RequestParam(value ="byDescTxt",  defaultValue = "") String byDescTxt,
+    		@RequestParam(value ="byDescChkBox",  defaultValue = "Def") String byDescChkBox,
+    		
     		@RequestParam(value ="byCategChkBoxP",  defaultValue = "Def") String byCategChkBoxP,
-    	//	@ModelAttribute("advanceSearchDetails")internalCategory cobj,
+    		@ModelAttribute("advanceSearchDetails")internalCategory cTemp,
     		
     		
     		HttpServletRequest request) {
     	
-    	System.out.println("in advancesearch post");
-    	double priceLow=00.00,priceHigh=00.00;
-    	int [] catArray={-1};
+    	
+    	
+    	String [] catArray= new String[cTemp.getCatName().length];
     	String [] condi= new String[2];
     	condi[0]="ALL";
     	if(byAuthChkBox.equalsIgnoreCase("Def")) {
-    		System.out.println("not checked");
+    		
     		byAuthTxt="ALL";
     		System.out.println(byAuthTxt+"  auth name not picked dude");
     	}
+    	else
+    		System.out.println(byAuthTxt+"   picked dude");
     	
-    	//condition input parsing starts
-    	if(byCondChkBox.equalsIgnoreCase("Def")) {
-    		System.out.println("cond. not checked");
-    		newCondCheckbox="ALL";
-    		oldCondCheckbox="ALL";
-    		condi[0]="ALL";
-    		System.out.println(newCondCheckbox+"---new cond,old cond---"+oldCondCheckbox);
+    	if(byPubChkBox.equalsIgnoreCase("Def")) {
+    		
+    		byPubTxt="ALL";
+    		System.out.println(byPubTxt+"  pub name not picked dude");
     	}
+    	else
+    		System.out.println(byPubTxt+"   pub name picked dude");
     	
-    	if((!(byCondChkBox.equalsIgnoreCase("Def"))) && (!(newCondCheckbox.equalsIgnoreCase("Def"))) && (!(oldCondCheckbox.equalsIgnoreCase("Def")))) {
-    		condi[0]="New";
-    		condi[1]="Old";
+    	if(byDescChkBox.equalsIgnoreCase("Def")) {
+    		
+    		byDescTxt="ALL";
+    		System.out.println(byDescTxt+"  Desc name not picked dude");
     	}
+    	else
+    		System.out.println(byDescTxt+"   Desc name picked dude");
     	
-    	if((!(byCondChkBox.equalsIgnoreCase("Def"))) && (newCondCheckbox.equalsIgnoreCase("Def")) && (!(oldCondCheckbox.equalsIgnoreCase("Def")))) {
-    		condi[0]="Old";
-    		condi[1]="Old";
-    	}
     	
-    	if((!(byCondChkBox.equalsIgnoreCase("Def"))) && (!(newCondCheckbox.equalsIgnoreCase("Def"))) && (oldCondCheckbox.equalsIgnoreCase("Def"))) {
-    		condi[0]="New";
-    		condi[1]="New";
-    	}
-    	//condition input parsing ends
-    	
-    	if(byPricChkBox.equalsIgnoreCase("Def")) {
-    		System.out.println("price. not checked");
-    		byPriceLowerTxt="ALL";
-    		byPriceUpperTxt="ALL";
-    		priceHigh=00.00;
-    		priceLow=00.00;
-    		System.out.println(priceHigh+"---hgh price cond,low price---"+priceLow);
-    	}
-    	
-    	if(!(byPricChkBox.equalsIgnoreCase("Def"))) {
-    		priceHigh=Double.parseDouble(byPriceUpperTxt)+00.00;
-    		priceLow=Double.parseDouble(byPriceLowerTxt)+00.00;
-    	}
-    	
-    	//byCategChkBoxP
     	
     	if(byCategChkBoxP.equalsIgnoreCase("Def")) {
     		System.out.println("cat. not checked");
-    		catArray[0]=-1;
+    		//catArray[0]=-1;
+    	}
+    	else {
+    		int len = 0;
+    		
+	    	for (String categ : cTemp.getCatName()) {
+	    			System.out.println("cat selected is:" + categ);
+	        		//if(categ.getSelected() == true)
+	        			catArray[len] = categ;
+	        			len++;
+	    		}
+    		
     	}
     	
-    	if(!(byCategChkBoxP.equalsIgnoreCase("Def"))) {
-    	//	for (int categ : cobj.getSlist()) {
-        		//System.out.println(categ);
-    		//}
-    	//	catArray=cobj.getSlist();
-    	}
+    	List<MongoBook> lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt, catArray);
+    	System.out.println("advanceSearch result size " + lb.size());
     	
-    	//List<book> lb = searchService.doAdvanceSearch(byAuthTxt, priceLow, priceHigh, condi, catArray);
-    /*	System.out.println("advanceSearch result size " + lb.size());
-    	System.out.println(lb.get(0).getAuthor());
+    	
     	
     	ModelAndView mv = new ModelAndView();
-    	mv.addObject("pagedetails", lb);*/
-    	ModelAndView mv = new ModelAndView();
+    	mv.addObject("pagedetails", lb);
   		mv.setViewName("searchResults");
   		return mv;
     }
