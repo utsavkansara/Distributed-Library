@@ -9,10 +9,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import redis.clients.jedis.Jedis;
 
@@ -188,9 +192,7 @@ public class FirstController {
             
             s = stdInput.readLine();
             System.out.println("Response for address is: " + s);
-            while ((s = stdInput.readLine()) != null) {
-                System.out.println(s);
-            }
+           
 
             // read any errors from the attempted command
             
@@ -228,6 +230,7 @@ public class FirstController {
             }	
             if (bindingResult.hasErrors() || parentId == 0 || passwordDiff == -1)
             {
+            	System.out.println(bindingResult);
             	System.out.println("Error in form: " + registrationModel.getDob());
                 //returning the errors on same page if any errors..
             	
@@ -258,7 +261,14 @@ public class FirstController {
             	user registerUser = new user();
             	registerUser.setActive(registrationModel.getActiveUser());
             	registerUser.setCategory(registrationModel.getCategory());
-            	//registerUser.setDob(new DateregistrationModel.getDob());
+            	
+            	DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            	format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+
+            	java.util.Date date = format.parse(registrationModel.getDob());
+
+            	java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            	registerUser.setDob(sqlDate);
             	registerUser.setEmailId(registrationModel.getEmailId());
             	registerUser.setName(registrationModel.getName());
             	registerUser.setPassword(registrationModel.getPassword());
