@@ -167,13 +167,15 @@ public class MongoCrud {
 			      DBCrud<category> dbCrudCt = new DBCrud<category>();
 			      category cTemp = new category();
 			      int catCount = 0;
+			      String ctTmp = "";
 			      if (authors != null && !authors.isEmpty()) {
 			        System.out.print("Category(s): ");
 			        arrayBooks = new JSONArray();
 			        for (int i = 0; i < authors.size(); ++i) {
 			        	arrayBooks.add(authors.get(i));
+			        	ctTmp  =authors.get(i);
 			        	dbCrudCt = new DBCrud<category>();
-			        	catCount = dbCrudCt.getExistingCategory(authors.get(i));
+			        	catCount = dbCrudCt.getExistingCategory(ctTmp);
 			        	if(catCount == 0)
 			        	{
 			        		cTemp = new category();
@@ -328,6 +330,44 @@ public class MongoCrud {
 
 		}
 			return searchedBooks;
+	}
+	
+	
+	public  MongoBook searchBooksInDBWithBookId(String bookId) throws Exception {
+		
+		dbCollection = db.getCollection("book");
+		BasicDBObject query = null;
+		query = new BasicDBObject("bookId", bookId);
+		BasicDBObject image = null;
+		DBCursor cursor = dbCollection.find(query);
+		BasicDBObject object = null;
+		MongoBook mTemp = new MongoBook();
+		System.out.println("Particular found: " + cursor.count());
+		try {
+			if (cursor.hasNext()) {
+				mTemp = new MongoBook();
+				 object = (BasicDBObject) cursor.next();
+				 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
+				 mTemp.setTitle(object.get("title").toString());
+				 mTemp.setDescription(object.get("description").toString());
+				 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 image = (BasicDBObject)object.get("image");
+				 if(image.containsField("smallThumbnail"))
+					 mTemp.setImage(image.get("smallThumbnail").toString());
+				 else
+					 mTemp.setImage("");
+				 
+				 mTemp.setLanguage(object.get("language").toString());
+				 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+				 mTemp.setPublisher(object.get("publisher").toString());
+				 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 
+			}
+		} finally {
+			cursor.close();
+
+		}
+			return mTemp;
 	}
 
 }
