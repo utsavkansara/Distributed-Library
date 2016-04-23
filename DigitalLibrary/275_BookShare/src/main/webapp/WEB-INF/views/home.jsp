@@ -56,17 +56,23 @@
                         <li class="divider"></li>
                         <li><a href="#">Sign Up</a></li>
                     </ul><!-- /.login-list -->	
-                    <form role="form" class="inner-top-50">
+                    <!-- <form role="form" class="inner-top-50" id="login" action="login" method="post" commandName="logindetails"> -->
+                    <form role="form" class="inner-top-50" id="login">
                         <div class="form-group">
                             <label for="exampleInputEmail1" class="sr-only">Email address</label>
-                            <input type="email" class="form-control bookshop-form-control" id="exampleInputEmail1" placeholder="Hezy Theme">
+                            <input type="email" class="form-control bookshop-form-control" id="userEmail" name="userEmail" placeholder="Enter Email ID here" required="true">
+                            <!-- <font color="red"><form:errors path="userEmail" required="true"></form:errors></font> 
+				  			<font color="red"><form:errors path="userEmail"></form:errors></font> -->
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1" class="sr-only">Password</label>
-                            <input type="password" class="form-control bookshop-form-control" id="exampleInputPassword1">
+                            <input type="password" class="form-control bookshop-form-control" id="password" name="password" placeholder="Enter password here" required="true">
+                            <%-- <font color="red"><form:errors path="password"></form:errors></font>
+				  			<font color="red"><label>${msg}</label></font> --%>
                         </div>
-
-                        <button type="button" class="btn btn-primary btn-uppercase">Login</button>
+						
+						<button id="singlebutton" name="singlebutton" class="btn btn-primary btn-uppercase" type="submit">Sign In</button>
+                        <!-- <button type="button" class="btn btn-primary btn-uppercase">Login</button> -->
                         <a href="#" class='forgot-password'>forgot password</a>
                     </form>
                 </div>
@@ -74,10 +80,10 @@
             <div class="modal-footer">
                 <div class="text-center">
                     <ul class='social-list text-center'>
-                        <li><a href="#" class="facebook"></a></li>
+                        <!-- <li><a href="#" class="facebook"></a></li>
                         <li><a href="#" class="google-plus"></a></li>
                         <li><a href="#" class="twitter"></a></li>
-                        <li><a href="#" class="pinterest"></a></li>
+                        <li><a href="#" class="pinterest"></a></li> -->
                     </ul><!-- /.social-list -->
                 </div>
             </div><!-- /.modal-footer -->
@@ -1214,3 +1220,41 @@
 	</div> --%>
 </body>
 </html>
+
+<script>
+
+ $(document).ready(function() {
+	
+	$('#login').submit(function(event) {
+		
+		var search = {}
+		search["userEmail"] = $("#userEmail").val();
+		search["password"] = $("#password").val();
+		
+		$.ajax({
+			type: "POST",
+			contentType : "application/json",
+	        url: "/Distributed-Library/login",	        
+	        data: JSON.stringify(search),
+	        dataType : 'json',
+	        timeout : 100000,
+	        complete: function(data) {
+	        	alert(JSON.stringify(data));
+	            if(data.responseJSON.status == "OK") {
+	            	alert('Person has been added');
+	            	$('#modal-login-big').modal('hide');
+	            }
+	            else {
+	            	alert('Failed adding person: ' + data.status + ', ' + data.errorMessage);
+	     
+	            }
+	        }
+			
+	    });
+		 event.preventDefault(); 
+		
+	})
+	
+}) 
+
+</script>
