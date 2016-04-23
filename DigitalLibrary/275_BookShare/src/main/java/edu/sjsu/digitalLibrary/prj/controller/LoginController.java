@@ -4,32 +4,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import edu.sjsu.digitalLibrary.prj.dao.*;
-import edu.sjsu.digitalLibrary.prj.dataoperations.MongoCrud;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import edu.sjsu.digitalLibrary.prj.dao.JPALoginDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
+import edu.sjsu.digitalLibrary.prj.jsonview.Views;
+import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
 import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.LoginSample;
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
-import edu.sjsu.digitalLibrary.prjservices.UserRecordService;
  
 
-@Controller
+@RestController
 public class LoginController {
     
 	Login loginModel;
@@ -51,7 +49,18 @@ public class LoginController {
     	return new ModelAndView("login", "logindetails", loginModel);
     }
     
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    
+    @JsonView(Views.Public.class)
+    @RequestMapping(value="/login", method=RequestMethod.POST)
+	public JsonResponse createSmartphone(@RequestBody LoginSample smartphone) {
+    	
+    	JsonResponse response = new JsonResponse();
+    	response.setStatus("OK");
+    	response.setErrorMessage("");
+    	return response;
+	}
+    
+    @RequestMapping(value = "/login1",method = RequestMethod.POST)
     public ModelAndView recieveCategory(@ModelAttribute("logindetails")Login loginModel1, BindingResult bindingResult, 
             HttpServletRequest request,  HttpServletResponse response) 
     {
