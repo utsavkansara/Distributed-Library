@@ -54,6 +54,13 @@ public class SearchServiceImpl {
 		return bookDAO.searchBooksInDB( input);
 		
 	}
+	
+	public MongoBook searchBooksInDBByID(String input) {
+		return bookDAO.searchBooksInDBByID( input);
+		
+	}
+	
+	
 	private int getLatestBookId(){
 		
 		return bookDAO.getLatestBookId();
