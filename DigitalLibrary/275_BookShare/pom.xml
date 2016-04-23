@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ecomm</groupId>
+	<groupId>edu.sjsu</groupId>
 	<artifactId>Distributed-Library</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -9,6 +9,7 @@
 
 	<properties>
 		<spring.version>4.0.1.RELEASE</spring.version>
+		<jackson.version>2.6.3</jackson.version>
 	</properties>
 	 <dependencies>
 	  <dependency>
@@ -139,6 +140,19 @@
         <scope>provided</scope>
     </dependency>
     
+    	<!-- Need this for json to/from object -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+    
 	</dependencies>
 <build>
     <sourceDirectory>src</sourceDirectory>
@@ -160,7 +174,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>275_BookShare</finalName>
+    <finalName>Distributed-Library</finalName>
   </build>
 	
 </project>

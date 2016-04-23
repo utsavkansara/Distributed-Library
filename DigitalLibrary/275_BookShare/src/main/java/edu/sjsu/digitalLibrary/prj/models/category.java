@@ -14,39 +14,34 @@ import javax.persistence.Id;
 @Entity
 public class category implements Serializable {
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 
-
-	/**
-	 * 
-	 */
 	
-	// Persistent Fields:
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CategoryID")
-    private int category_Id = 5;
+
+
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+    private int id;
     
     
     
-    @Column(name = "Name", length = 200)
+    @Column(name = "name", length = 45)
     private String name;
     
 	
-    @Column(name = "Active")
+    @Column(name = "active")
     private int active;
 
 
-	public int getCategoryId() {
-		return category_Id;
+	public int getId() {
+		return id;
 	}
 
 
-	public void setCategoryId(int categoryId) {
-		this.category_Id = categoryId;
+	public void setId(int categoryId) {
+		this.id = categoryId;
 	}
 
 

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="edu.sjsu.digitalLibrary.prj.models.book" %>
+<%@ page import="edu.sjsu.digitalLibrary.prj.models.MongoBook" %>
 <jsp:include page="navbar.jsp" />
 <html>
 <head>
@@ -79,6 +79,8 @@
 </head>
 
 <body>
+<% MongoBook Book = (MongoBook)request.getAttribute("bookdetails"); 
+%>
 	<div class="container-fluid">
 		<div class="table-responsive col-md-6">
 			<div class="panel panel-primary">
@@ -86,7 +88,7 @@
 				<table class="table">					
 					<tr class="active">
 					    <td colspan="3">
-					  		<img src="${bookdetails.pictureId}" height="100" width="100">
+					  		<img src="${bookdetails.getImage()}" height="100" width="100">
 					    </td>
 					</tr>
 					
@@ -102,15 +104,17 @@
 					
 					<tr class="info">
 					    <td><label>Author</label></td>
-					    <td><label>${bookdetails.author}</label></td>
+					    <td>
+					    <ul>
+					    	<c:forEach var="authorValue" items="${bookdetails.getAuthors()}">
+							<li>${authorValue}</li>
+							</c:forEach>
+						</ul>
+						</td>
 					    <td></td>
 					</tr>
 					
-					<tr class="info">
-					    <td><label>ISBN</label></td>
-					    <td><label>${bookdetails.isbn}</label></td>
-					    <td></td>
-					</tr>
+					
 					
 					<tr class="info">
 					    <td><label>Description</label></td>
@@ -118,53 +122,59 @@
 					    <td></td>
 					</tr>
 					 
-					<tr class="info">
-					    <td><label>Price</label></td>
-					    <td><label>${bookdetails.price}</label></td>
-					    <td></td>
-					</tr>
+					
 					
 					<tr class="info">
-					    <td><label>Condition</label></td>
-					    <td><label>${bookdetails.condition}</label></td>
+					    <td><label>Rating</label></td>
+					    <td><label>${bookdetails.rating}</label></td>
 					    <td></td>
 					    
 					</tr>
 					
 					<tr class="info">
-					    <td><label>Keywords</label></td>
-					    <td><label>${bookdetails.keywords}</label></td>
+					    <td><label>Language</label></td>
+					    <td><label>${bookdetails.language}</label></td>
 					    <td></td>
+					    
+					</tr>
+					
+					
+					<tr class="info">
+					    <td><label>Publisher</label></td>
+					    <td><label>${bookdetails.publisher}</label></td>
+					    <td></td>
+					    
 					</tr>
 					
 					<tr class="info">
-					    <td><label>Category</label></td>
-					    <td><label id="cati">${catId}</label></td>
+					    <td><label>Page Count</label></td>
+					    <% if(0 == Book.getPageCount()){ %>
+					    	<td><label>${bookdetails.pageCount}</label></td>
+					    <% } else {%>
+							<td><label>No Info available</label></td>
+						<% } %>
 					    <td></td>
+					    
 					</tr>
 					
 					<tr class="info">
-					    <td><label>Uploader</label></td>
-					    <% if(null == session.getAttribute("USERID")){ %>
-					    	<td><label>${bookdetails.getUserId().getName()}</label></td>
-					    <% } else { %>
-					    	<td><label><a href="${pageContext.request.contextPath}/showuser/${bookdetails.getUserId().getUserId()}" role="button">${bookdetails.getUserId().getName()}</a></label></td>
-					    <% } %>
+					    <td><label>Categories</label></td>
+					    <td>
+					    <ul>
+					    	<c:forEach var="catValue" items="${bookdetails.getCategories()}">
+							<li>${catValue}</li>
+							</c:forEach>
+						</ul>
+						</td>
 					    <td></td>
 					</tr>
-					<% book Book = (book)request.getAttribute("bookdetails"); 
-					   int ownerId = Book.getUserId().getId();
-					   String bookStatus = Book.getStatus(); %>
 					
-					<% if(null == session.getAttribute("USERID")){ %>
-						    <td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/login" role="button">Log in to Buy</a>
-					<% } else if(ownerId == Integer.parseInt(session.getAttribute("USERID").toString())){ %>
-						    <td colspan="2" align="right"><input type="submit" class="btn btn-md btn-primary" id="edit" value="Edit" onClick="javascript: RedirectToEdit();"></td>
-		            <% } else if(bookStatus.equalsIgnoreCase("sold")){ %>
-							<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook" role="button">Make a request</a>
-					<% } else {%>
-							<td colspan="2" align="right"><input type="submit" class="btn btn-md btn-primary" value="Buy" onClick="javascript: RedirectToBuy();" ></td>
-					<% } %>
+					
+					
+					
+					
+					
+					
 					
 					<tr>
 					    <td colspan="3" align="center"><font color="red"><form:errors /></font></td>
@@ -173,22 +183,6 @@
 			</div>
 		</div>
 	    	
-		<div class="table-responsive col-md-6">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Pickup Address</div>
-				<table class="table table-striped">
-					
-		    		<tr>
-					    <td><label>${bookdetails.pickupAddress}</label></td>
-						<input type="hidden" id="address" value="${bookdetails.pickupAddress}"></input></td>
-					</tr>
-
-		    		<tr>
-						<td><div id="map_container" align="center"></div></td>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</div>
+		
 </body>
 </html>

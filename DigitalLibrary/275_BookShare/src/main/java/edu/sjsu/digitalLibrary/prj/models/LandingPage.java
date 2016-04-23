@@ -10,7 +10,7 @@ import java.util.List;
 
 public class LandingPage {
 	private List<category> categories;
-	private List<book> books;
+	
 	
 	public List<category> getCategories() {
 		return categories;
@@ -20,11 +20,5 @@ public class LandingPage {
 		categories = categoriesI;
 	}
 	
-	public List<book> getBooks() {
-		return books;
-	}
 	
-	public void setBooks(List<book> booksI) {
-		books = booksI;
-	}
 }

@@ -144,8 +144,8 @@
 			<div class="form-group">
 				<label class="col-md-4 control-label" for="textinput">Confirm password</label> 
 				<div class="col-md-7">
-					<input id="confirmpassword" name="confirmpassword" type="password" placeholder="Enter your password again" class="form-control input-md">
-					<font color="red"><form:errors path="confirmpassword" ></form:errors></font> 
+					<input id="confirmPassword" name="confirmPassword" type="password" placeholder="Enter your password again" class="form-control input-md">
+					<font color="red"><form:errors path="confirmPassword" ></form:errors></font> 
 				</div>
 			</div>
 			
