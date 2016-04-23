@@ -75,13 +75,29 @@ public List<MongoBook> doAdvanceSearch(String auth, String publisher, String des
 		
 			
 		}
-		//Search book in MongoDB
+		//Search books in MongoDB
 
 				public List<MongoBook> searchBooksInDB(String input) {
 					
 					try {
 						MongoCrud db = new MongoCrud("book");
 						return db.searchBooksInDB(input);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+					return null	;
+				}
+				
+				//Search book with book id in MongoDB
+
+				public MongoBook searchBooksInDBByID(String input) {
+					
+					try {
+						MongoCrud db = new MongoCrud("book");
+						return db.searchBooksInDBByID(input);
 						
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block

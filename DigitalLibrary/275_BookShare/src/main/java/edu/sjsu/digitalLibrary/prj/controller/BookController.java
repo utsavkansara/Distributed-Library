@@ -57,6 +57,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
@@ -64,13 +66,11 @@ import edu.sjsu.digitalLibrary.prj.models.Registration;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
 import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.category;
-
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
-
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
-
+import edu.sjsu.digitalLibrary.prjservices.SearchServiceImpl;
 import edu.sjsu.digitalLibrary.prjservices.UserRecordService;
  
 @SuppressWarnings("unused")
@@ -95,33 +95,22 @@ public class BookController {
     
    	private MongoBook bookModel;
    	
+   	private SearchServiceImpl searchService= new SearchServiceImpl();
+   	
     @RequestMapping(value = "/showbook/{bookId}",method = RequestMethod.GET)
     public ModelAndView showBook(@PathVariable int bookId, HttpServletRequest request) {
     	
     	ModelAndView mv = new ModelAndView();
-    	bookModel = new MongoBook();
     	
-    	bookModel.setBookId(bookId);
-    	List<MongoBook> lstBooks = (List<MongoBook>)httpSession.getAttribute("SEARCHEDBOOKS");
+    	bookModel = searchService.searchBooksInDBByID(bookId + "");
     	
-    	if(lstBooks.contains(bookModel))
-    	{
-    		bookModel = lstBooks.get(lstBooks.indexOf(bookModel));
-    	}
-    	
-    	//JPABookDAO obj= new JPABookDAO();
-    	//bookModel = obj.getBook(bookId);
     	System.out.println("Book User ID: " +bookModel.getPublisher() );
-		System.out.println("going: " +bookModel.getBookId() );
+		System.out.println("going: " +bookModel.getCategories().size() );
     	
-    	
-    	
-    	
-       // mv.addObject("catId", bookModel.getCategoryId().getName());
         mv.addObject("bookdetails", bookModel);
         mv.setViewName("showbook");
         
        return mv;
     }
     
-    }
+}

@@ -118,7 +118,7 @@
 					
 					<tr class="info">
 					    <td><label>Description</label></td>
-					    <td><label>${bookdetails.description}</label></td>
+					    <td>${bookdetails.description}</td>
 					    <td></td>
 					</tr>
 					 
@@ -126,14 +126,14 @@
 					
 					<tr class="info">
 					    <td><label>Rating</label></td>
-					    <td><label>${bookdetails.rating}</label></td>
+					    <td>${bookdetails.rating}</td>
 					    <td></td>
 					    
 					</tr>
 					
 					<tr class="info">
 					    <td><label>Language</label></td>
-					    <td><label>${bookdetails.language}</label></td>
+					    <td>${bookdetails.language}></td>
 					    <td></td>
 					    
 					</tr>
@@ -141,17 +141,17 @@
 					
 					<tr class="info">
 					    <td><label>Publisher</label></td>
-					    <td><label>${bookdetails.publisher}</label></td>
+					    <td>${bookdetails.publisher}</td>
 					    <td></td>
 					    
 					</tr>
 					
 					<tr class="info">
 					    <td><label>Page Count</label></td>
-					    <% if(0 == Book.getPageCount()){ %>
-					    	<td><label>${bookdetails.pageCount}</label></td>
+					    <% if(0 != Book.getPageCount()){ %>
+					    	<td>${bookdetails.pageCount}</td>
 					    <% } else {%>
-							<td><label>No Info available</label></td>
+							<td>No Info available</td>
 						<% } %>
 					    <td></td>
 					    

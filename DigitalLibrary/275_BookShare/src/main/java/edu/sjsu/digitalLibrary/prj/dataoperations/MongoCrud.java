@@ -9,12 +9,14 @@ import java.net.UnknownHostException;
 
 
 
+
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 
 
 
 import edu.sjsu.digitalLibrary.prj.models.category;
+
 
 //import java.util.List;
 import org.json.simple.JSONArray;
@@ -461,6 +463,95 @@ public class MongoCrud {
 		}
 			return searchedBooks;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public  MongoBook searchBooksInDBByID(String searchString) throws Exception {
+		//java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
+		dbCollection = db.getCollection("book");
+
+		
+		
+		BasicDBObject query = null;
+		query = new BasicDBObject("bookId", Integer.parseInt(searchString));
+		BasicDBObject image = null;
+		DBCursor cursor = dbCollection.find(query);
+		BasicDBObject object = null;
+		MongoBook mTemp = new MongoBook();
+		System.out.println("look this is what i found: " + cursor.count());
+		try {
+			if (cursor.hasNext()) {
+				mTemp = new MongoBook();
+				 object = (BasicDBObject) cursor.next();
+				 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
+				 mTemp.setTitle(object.get("title").toString());
+				 
+				 if(object.containsField("description"))
+					 mTemp.setDescription(object.get("description").toString());
+				 else
+					 mTemp.setDescription("");
+				 
+				 
+				 if(object.containsField("description"))
+					 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 else
+					 mTemp.setRating(0);
+				 
+				 image = (BasicDBObject)object.get("image");
+				 if(image != null)
+				 {
+					 if(image.containsField("smallThumbnail"))
+						 mTemp.setImage(image.get("smallThumbnail").toString());
+					 else
+						 mTemp.setImage("");
+				 }
+				 else
+					 mTemp.setImage("");
+				 
+				 if(object.containsField("categories"))
+					 mTemp.setCategories((java.util.List<String>)object.get("categories"));
+				 else
+					 mTemp.setCategories(null);
+				 
+				 if(object.containsField("authors"))
+					 mTemp.setAuthors((java.util.List<String>)object.get("authors"));
+				 else
+					 mTemp.setAuthors(null);
+				 
+				 
+				 if(object.containsField("language"))
+					 mTemp.setLanguage(object.get("language").toString());
+				 else
+					 mTemp.setLanguage("");
+				 
+				 if(object.containsField("pageCount"))
+					 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+				 else
+					 mTemp.setPageCount(0);
+				 
+				 if(object.containsField("publisher"))
+					 mTemp.setPublisher(object.get("publisher").toString());
+				 else
+					 mTemp.setPublisher("");
+				 
+				 if(object.containsField("price"))
+					 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 else
+					 mTemp.setPrice(0);
+				 
+				 
+				 
+			}
+		} finally {
+			cursor.close();
+
+		}
+			return mTemp;
+	}
+	
+	
+	
+	
 	public java.util.List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc, String[] categories)
 	{
 		java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
