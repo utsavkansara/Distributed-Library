@@ -11,7 +11,7 @@ import java.util.List;
 		
 		private String [] catName;
 
-		//private boolean selected;
+		
 
 		public String [] getCatName() {
 			return catName;
@@ -21,14 +21,7 @@ import java.util.List;
 			this.catName = catName;
 		}
 
-//		public boolean getSelected() {
-//			return selected;
-//		}
-//
-//		public void setSelected(boolean selected) {
-//			this.selected = selected;
-//		}
-//		
+
 		
 		
 	}

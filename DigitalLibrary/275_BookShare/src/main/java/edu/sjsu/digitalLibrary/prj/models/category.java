@@ -40,7 +40,7 @@ public class category implements Serializable {
 	}
 
 
-	public void setCategoryId(int categoryId) {
+	public void setId(int categoryId) {
 		this.id = categoryId;
 	}
 
