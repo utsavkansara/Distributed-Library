@@ -16,7 +16,6 @@ import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.dataoperations.MongoCrud;
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
-import edu.sjsu.digitalLibrary.prj.models.book;
 import edu.sjsu.digitalLibrary.prj.models.user;
 
 
@@ -25,112 +24,12 @@ import edu.sjsu.digitalLibrary.prj.models.user;
  * it implements the DAO of address
  */
 @SuppressWarnings("unused")
-public class JPABookDAO implements BookDAO{
+public class JPABookDAO {
 
 	
-	/*
-	 * Function to add address
-	 * 
-	 */
-	List<book> listOfbooks = new ArrayList<book>();
-	public int insert(book book) 
-	{
-		//System.out.println("in category jpa");
-		int addressId= 0;
-		try {
-			DBCrud<book> db = new DBCrud<book>();
-			addressId = db.Insert(book);
-			
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return addressId;
-	}
-
-	
-	/*
-	  * function to update address tuple n the database 
-	  * 
-	  */
-	public void update(book book) {
-		
-		
-				try {
-					DBCrud<book> db = new DBCrud<book>();
-					db.update(book);
-					
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		
-	}
-
-	
-	/*
-	 * Function to delete address from databse
-	 * 
-	 */
-	public void delete(book book) {
-		
-		
-		
-		try {
-			DBCrud<book> db = new DBCrud<book>();
-			db.delete(book);
-			
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		
-	}
-
-
-	public book getBook(int bookId) {
-		book tempBook = new book();
-		try {
-			DBCrud<book> db = new DBCrud<book>();
-			tempBook=  db.get(tempBook, bookId);
-			
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		return tempBook	;
-	}
-	
-	public List<book> getAllResults(String input) {
-		
-		try {
-			DBCrud<book> db = new DBCrud<book>();
-			listOfbooks=  db.getAllResults(input);
-			
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		return listOfbooks	;
-	}
 	
 	
-public List<book> getResultsByName(String input) {
-		
-		try {
-			DBCrud<book> db = new DBCrud<book>();
-			listOfbooks=  db.getResultsByName(input);
-			
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
-		return listOfbooks	;
-	}
 public List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc,
 		String[] categories) {
 	try {
@@ -163,6 +62,19 @@ public List<MongoBook> doAdvanceSearch(String auth, String publisher, String des
 			
 		}
 
+		public void getBooksFromGoogleAdvance(String byAuthTxt, String byPubTxt, String byDescTxt, String [] catArray, int bookId) {
+			
+			try {
+				MongoCrud db = new MongoCrud("book");
+				db.GetBooksFromGoogleAdvance(byAuthTxt,  byPubTxt,  byDescTxt,  catArray, bookId);
+				
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		
+			
+		}
 		//Search book in MongoDB
 
 				public List<MongoBook> searchBooksInDB(String input) {

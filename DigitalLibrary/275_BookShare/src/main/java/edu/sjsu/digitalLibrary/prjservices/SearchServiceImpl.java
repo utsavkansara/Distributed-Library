@@ -13,50 +13,28 @@ import org.springframework.stereotype.Service;
 
 
 
+
+
 import edu.sjsu.digitalLibrary.prj.dao.JPABookDAO;
-import edu.sjsu.digitalLibrary.prj.dao.JPARequestCategory;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
-import edu.sjsu.digitalLibrary.prj.models.book;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
 
-/**
- * Implementation of UserRecordService
- * @author karan
- *
- */
 @SuppressWarnings("unused")
 @Service("searchService")
-public class SearchServiceImpl implements SearchService {
+public class SearchServiceImpl {
     
     private JPABookDAO bookDAO = new JPABookDAO();
-    private JPARequestCategory catDAO = new JPARequestCategory();
+   
 
-	public List<book> getAllResults(String input) {
-		
-		return bookDAO.getAllResults(input);
-	}
-
-	public List<book> getResultsByCategory(List<category> cInput) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<book> getResultsByName(String input) {
-		
-		return bookDAO.getResultsByName(input);
-	}
-
+	
 	public List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc,
 			String[] categories) {
 		return bookDAO.doAdvanceSearch(auth, publisher, desc, categories);
 		
 	}
 	
-	public List<category> getCategoriesByBookJonCateg() 
-	{
-		return catDAO.getCategoriesByBookJonCateg();
-	}
+	
  
     public void getBooksFromGoogle(String value)
     {
@@ -65,7 +43,13 @@ public class SearchServiceImpl implements SearchService {
     	
     }
 
-	@Override
+    public void getBooksFromGoogleAdvance(String byAuthTxt, String byPubTxt, String byDescTxt, String [] catArray)
+    {
+    	
+    	 bookDAO.getBooksFromGoogleAdvance(  byAuthTxt,  byPubTxt,  byDescTxt,  catArray, getLatestBookId());
+    	
+    }
+	
 	public List<MongoBook> searchBooksInDB(String input) {
 		return bookDAO.searchBooksInDB( input);
 		

@@ -20,7 +20,7 @@ import edu.sjsu.digitalLibrary.prj.models.category;
  * it implements the DAO of address
  */
 @SuppressWarnings("unused")
-public class JPACategoryDAO implements CategoryDAO{
+public class JPACategoryDAO{
 
 	
 	/*

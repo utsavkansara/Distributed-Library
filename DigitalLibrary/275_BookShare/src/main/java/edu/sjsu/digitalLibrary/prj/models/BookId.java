@@ -33,7 +33,7 @@ public class BookId implements Serializable{
 
 
 
-		@Column(name = "BookId")
+		@Column(name = "BId")
 	    private int bookId;
 
 

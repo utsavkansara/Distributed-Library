@@ -128,6 +128,7 @@ public class MongoCrud {
 	    for (Volume volume : volumes.getItems()) {
 	    	objBooks = new JSONObject();
 			      Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
+			      
 			      Volume.SaleInfo saleInfo = volume.getSaleInfo();
 			      System.out.println("==========");
 			      // Title.
@@ -183,24 +184,32 @@ public class MongoCrud {
 			        		cTemp.setName(authors.get(i));
 			        		dbCrudCt.Insert(cTemp);
 			        	}
-			        	System.out.print(authors.get(i));
-			        	if (i < authors.size() - 1) {
-			        		System.out.print(", ");
-			        	}
+			        	
+			        	
 			        }
-			        System.out.println();
+			        
 			      }
-			      objBooks.put("categories", arrayBooks);
 			      
-			      objBooks.put("image", volumeInfo.getImageLinks());
-			      objBooks.put("language", volumeInfo.getLanguage());
+			      if(arrayBooks.size() != 0)
+			    	  objBooks.put("categories", arrayBooks);
+			      
+			      if(volumeInfo.getImageLinks() != null)
+			    	  objBooks.put("image", volumeInfo.getImageLinks());
+			      
+			      if(volumeInfo.getLanguage() != null)
+			    	  objBooks.put("language", volumeInfo.getLanguage());
+			      
 			      if(volumeInfo.getPrintedPageCount() == null)
 			    	  objBooks.put("pageCount", 0);
 			      else
 			    	  objBooks.put("pageCount", volumeInfo.getPrintedPageCount());
 			      
-			      objBooks.put("publisher", volumeInfo.getPublisher());
-			      objBooks.put("price", 0.0);
+			      if(volumeInfo.getPublisher() != null)
+			    	  objBooks.put("publisher", volumeInfo.getPublisher());
+			      
+			      
+			      
+			    	  objBooks.put("price", 0.0);
 			      
 			      Object o = com.mongodb.util.JSON.parse(objBooks.toString());
 					DBObject dbObj = (DBObject) o;
@@ -228,13 +237,161 @@ public class MongoCrud {
 	    
 	  }
 	
+	public  void GetBooksFromGoogleAdvance(String byAuthTxt, String byPubTxt, String byDescTxt, String [] catArray, int bookId)
+	{
+		JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+		String prefix = null;
+	    
+	    String query="author="+ byAuthTxt;
+	    try {
+			queryGoogleBooks(jsonFactory,query, bookId);
+			System.out.println("Search completed	");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	}
+	
+//private  void getBooksFromGoogleAdvance(JsonFactory jsonFactory, String byAuthTxt, String byPubTxt, String byDescTxt, String [] catArray, int bookId) throws Exception {
+//	    
+//		JSONObject objBooks = new JSONObject();
+//		JSONArray arrayBooks = new JSONArray();
+//		java.util.List<String> authors;
+//		
+//	    // Set up Books client.
+//	    final Books books = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, null)
+//	        .setApplicationName(APPLICATION_NAME)
+//	        .setGoogleClientRequestInitializer(new BooksRequestInitializer(API_KEY))
+//	        .build();
+//	    
+//	    List volumesList = books.volumes().list(query);
+//	   
+//	    Volumes volumes = volumesList.execute();
+//	    if (volumes.getTotalItems() == 0 || volumes.getItems() == null) {
+//	      
+//	      return;
+//	    }
+//	    
+//	    // Output results.
+//	    for (Volume volume : volumes.getItems()) {
+//	    	objBooks = new JSONObject();
+//			      Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
+//			      
+//			      Volume.SaleInfo saleInfo = volume.getSaleInfo();
+//			      System.out.println("==========");
+//			      // Title.
+//			      objBooks.put("bookId", bookId);	bookId++;
+//			      objBooks.put("title", volumeInfo.getTitle());	
+//			      System.out.println("Title: " + volumeInfo.getTitle());
+//			      // Author(s).
+//			      
+//			      authors = volumeInfo.getAuthors();
+//			      
+//			      if (authors != null && !authors.isEmpty()) {
+//			        System.out.print("Author(s): ");
+//			        arrayBooks = new JSONArray();
+//			        for (int i = 0; i < authors.size(); ++i) {
+//			        	arrayBooks.add(authors.get(i));
+//			          System.out.print(authors.get(i));
+//			          if (i < authors.size() - 1) {
+//			            System.out.print(", ");
+//			          }
+//			        }
+//			        System.out.println();
+//			      }
+//			      objBooks.put("authors", arrayBooks);	
+//			      // Description (if any).
+//			      if (volumeInfo.getDescription() != null && volumeInfo.getDescription().length() > 0) {
+//			    	  objBooks.put("description", volumeInfo.getDescription());
+//			        System.out.println("Description: " + volumeInfo.getDescription());
+//			      }
+//			      
+//			      if(volumeInfo.getAverageRating() != null)
+//			    	  objBooks.put("rating", volumeInfo.getAverageRating().doubleValue());
+//			      else
+//			    	  objBooks.put("rating",0);
+//			      
+//			      //Categories
+//			      authors = volumeInfo.getCategories();
+//			      DBCrud<category> dbCrudCt = new DBCrud<category>();
+//			      category cTemp = new category();
+//			      int catCount = 0;
+//			      String ctTmp = "";
+//			      if (authors != null && !authors.isEmpty()) {
+//			        System.out.print("Category(s): ");
+//			        arrayBooks = new JSONArray();
+//			        for (int i = 0; i < authors.size(); ++i) {
+//			        	arrayBooks.add(authors.get(i));
+//			        	ctTmp  =authors.get(i);
+//			        	dbCrudCt = new DBCrud<category>();
+//			        	catCount = dbCrudCt.getExistingCategory(ctTmp);
+//			        	if(catCount == 0)
+//			        	{
+//			        		cTemp = new category();
+//			        		cTemp.setActive(1);
+//			        		cTemp.setName(authors.get(i));
+//			        		dbCrudCt.Insert(cTemp);
+//			        	}
+//			        	
+//			        	
+//			        }
+//			        
+//			      }
+//			      
+//			      if(arrayBooks.size() != 0)
+//			    	  objBooks.put("categories", arrayBooks);
+//			      
+//			      if(volumeInfo.getImageLinks() != null)
+//			    	  objBooks.put("image", volumeInfo.getImageLinks());
+//			      
+//			      if(volumeInfo.getLanguage() != null)
+//			    	  objBooks.put("language", volumeInfo.getLanguage());
+//			      
+//			      if(volumeInfo.getPrintedPageCount() == null)
+//			    	  objBooks.put("pageCount", 0);
+//			      else
+//			    	  objBooks.put("pageCount", volumeInfo.getPrintedPageCount());
+//			      
+//			      if(volumeInfo.getPublisher() != null)
+//			    	  objBooks.put("publisher", volumeInfo.getPublisher());
+//			      
+//			      
+//			      
+//			    	  objBooks.put("price", 0.0);
+//			      
+//			      Object o = com.mongodb.util.JSON.parse(objBooks.toString());
+//					DBObject dbObj = (DBObject) o;
+//					
+//					
+//					 dbCollection = db.getCollection("book");
+//					 //System.out.println("db name func: " + dbCollection.getName());
+//					 dbCollection.insert(dbObj);
+//			      
+//	    }
+//	    
+//	    //insert next bookId in SQL DB BookId table
+//	    try {
+//			DBCrud<BookId> dbCrud = new DBCrud<BookId>();
+//			BookId bTemp = new BookId();
+//			bTemp = dbCrud.get(bTemp, 1);
+//			bTemp.setBookId(bookId);
+//			dbCrud.update(bTemp);
+//			
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//	    
+//	    
+//	  }
 	
 	
 	public  java.util.List<MongoBook> searchBooksInDB(String searchString) throws Exception {
 		java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
 		dbCollection = db.getCollection("book");
 
-		//System.out.println("heelo i reached: " + dbCollection.getCount() + " -- "  + dbCollection.getFullName() + " -- " + searchString);
+		
 		Pattern regex = Pattern.compile(searchString);
 		BasicDBObject query = null;
 		query = new BasicDBObject("title", regex);
@@ -249,18 +406,53 @@ public class MongoCrud {
 				 object = (BasicDBObject) cursor.next();
 				 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
 				 mTemp.setTitle(object.get("title").toString());
-				 mTemp.setDescription(object.get("description").toString());
-				 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 
+				 if(object.containsField("description"))
+					 mTemp.setDescription(object.get("description").toString());
+				 else
+					 mTemp.setDescription("");
+				 
+				 
+				 if(object.containsField("description"))
+					 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 else
+					 mTemp.setRating(0);
+				 
 				 image = (BasicDBObject)object.get("image");
-				 if(image.containsField("smallThumbnail"))
-					 mTemp.setImage(image.get("smallThumbnail").toString());
+				 if(image != null)
+				 {
+					 if(image.containsField("smallThumbnail"))
+						 mTemp.setImage(image.get("smallThumbnail").toString());
+					 else
+						 mTemp.setImage("");
+				 }
 				 else
 					 mTemp.setImage("");
 				 
-				 mTemp.setLanguage(object.get("language").toString());
-				 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
-				 mTemp.setPublisher(object.get("publisher").toString());
-				 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 
+				 
+				 
+				 if(object.containsField("language"))
+					 mTemp.setLanguage(object.get("language").toString());
+				 else
+					 mTemp.setLanguage("");
+				 
+				 if(object.containsField("pageCount"))
+					 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+				 else
+					 mTemp.setPageCount(0);
+				 
+				 if(object.containsField("publisher"))
+					 mTemp.setPublisher(object.get("publisher").toString());
+				 else
+					 mTemp.setPublisher("");
+				 
+				 if(object.containsField("price"))
+					 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 else
+					 mTemp.setPrice(0);
+				 
+				 
 				 searchedBooks.add(mTemp);
 			}
 		} finally {
@@ -291,7 +483,7 @@ public class MongoCrud {
 		if(auth != "ALL")
 			query = new BasicDBObject("authors", regexAuth);
 			
-		if(categories[0] != "-1")
+		if(categories.length != 0)
 			query.put("categories", new BasicDBObject("$in", categories)); 
 		 
 		 if(publisher != "ALL")
@@ -312,17 +504,52 @@ public class MongoCrud {
 				 object = (BasicDBObject) cursor.next();
 				 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
 				 mTemp.setTitle(object.get("title").toString());
-				 mTemp.setDescription(object.get("description").toString());
-				 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 if(object.containsField("description"))
+					 mTemp.setDescription(object.get("description").toString());
+				 else
+					 mTemp.setDescription("");
+				 
+				 
+				 if(object.containsField("description"))
+					 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 else
+					 mTemp.setRating(0);
+				 
 				 image = (BasicDBObject)object.get("image");
-				 if(image.containsField("smallThumbnail"))
-					 mTemp.setImage(image.get("smallThumbnail").toString());
+				 if(image != null)
+				 {
+					 if(image.containsField("smallThumbnail"))
+						 mTemp.setImage(image.get("smallThumbnail").toString());
+					 else
+						 mTemp.setImage("");
+				 }
 				 else
 					 mTemp.setImage("");
-				 mTemp.setLanguage(object.get("language").toString());
-				 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
-				 mTemp.setPublisher(object.get("publisher").toString());
-				 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 
+				 
+				 
+				 
+				 if(object.containsField("language"))
+					 mTemp.setLanguage(object.get("language").toString());
+				 else
+					 mTemp.setLanguage("");
+				 
+				 if(object.containsField("pageCount"))
+					 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+				 else
+					 mTemp.setPageCount(0);
+				 
+				 if(object.containsField("publisher"))
+					 mTemp.setPublisher(object.get("publisher").toString());
+				 else
+					 mTemp.setPublisher("");
+				 
+				 if(object.containsField("price"))
+					 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 else
+					 mTemp.setPrice(0);
+				 
+
 				 searchedBooks.add(mTemp);
 			}
 		} finally {

@@ -66,11 +66,11 @@ import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.category;
 
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
-import edu.sjsu.digitalLibrary.prj.models.statistics;
+
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
-import edu.sjsu.digitalLibrary.prjservices.SearchService;
+import edu.sjsu.digitalLibrary.prjservices.SearchServiceImpl;
 import edu.sjsu.digitalLibrary.prjservices.UserRecordService;
  
 @SuppressWarnings("unused")
@@ -87,8 +87,8 @@ public class FirstController {
     private static Jedis jedis;
     
     @Autowired
-    private SearchService searchService;
-    
+    private SearchServiceImpl searchService;
+    //hellod
     @Autowired
    	private HttpSession httpSession;
    	
@@ -307,26 +307,6 @@ public class FirstController {
             	//address Entry Ends
             	
             	
-            	//file upload
-//            	
-//            	if (!file.isEmpty()) {
-//        			try {
-//        			
-//        			
-//        				BufferedOutputStream stream = new BufferedOutputStream(
-//        						new FileOutputStream(new File("/userFiles/" + newUserId + "/" + file.getName())));
-//                        FileCopyUtils.copy(file.getInputStream(), stream);
-//        				stream.close();
-//        				System.out.println("File uploaded");
-//        			}
-//        			catch (Exception e) {
-//        				System.out.println("File not uploaded: " + e.getMessage());
-//        			}
-//        		}
-            	
-            	
-            	///////file upload ends
-            	
             	
             	
             	Login loginModel = new Login();
@@ -417,7 +397,7 @@ public class FirstController {
         		// getting data
         		landingPage = new LandingPage();
         		JPALandingPageDAO obj1 = new JPALandingPageDAO();
-        		landingPage.setBooks(obj1.getBooks());
+        		//landingPage.setBooks(obj1.getBooks());
         		landingPage.setCategories(obj1.getCategories());
         		System.out.println(landingPage);
         		mv.addObject("pagedetails", landingPage);
@@ -446,7 +426,7 @@ public class FirstController {
 		// getting data
 		landingPage = new LandingPage();
 		JPALandingPageDAO obj = new JPALandingPageDAO();
-		landingPage.setBooks(obj.getBooks());
+		//landingPage.setBooks(obj.getBooks());
 		landingPage.setCategories(obj.getCategories());
 		System.out.println(landingPage);
 		mv.addObject("pagedetails", landingPage);
@@ -492,14 +472,20 @@ public class FirstController {
     	//End of search in MongoDB    	
     	//Suppose No book is found    	
     	//Google API implementation   	
-    	
-    	if(searchedBooks.size() == 0)
+    	try
+    	{
+	    	if(searchedBooks.size() == 0)
+	    	{
+	    		searchService.getBooksFromGoogle(input);
+	    		searchedBooks = searchService.searchBooksInDB(input);
+	        	
+	    	}
+    	}
+    	catch(Exception e)
     	{
     		searchService.getBooksFromGoogle(input);
     		searchedBooks = searchService.searchBooksInDB(input);
-        	
     	}
-    	
     	
     	
     	ModelAndView mv = new ModelAndView();
@@ -528,6 +514,7 @@ public class FirstController {
     		len++;
     	}
     	
+    	httpSession.removeAttribute("SEARCHEDBOOKS");
     	cTemp.setCatName(catToDisplay);
     	ModelAndView mv = new ModelAndView();
     	mv.addObject("advanceSearchDetails", cTemp);
@@ -601,10 +588,23 @@ public class FirstController {
     	}
     	
     	List<MongoBook> lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt, catArray);
-    	System.out.println("advanceSearch result size " + lb.size());
+    	//System.out.println("advanceSearch result size " + lb.size());
+    	try
+    	{
+	    	if(lb.size() == 0)
+	    	{
+	    		searchService.getBooksFromGoogleAdvance(byAuthTxt, byPubTxt, byDescTxt, catArray);
+	    		lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt, catArray);
+	        	
+	    	}
+    	}
+    	catch(Exception e)
+    	{
+    		searchService.getBooksFromGoogleAdvance(byAuthTxt, byPubTxt, byDescTxt, catArray);
+    		lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt, catArray);
+    	}
     	
-    	
-    	
+    	httpSession.setAttribute("SEARCHEDBOOKS", lb);
     	ModelAndView mv = new ModelAndView();
     	mv.addObject("pagedetails", lb);
   		mv.setViewName("searchResults");
