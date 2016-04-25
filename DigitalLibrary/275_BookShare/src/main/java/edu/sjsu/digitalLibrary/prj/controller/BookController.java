@@ -108,6 +108,7 @@ public class BookController {
 		System.out.println("going: " +bookModel.getCategories().size() );
     	
         mv.addObject("bookdetails", bookModel);
+        mv.addObject("addressdetails", "101 E San Fernando, Apt#320, San Jose, CA, 95134");
         mv.setViewName("showbook");
         
        return mv;

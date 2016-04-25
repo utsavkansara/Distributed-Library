@@ -58,22 +58,7 @@
 		});
 
 
-		function RedirectToEdit() {
-			var x = document.getElementById('bookId').value;
-			if(document.getElementById('redirectTo').value == '')
-				window.location = "../bookhome/" + x;
-			else
-				window.location = document.getElementById('redirectTo').value + "/" + x;
-	
-		}
-	
-		function RedirectToBuy() {
-			var x = document.getElementById('bookId').value;
-			if(document.getElementById('redirectToBuy').value == '')
-				window.location = "../purchase/" + x;
-			else
-				window.location = document.getElementById('redirectToBuy').value + "/" + x;
-		}	
+		
 	
 	</script>
 </head>
@@ -170,7 +155,16 @@
 					</tr>
 					
 					
-					
+					<tr class="info">
+					    
+					    <% if(null != session.getAttribute("USERNAME")) {%> 
+					    	<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook" role="button">Make a request</a>
+					    <% } else {%>
+							<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/login" role="button">Log in to Buy</a>
+						<% } %>
+					   
+					    
+					</tr>
 					
 					
 					
@@ -182,7 +176,23 @@
 				</table>
 			</div>
 		</div>
-	    	
-		
+	    	<div class="table-responsive col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Pickup Address</div>
+				<table class="table table-striped">
+					
+		    		<tr>
+					    <td><label>${addressdetails}</label>
+					    <input type="hidden" id="address" value="${addressdetails}"></input></td>
+						
+					</tr>
+
+		    		<tr>
+						<td><div id="map_container" align="center"></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>		
 </body>
 </html>
