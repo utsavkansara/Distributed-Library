@@ -62,7 +62,7 @@ import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
-import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.category;
 
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
@@ -109,7 +109,7 @@ public class FirstController {
     	if(!sessionService.checkAuth())
     	{
     		System.out.println("chk class wrked!");
-    		Login login = new Login();
+    		LoginSamplee login = new LoginSamplee();
         	
     		
     	    return new ModelAndView("login", "logindetails", login);
@@ -309,7 +309,7 @@ public class FirstController {
             	
             	
             	
-            	Login loginModel = new Login();
+            	LoginSamplee loginModel = new LoginSamplee();
             	ModelAndView model = new ModelAndView("login");
             	
             	model.addObject("logindetails", loginModel);
@@ -336,7 +336,7 @@ public class FirstController {
     	if(!sessionService.checkAuth())
     	{
     		System.out.println("chk class wrked!");
-    		Login login = new Login();
+    		LoginSamplee login = new LoginSamplee();
         	
     		
     	    return new ModelAndView("login", "logindetails", login);
