@@ -194,12 +194,7 @@ public class FirstController {
             System.out.println("Response for address is: " + s);
            
 
-            // read any errors from the attempted command
-            
-//            System.out.println("Here is the standard error of the command (if any):\n");
-//            while ((s = stdError.readLine()) != null) {
-//                System.out.println(s);
-//            }
+           
             if(process.isAlive())
             {
             	process.destroy();
