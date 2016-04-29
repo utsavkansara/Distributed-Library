@@ -28,7 +28,7 @@ public class Recommendations {
 		List<Integer> lstBooks = new ArrayList<Integer>();
 		try {
 			//enterData();
-			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(new File("userBookData.csv"))));
+			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(new File("../userBookData.csv"))));
 			
 			UserSimilarity similarity = new TanimotoCoefficientSimilarity(model);
 			UserNeighborhood neighborhood = new NearestNUserNeighborhood(10, similarity, model);

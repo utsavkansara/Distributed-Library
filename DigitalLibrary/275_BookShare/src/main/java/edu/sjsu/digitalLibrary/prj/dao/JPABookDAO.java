@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import edu.sjsu.digitalLibrary.prj.Recommendations.Recommendations;
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.dataoperations.MongoCrud;
 import edu.sjsu.digitalLibrary.prj.models.BookId;
@@ -155,6 +156,35 @@ public List<MongoBook> doAdvanceSearch(String auth, String publisher, String des
 						e1.printStackTrace();
 					}
 					return 0;
+				}
+				
+				public List<MongoBook> searchTop5CategoryBooks(String[] categories) {
+					
+					try {
+						MongoCrud db = new MongoCrud("book");
+						return db.searchTop5CategoryBooks(categories);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+					return null	;
+				}
+				
+				
+				public List<Integer> getMahoutRecomm(int userId) {
+					
+					try {
+						Recommendations r = new Recommendations();
+						return r.getBookRecommendationsMahout(userId, 10);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+					return null	;
 				}
 				
 }

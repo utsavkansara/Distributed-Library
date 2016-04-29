@@ -209,7 +209,7 @@ public class DBCrud<T> {
 		session = s.openSession();
 		session.beginTransaction();
 		Query query = session.createSQLQuery(
-				"select * from order where userId = :sCode")
+				"select * from BookShareDB.order where userId = :sCode")
 				.addEntity(order.class)
 				.setParameter("sCode", userID);
 				int  result = query.list().size();

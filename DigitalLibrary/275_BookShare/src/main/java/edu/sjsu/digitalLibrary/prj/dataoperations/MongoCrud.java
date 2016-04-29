@@ -687,5 +687,23 @@ public class MongoCrud {
 		}
 			return mTemp;
 	}
+	
+	
+public  java.util.List<MongoBook> searchTop5CategoryBooks(String[] categories) throws Exception {
+	
+	java.util.List<MongoBook> mBooks = new java.util.ArrayList<MongoBook>();
+	mBooks = this.doAdvanceSearch("ALL", "ALL", "ALL", categories);
+	
+	for(MongoBook m : mBooks)
+	{
+		System.out.println("Books in recomm:" + m.getTitle());
+	}
+	
+	
+	return mBooks;
+	
+	
+		
+	}
 
 }
