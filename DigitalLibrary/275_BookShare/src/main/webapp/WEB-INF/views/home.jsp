@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page session="true" %>
 <jsp:include page="imports.jsp" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <body>
 
-
+		
 	<div id="wrapper">
 		<div id="page-content-wrapper" class="st-pusher">
 			<div class="st-pusher-after"></div>
@@ -998,6 +999,8 @@
 
 				$('#login').submit(
 						function(event) {
+							
+							
 
 							var search = {}
 							search["userEmail"] = $("#userEmail").val();
@@ -1009,16 +1012,18 @@
 								url : "/Distributed-Library/login",
 								data : JSON.stringify(search),
 								dataType : 'json',
-								timeout : 100000,
 								complete : function(data) {
-									alert(JSON.stringify(data));
-									if (data.responseJSON.status == "OK") {
-										alert('Person has been added');
-										$('#modal-login-big').modal('hide');
+									
+									if (data.responseJSON.successFlag == "Y") {
+										
+										location.reload(true);
+										/* $("#userEmail").val('');
+										$("#password").val('');
+										
+										$('#modal-login-big').modal('hide'); */
 									} else {
-										alert('Failed adding person: '
-												+ data.status + ', '
-												+ data.errorMessage);
+																				
+										alert(' Please check credentials ');
 
 									}
 								}

@@ -21,8 +21,8 @@ import edu.sjsu.digitalLibrary.prj.dao.JPALoginDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
+import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.Login;
-import edu.sjsu.digitalLibrary.prj.models.LoginSample;
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
@@ -31,7 +31,7 @@ import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
 @RestController
 public class LoginController {
     
-	Login loginModel;
+	LoginSamplee loginModel;
     
     @Autowired
 	private HttpSession httpSession;
@@ -46,67 +46,60 @@ public class LoginController {
         	httpSession.removeAttribute("USERNAME");
         	httpSession.invalidate();
     	}
-    	loginModel = new Login();
+    	loginModel = new LoginSamplee();
     	return new ModelAndView("login", "logindetails", loginModel);
     }
     
     
     @JsonView(Views.Public.class)
     @RequestMapping(value="/login", method=RequestMethod.POST)
-	public JsonResponse createSmartphone(@RequestBody LoginSample smartphone) {
+	public JsonResponse createSmartphone(@RequestBody Login loginModel) {
     	
-    	JsonResponse response = new JsonResponse();
-    	response.setStatus("OK");
-    	response.setErrorMessage("");
-    	return response;
-	}
-    
-    @RequestMapping(value = "/login1",method = RequestMethod.POST)
-    public ModelAndView recieveCategory(@ModelAttribute("logindetails")Login loginModel1, BindingResult bindingResult, 
-            HttpServletRequest request,  HttpServletResponse response) 
-    {
-        try {
+try {
         	
         	String msg=null;
         	
-           if(loginModel1.getUserEmail().equals(null) || loginModel1.getUserEmail().isEmpty())
+           if(loginModel.getUserEmail().equals(null) || loginModel.getUserEmail().isEmpty())
            {
-        	ModelAndView model = new ModelAndView();
-        	loginModel = new Login();
-           	model.addObject("msg", "Invalid user email and password combination");
-           	model.addObject("logindetails", loginModel);
-          	model.setViewName("login"); 
+        	   
+            JsonResponse response = new JsonResponse();
+            response.setSuccessFlag("N");
+            response.setErrorMessage("Invalid user email and password combination");                    
+          	return response;
            }
            
         	else {
             	JPALoginDAO obj= new JPALoginDAO();
-            	loginModel1.setPassword(PlayPP.sha1(loginModel1.getPassword()));
-            	loginModel1.setPassword(loginModel1.getPassword());
-            	int l =obj.validate(loginModel1);
+            	loginModel.setPassword(PlayPP.sha1(loginModel.getPassword()));
+            	loginModel.setPassword(loginModel.getPassword());
+            	int l =obj.validate(loginModel);
             	
             	ModelAndView model = new ModelAndView();
             	if(l == 0) {
-	            	loginModel = new Login();
-	            	model.addObject("msg", "Invalid user email and password combination");
-	            	model.addObject("logindetails", loginModel);
-	           	 	model.setViewName("login");
+            		JsonResponse response = new JsonResponse();
+            		response.setSuccessFlag("N");
+                    response.setErrorMessage("Invalid user email and password combination");                    
+                  	return response;
             	} else {
+            		
+            		JsonResponse response = new JsonResponse();
             		JPAUserDAO jp = new JPAUserDAO();
             		
-            		loginModel1.setId(l);
-            		httpSession.setAttribute("USERID", loginModel1.getId());
-            		user tempUser = jp.getUser(loginModel1.getId());
+            		loginModel.setId(l);
+            		httpSession.setAttribute("USERID", loginModel.getId());
+            		user tempUser = jp.getUser(loginModel.getId());
             		httpSession.setAttribute("USERNAME", tempUser.getName());
             		sessionService.setHttpSession(httpSession);
             		System.out.println("my userid in session is" + httpSession.getAttribute("USERID"));
             		
+
             		
             		/////check for recommendations
             		
             		
             		JPABookDAO bookTemp = new JPABookDAO();
             		
-            		int orderCount = bookTemp.getOrderCount(loginModel1.getId());
+            		int orderCount = bookTemp.getOrderCount(loginModel.getId());
             		
             		
             		
@@ -129,17 +122,76 @@ public class LoginController {
             		
             		////End check for recommendations
             		
-            		return new ModelAndView("redirect:/");
+            		//return new ModelAndView("redirect:/");
+
+            		response.setSuccessFlag("Y");
+            		response.setSuccessMessage("Login success");
+            		//MongoCrud m = new MongoCrud();
+            		return response;
+
             	}
-           	 	return model;
+           	 	
             }
         } catch (Exception e) {
             System.out.println("Exception in FirstController "+e.getMessage());
             e.printStackTrace();
-            return new ModelAndView("error404");
+            JsonResponse response = new JsonResponse();
+            response.setSuccessFlag("E");
+            response.setErrorMessage("Error Occurred while processing request");                 
+          	return response;
         }
-		return null;
-    }
+	}
+    
+//    @RequestMapping(value = "/login1",method = RequestMethod.POST)
+//    public ModelAndView recieveCategory(@ModelAttribute("logindetails")LoginSamplee loginModel1, BindingResult bindingResult, 
+//            HttpServletRequest request,  HttpServletResponse response) 
+//    {
+//        try {
+//        	
+//        	String msg=null;
+//        	
+//           if(loginModel1.getUserEmail().equals(null) || loginModel1.getUserEmail().isEmpty())
+//           {
+//        	ModelAndView model = new ModelAndView();
+//        	loginModel = new LoginSamplee();
+//           	model.addObject("msg", "Invalid user email and password combination");
+//           	model.addObject("logindetails", loginModel);
+//          	model.setViewName("login"); 
+//           }
+//           
+//        	else {
+//            	JPALoginDAO obj= new JPALoginDAO();
+//            	loginModel1.setPassword(PlayPP.sha1(loginModel1.getPassword()));
+//            	loginModel1.setPassword(loginModel1.getPassword());
+//            	int l =obj.validate(loginModel1);
+//            	
+//            	ModelAndView model = new ModelAndView();
+//            	if(l == 0) {
+//	            	loginModel = new LoginSamplee();
+//	            	model.addObject("msg", "Invalid user email and password combination");
+//	            	model.addObject("logindetails", loginModel);
+//	           	 	model.setViewName("login");
+//            	} else {
+//            		JPAUserDAO jp = new JPAUserDAO();
+//            		
+//            		loginModel1.setId(l);
+//            		httpSession.setAttribute("USERID", loginModel1.getId());
+//            		user tempUser = jp.getUser(loginModel1.getId());
+//            		httpSession.setAttribute("USERNAME", tempUser.getName());
+//            		sessionService.setHttpSession(httpSession);
+//            		System.out.println("my userid in session is" + httpSession.getAttribute("USERID"));
+//            		//MongoCrud m = new MongoCrud();
+//            		return new ModelAndView("redirect:/");
+//            	}
+//           	 	return model;
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Exception in FirstController "+e.getMessage());
+//            e.printStackTrace();
+//            return new ModelAndView("error404");
+//        }
+//		return null;
+//    }
     
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
     public ModelAndView logoutPage(HttpServletRequest request,  HttpServletResponse response) {
@@ -149,7 +201,7 @@ public class LoginController {
     	httpSession.invalidate();
     	sessionService.setHttpSession(null);
     	System.out.println("in logot");
-    	loginModel = new Login();
+    	loginModel = new LoginSamplee();
     	response.setHeader("Cache-Control","no-cache");
     	response.setHeader("Cache-Control","no-store");
     	response.setDateHeader("Expires", 0);

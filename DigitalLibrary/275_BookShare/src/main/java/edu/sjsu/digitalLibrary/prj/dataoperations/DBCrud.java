@@ -132,6 +132,9 @@ public class DBCrud<T> {
 		session = s.openSession();
 		session.beginTransaction();
 		
+		System.out.println("sCode"+ login.getUserEmail());
+		System.out.println("jCode"+ login.getPassword());
+		
 		int result,returnedId = 0;
 		Query query = session.createSQLQuery(
 				"select * from user  where emailId = :sCode and password = :jCode")

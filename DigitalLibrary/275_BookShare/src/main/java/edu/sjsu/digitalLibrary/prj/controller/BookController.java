@@ -64,7 +64,7 @@ import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
-import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
 import edu.sjsu.digitalLibrary.prj.models.user;
