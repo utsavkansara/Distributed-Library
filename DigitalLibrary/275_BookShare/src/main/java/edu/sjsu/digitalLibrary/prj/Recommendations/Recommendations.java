@@ -21,6 +21,7 @@ import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
+import org.springframework.core.io.FileSystemResource;
 
 public class Recommendations {
 	static Random rand = new Random();
@@ -28,7 +29,8 @@ public class Recommendations {
 		List<Integer> lstBooks = new ArrayList<Integer>();
 		try {
 			//enterData();
-			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(new File("../userBookData.csv"))));
+			FileSystemResource resource = new FileSystemResource("/Users/raunaqmathur/project295B/Distributed-Library/DigitalLibrary/275_BookShare/src/main/webapp/WEB-INF/MahoutData/userBookData.csv");
+			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(resource.getFile())));
 			
 			UserSimilarity similarity = new TanimotoCoefficientSimilarity(model);
 			UserNeighborhood neighborhood = new NearestNUserNeighborhood(10, similarity, model);
