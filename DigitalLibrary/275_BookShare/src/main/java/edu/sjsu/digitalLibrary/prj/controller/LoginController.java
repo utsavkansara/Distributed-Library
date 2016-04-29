@@ -105,12 +105,12 @@ try {
             		
             		int orderCount = bookTemp.getOrderCount(loginModel.getId());
             		
-            		//get Top 5 recommendations from user category 
+            		//get Top recommendations from user category based on rating
             		String[] categories = tempUser.getCategory().split(",");
             		
-            		List<MongoBook> recommBooks = new ArrayList<MongoBook>();
+            		List<MongoBook> recommCatBooks = new ArrayList<MongoBook>();
             		
-            		recommBooks = bookTemp.searchTop5CategoryBooks(categories);
+            		recommCatBooks = bookTemp.searchTop5CategoryBooks(categories);
             		
             		
             		List<Integer> userbasedRecommBookIds = new ArrayList<Integer>();
@@ -122,15 +122,15 @@ try {
             			
             		}
             		
-            		for(int m : userbasedRecommBookIds)
-            		{
-            			System.out.println("User based recomm:" + m);
-            		}
+//            		for(int m : userbasedRecommBookIds)
+//            		{
+//            			System.out.println("User based recomm:" + m);
+//            		}
             		
             		////End check for recommendations
             		
             		//return new ModelAndView("redirect:/");
-
+            		
             		response.setSuccessFlag("Y");
             		response.setSuccessMessage("Login success");
             		//MongoCrud m = new MongoCrud();

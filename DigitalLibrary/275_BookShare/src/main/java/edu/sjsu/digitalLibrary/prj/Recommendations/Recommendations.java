@@ -38,9 +38,9 @@ public class Recommendations {
 			List<RecommendedItem> recommendations = recommender.recommend(userId, number);
 			for (RecommendedItem recommendation : recommendations) {
 				lstBooks.add(Integer.parseInt(recommendation.getItemID() + ""));
-			  System.out.println(recommendation);
+			  //System.out.println(recommendation);
 			}
-			System.out.println("End with recommendations for userID: " + userId);
+			//System.out.println("End with recommendations for userID: " + userId);
 		} catch (IOException e) {
 			
 			e.printStackTrace();

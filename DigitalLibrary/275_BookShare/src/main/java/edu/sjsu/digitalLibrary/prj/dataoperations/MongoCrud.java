@@ -10,12 +10,16 @@ import java.net.UnknownHostException;
 
 
 
+
+
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 
 
 
 import edu.sjsu.digitalLibrary.prj.models.category;
+
+
 
 
 //import java.util.List;
@@ -44,6 +48,8 @@ import com.mongodb.ServerAddress;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.regex.Pattern;
 
 public class MongoCrud {
@@ -694,10 +700,14 @@ public  java.util.List<MongoBook> searchTop5CategoryBooks(String[] categories) t
 	java.util.List<MongoBook> mBooks = new java.util.ArrayList<MongoBook>();
 	mBooks = this.doAdvanceSearch("ALL", "ALL", "ALL", categories);
 	
-	for(MongoBook m : mBooks)
-	{
-		System.out.println("Books in recomm:" + m.getTitle());
-	}
+	
+
+	Collections.sort(mBooks);
+	//mBooks.sort((o1, o2) -> o1.getRating() > (o2.getRating()) ? 0:1);
+//	for(MongoBook m : mBooks)
+//	{
+//		System.out.println("Books in recomm:" + m.getTitle());
+//	}
 	
 	
 	return mBooks;
