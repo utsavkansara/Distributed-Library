@@ -223,7 +223,7 @@ public class FirstController {
             	 return mv1;
             	 
             }	
-            if (bindingResult.hasErrors() || parentId == 0 || passwordDiff == -1)
+            if (bindingResult.hasErrors() || ((!registrationModel.getParentId().equals("")) && parentId == 0) || passwordDiff == -1)
             {
             	System.out.println(bindingResult);
             	System.out.println("Error in form: " + registrationModel.getDob());

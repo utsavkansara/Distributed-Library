@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import edu.sjsu.digitalLibrary.prj.dao.JPABookDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPALoginDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
@@ -98,7 +99,36 @@ public class LoginController {
             		httpSession.setAttribute("USERNAME", tempUser.getName());
             		sessionService.setHttpSession(httpSession);
             		System.out.println("my userid in session is" + httpSession.getAttribute("USERID"));
-            		//MongoCrud m = new MongoCrud();
+            		
+            		
+            		/////check for recommendations
+            		
+            		
+            		JPABookDAO bookTemp = new JPABookDAO();
+            		
+            		int orderCount = bookTemp.getOrderCount(loginModel1.getId());
+            		
+            		
+            		
+            		
+            		if(orderCount == 0)
+            		{
+            			//get Top 5 recommendations from user category
+            			
+            			
+            			
+            		}
+            		else
+            		{
+            			//get Top 5 recommendations from user category 
+            			//get Apache Mahout recommendations based on previous selections
+            			
+            			
+            		}
+            		
+            		
+            		////End check for recommendations
+            		
             		return new ModelAndView("redirect:/");
             	}
            	 	return model;

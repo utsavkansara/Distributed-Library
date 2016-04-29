@@ -11,6 +11,7 @@ import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
+import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.user;
 
@@ -200,6 +201,19 @@ public class DBCrud<T> {
 		return result;
 	}
 
-	
+	public int getOrderCount(int userID ){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery(
+				"select * from order where userId = :sCode")
+				.addEntity(order.class)
+				.setParameter("sCode", userID);
+				int  result = query.list().size();
+		session.close();
+		s.close();
+		System.out.println("category found----" + result);
+		return result;
+	}
 	
 }

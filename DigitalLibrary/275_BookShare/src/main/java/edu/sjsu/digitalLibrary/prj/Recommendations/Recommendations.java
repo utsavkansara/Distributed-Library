@@ -28,7 +28,7 @@ public class Recommendations {
 		List<Integer> lstBooks = new ArrayList<Integer>();
 		try {
 			//enterData();
-			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(new File("data1.csv"))));
+			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(new File("userBookData.csv"))));
 			
 			UserSimilarity similarity = new TanimotoCoefficientSimilarity(model);
 			UserNeighborhood neighborhood = new NearestNUserNeighborhood(10, similarity, model);
@@ -38,7 +38,7 @@ public class Recommendations {
 				lstBooks.add(Integer.parseInt(recommendation.getItemID() + ""));
 			  System.out.println(recommendation);
 			}
-			System.out.println("End with recommendations");
+			System.out.println("End with recommendations for userID: " + userId);
 		} catch (IOException e) {
 			
 			e.printStackTrace();
