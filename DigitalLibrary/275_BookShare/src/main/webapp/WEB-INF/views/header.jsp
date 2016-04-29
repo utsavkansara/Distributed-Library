@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+<%@ page session="true" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -32,17 +34,29 @@
 		<!-- /.col -->
 		<div class="col-md-4 col-sm-2">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="hidden-xs hidden-sm"><a href="contact.html">Wishlist</a></li>
-				<li class="hidden-xs hidden-sm"><a href="single-book.html">Shopping
-						Cart</a></li>
+				
+				<!-- <li class="hidden-xs hidden-sm"><a href=".menu-toggle-right">Shopping
+						Cart</a></li> -->
 				<li class="hidden-xs hidden-sm"><a href="contact.html">My
 						Account</a></li>
-				<li class="icon icon-small hidden-xs"><a data-toggle="modal"
+				
+				<c:choose>
+				<c:when test="${sessionScope.USERNAME != undefined && sessionScope.USERNAME != null  && sessionScope.USERNAME != '' }">
+				<%-- <c:when test="${sessionScope.USERNAME != ''}"> --%>
+   						<li class="hidden-xs hidden-sm"><a href="contact.html">Hey, ${sessionScope.USERNAME}</a></li>
+				</c:when>
+				
+				<c:otherwise>
+					<li class="icon icon-small hidden-xs"><a data-toggle="modal"
 					data-target="#modal-login-big" href="#"><i
 						class="icon fa fa-lock"></i></a></li>
-				<li class="icon hidden-lg hidden-sm hidden-md"><a
-					data-toggle="modal" data-target="#modal-login-small" href="#"><i
-						class="icon fa fa-lock"></i></a></li>
+					<li class="icon hidden-lg hidden-sm hidden-md"><a
+						data-toggle="modal" data-target="#modal-login-small" href="#"><i
+							class="icon fa fa-lock"></i></a></li>
+				</c:otherwise>
+				</c:choose>
+						
+				
 			</ul>
 			<!-- /.nav -->
 		</div>
