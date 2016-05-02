@@ -1,5 +1,8 @@
 package edu.sjsu.digitalLibrary.prj.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,12 +19,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import edu.sjsu.digitalLibrary.prj.dao.JPABookDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPALoginDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
 import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
@@ -83,7 +88,7 @@ try {
             		
             		JsonResponse response = new JsonResponse();
             		JPAUserDAO jp = new JPAUserDAO();
-            		
+            		System.out.println("Welcome sir: " + l);
             		loginModel.setId(l);
             		httpSession.setAttribute("USERID", loginModel.getId());
             		user tempUser = jp.getUser(loginModel.getId());
@@ -91,10 +96,46 @@ try {
             		sessionService.setHttpSession(httpSession);
             		System.out.println("my userid in session is" + httpSession.getAttribute("USERID"));
             		
+
+            		
+            		/////check for recommendations
+            		
+            		
+            		JPABookDAO bookTemp = new JPABookDAO();
+            		
+            		int orderCount = bookTemp.getOrderCount(loginModel.getId());
+            		
+            		//get Top recommendations from user category based on rating
+            		String[] categories = tempUser.getCategory().split(",");
+            		
+            		List<MongoBook> recommCatBooks = new ArrayList<MongoBook>();
+            		
+            		recommCatBooks = bookTemp.searchTop5CategoryBooks(categories);
+            		
+            		
+            		List<Integer> userbasedRecommBookIds = new ArrayList<Integer>();
+            		if(orderCount != 0)
+            		{
+            			//get Apache Mahout recommendations based on previous selections
+            			
+            			userbasedRecommBookIds = bookTemp.getMahoutRecomm(980);
+            			
+            		}
+            		
+//            		for(int m : userbasedRecommBookIds)
+//            		{
+//            			System.out.println("User based recomm:" + m);
+//            		}
+            		
+            		////End check for recommendations
+            		
+            		//return new ModelAndView("redirect:/");
+            		
             		response.setSuccessFlag("Y");
             		response.setSuccessMessage("Login success");
             		//MongoCrud m = new MongoCrud();
             		return response;
+
             	}
            	 	
             }

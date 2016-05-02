@@ -11,7 +11,10 @@ import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
+import edu.sjsu.digitalLibrary.prj.models.order;
+import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
+import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.user;
 
 public class DBCrud<T> {
@@ -203,6 +206,100 @@ public class DBCrud<T> {
 		return result;
 	}
 
+	public int getOrderCount(int userID ){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery(
+				"select * from BookShareDB.order where userId = :sCode")
+				.addEntity(order.class)
+				.setParameter("sCode", userID);
+				int  result = query.list().size();
+		session.close();
+		s.close();
+		System.out.println("category found----" + result);
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<subbook> getSubBookdetails(int bookId) {
+		List<subbook> result = new ArrayList<subbook>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		System.out.println("Enter the getSubBookdetails in DBCRud" + " **** "  + bookId);
+		Query query = session.createSQLQuery("select * from subbook where parentId=:sCode").addEntity(subbook.class).setParameter("sCode", bookId);
+		System.out.println("Enter the requestDetails in DBCRud");
+		result = (List<subbook>)query.list();
+		session.close();
+		s.close();		
+		System.out.println("----" + result);
+		return result;
+	}
+	
+	public region getRegionInfo(int regionId){
+		System.out.println(" in all Order table " + regionId );
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.region where id=:sCode").addEntity(region.class).setParameter("sCode", regionId);
+
+		region  result = new region();
+		if(query.list().size()==0)
+        {
+        	 return null;
+        }
+        else
+        {
+        	System.out.println("enter the else in the region function");
+        	 result = (region)query.list().get(0);
+        }
+
+		System.out.println(" value of result in DBCrud" + result);
+		session.close();
+		s.close();
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public order getBookAvailability(int bookId){
+		System.out.println(" in all Order table " + bookId );
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.order where bookId=:sCode and active='1' and endDate>current_date").addEntity(order.class).setParameter("sCode", bookId);
+
+		order  result = new order();
+		if(query.list().size()==0)
+        {
+        	 return null;
+        }
+        else
+        {
+        	 result = (order)query.list().get(0);
+        }
+
+		System.out.println(" value of result in DBCrud" + result);
+		session.close();
+		s.close();
+		return result;
+	}
+	
+	
+	public List<region> getAllRegions(String city){
+		List<region> r = new ArrayList<region>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.region where city=:sCode and active='1'").addEntity(region.class).setParameter("sCode", city);
+
+		
+		r = (List<region>)query.list();
+       
+		session.close();
+		s.close();
+		return r;
+	}
 	
 	
 }
