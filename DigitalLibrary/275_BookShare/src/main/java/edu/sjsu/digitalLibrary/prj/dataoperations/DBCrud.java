@@ -285,4 +285,21 @@ public class DBCrud<T> {
 		return result;
 	}
 	
+	
+	public List<region> getAllRegions(String city){
+		List<region> r = new ArrayList<region>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.region where city=:sCode and active='1'").addEntity(region.class).setParameter("sCode", city);
+
+		
+		r = (List<region>)query.list();
+       
+		session.close();
+		s.close();
+		return r;
+	}
+	
+	
 }

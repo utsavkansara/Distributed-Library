@@ -31,6 +31,38 @@ public class region implements Serializable{
 	 @Column(name = "funding_region")	 
 	 private int funding_region;
 
+	 
+	 @Column(name = "city")	 
+	 private String city;
+	 
+	 @Column(name = "active")	 
+	 private int active;
+	 
+	 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
 	public int getId() {
 		return id;
 	}

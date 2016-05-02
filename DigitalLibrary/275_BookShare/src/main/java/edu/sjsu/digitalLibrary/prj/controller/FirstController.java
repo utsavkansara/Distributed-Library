@@ -57,6 +57,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
@@ -64,9 +65,8 @@ import edu.sjsu.digitalLibrary.prj.models.Registration;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
 import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.category;
-
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
-
+import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
@@ -157,8 +157,8 @@ public class FirstController {
         	String msg=null;
            
             //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"id","id", "id can not be empty.");
-            ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"name","name", "name not be empty");
-            ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "emailId", "emailId", "emailId cant be empty");
+           // ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"name","name", "name not be empty");
+            //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "emailId", "emailId", "emailId cant be empty");
             //ValidationUtils.r
  
             passwordDiff = 1;
@@ -302,7 +302,11 @@ public class FirstController {
             	//address Entry Ends
             	
             	
+            	//Getting regions in User City , If no found ?????
+            	JPARegionDAO jr = new JPARegionDAO();
+            	List<region> rgnNearUser = new ArrayList<region>();
             	
+            	rgnNearUser = jr.getAllRegions(registrationModel.getCity());
             	
             	LoginSamplee loginModel = new LoginSamplee();
             	ModelAndView model = new ModelAndView("login");
