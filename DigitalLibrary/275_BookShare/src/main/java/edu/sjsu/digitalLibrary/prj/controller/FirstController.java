@@ -103,6 +103,19 @@ public class FirstController {
 
     }
     
+  
+    @RequestMapping(value = "/categories",method = RequestMethod.GET)
+    @ResponseBody
+    public List<category> getActiveCategories() {
+    	JPACategoryDAO obj= new JPACategoryDAO();
+    	List<category> categories = obj.getCategories();
+        return categories;
+    }
+    
+    
+    
+    
+    
     @RequestMapping(value = "/showuser/{userId}",method = RequestMethod.GET)
     public ModelAndView showBook(@PathVariable int userId) {
     	
