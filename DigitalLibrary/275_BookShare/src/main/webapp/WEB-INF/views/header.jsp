@@ -605,12 +605,7 @@
 	
 	$(document).ready(
 				
-			
 			function() {
-				
-				
-				
-				
 				
 				$.ajax({
 					
@@ -627,7 +622,7 @@
 				            	  
 				            	  $.each( data.responseJSON, function(index, val) {
 				            		  
-				            		html += "<option value=''"+index+"'>"+val.name+"</option>";  
+				            		html += "<option value=''"+index+"' title='"+val.name+"'>"+val.name+"</option>";  
 				            	    
 				            	  });
 				            	  
@@ -662,10 +657,7 @@
 									if (data.responseJSON.successFlag == "Y") {
 										
 										location.reload(true);
-										/* $("#userEmail").val('');
-										$("#password").val('');
-										
-										$('#modal-login-big').modal('hide'); */
+									
 									} else {
 																				
 										alert(' Please check credentials ');
@@ -679,14 +671,17 @@
 						})
 						
 						
-						
-						
-						
+															
 						
 				$('#register').submit(
-						function(event){
-							var signupData = {}
-						
+					function(event){
+						var signupData = {}
+
+						var array_of_checked_values = $("#category").multiselect("getChecked").map(function(){
+								
+							   return (this.title ? this.title : this.description );
+							
+						}).get();
 				
 				})	
 
