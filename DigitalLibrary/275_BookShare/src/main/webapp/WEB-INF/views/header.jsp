@@ -136,8 +136,8 @@
 								<div class="form-group">
 									<label for="email" class="sr-only">Email</label>
 									<input type="email"
-										class="form-control bookshop-form-control" id="email"
-										name="email" placeholder="Enter your email address here"
+										class="form-control bookshop-form-control" id="emailId"
+										name="emailId" placeholder="Enter your email address here"
 										required="true">
 								</div>		
 										
@@ -209,11 +209,66 @@
 								</div>
 								
 								<div class="form-group">
-									<label for="state" class="sr-only">State</label>
-									<input type="text"
+									<label for="state" class="sr-only">State</label>									
+									<select id="state" name="state" style="width:346px; height:38px;" placeholder="select state">
+										<option value="" disabled selected>select state</option>
+										<option value="AL">Alabama</option>
+										<option value="AK">Alaska</option>
+										<option value="AZ">Arizona</option>
+										<option value="AR">Arkansas</option>
+										<option value="CA">California</option>
+										<option value="CO">Colorado</option>
+										<option value="CT">Connecticut</option>
+										<option value="DE">Delaware</option>
+										<option value="DC">District Of Columbia</option>
+										<option value="FL">Florida</option>
+										<option value="GA">Georgia</option>
+										<option value="HI">Hawaii</option>
+										<option value="ID">Idaho</option>
+										<option value="IL">Illinois</option>
+										<option value="IN">Indiana</option>
+										<option value="IA">Iowa</option>
+										<option value="KS">Kansas</option>
+										<option value="KY">Kentucky</option>
+										<option value="LA">Louisiana</option>
+										<option value="ME">Maine</option>
+										<option value="MD">Maryland</option>
+										<option value="MA">Massachusetts</option>
+										<option value="MI">Michigan</option>
+										<option value="MN">Minnesota</option>
+										<option value="MS">Mississippi</option>
+										<option value="MO">Missouri</option>
+										<option value="MT">Montana</option>
+										<option value="NE">Nebraska</option>
+										<option value="NV">Nevada</option>
+										<option value="NH">New Hampshire</option>
+										<option value="NJ">New Jersey</option>
+										<option value="NM">New Mexico</option>
+										<option value="NY">New York</option>
+										<option value="NC">North Carolina</option>
+										<option value="ND">North Dakota</option>
+										<option value="OH">Ohio</option>
+										<option value="OK">Oklahoma</option>
+										<option value="OR">Oregon</option>
+										<option value="PA">Pennsylvania</option>
+										<option value="RI">Rhode Island</option>
+										<option value="SC">South Carolina</option>
+										<option value="SD">South Dakota</option>
+										<option value="TN">Tennessee</option>
+										<option value="TX">Texas</option>
+										<option value="UT">Utah</option>
+										<option value="VT">Vermont</option>
+										<option value="VA">Virginia</option>
+										<option value="WA">Washington</option>
+										<option value="WV">West Virginia</option>
+										<option value="WI">Wisconsin</option>
+										<option value="WY">Wyoming</option>
+									</select>
+									
+									<!-- <input type="text"
 										class="form-control bookshop-form-control" id="state"
 										name="state" placeholder="Enter State"
-										required="true">
+										required="true"> -->
 									
 								</div>
 								
@@ -222,7 +277,7 @@
 									<input type="text"
 										class="form-control bookshop-form-control" id="country"
 										name="state" placeholder="Enter Country"
-										required="true">
+										required="true" readonly="readonly" value="US">
 									
 								</div>
 								
@@ -614,7 +669,7 @@
 					url : "/Distributed-Library/categories",
 					complete : function(data) {
 						
-						alert(JSON.stringify(data.responseJSON));
+						
 						 if(data !=''){
 				             
 				            	  var html = "<select id='category' name='category' multiple='multiple' style='width:346px; height:38px;'>";
@@ -641,7 +696,6 @@
 				$('#login').submit(
 						function(event) {
 													
-
 							var search = {}
 							search["userEmail"] = $("#userEmail").val();
 							search["password"] = $("#password").val();
@@ -660,7 +714,7 @@
 									
 									} else {
 																				
-										alert(' Please check credentials ');
+										alert(data.responseJSON.ErrorMessage);
 
 									}
 								}
@@ -669,19 +723,68 @@
 							event.preventDefault();
 
 						})
-						
-						
-															
+									
 						
 				$('#register').submit(
 					function(event){
-						var signupData = {}
-
+						
 						var array_of_checked_values = $("#category").multiselect("getChecked").map(function(){
-								
+							
 							   return (this.title ? this.title : this.description );
 							
 						}).get();
+						
+						var categoriesArray = "";
+						for(var i=0;i<array_of_checked_values.length;i++){
+							categoriesArray += array_of_checked_values[i] + ","
+						}
+						
+						var categories = categoriesArray.substring(0, categoriesArray.length-1);
+						
+						var signupData = {};
+						
+						signupData["userName"] = $("#userName").val();
+						signupData["dob"] = $("#dob").val();
+						signupData["emailId"] = $("#emailId").val();
+						signupData["phone"] = $("#phone").val();
+						signupData["category"] = $("#category").val();
+						signupData["parentId"] = $("#parentId").val();
+						signupData["street"] = $("#street").val();
+						signupData["aptNo"] = $("#aptNo").val();
+						signupData["city"] = $("#city").val();
+						signupData["state"] = $("#state").val();
+// 						signupData["country"] = $("#country").val();
+						signupData["country"] = "USA";	
+						signupData["zipcode"] = $("#zipcode").val();
+						signupData["userPassword"] = $("#userPassword").val();
+						signupData["confirmPassword"] = $("#confirmPassword").val();
+						signupData["category"] = categories;
+						
+						$.ajax({
+							type : "POST",
+							contentType : "application/json; charset=utf-8",
+							url : "/Distributed-Library/signup",
+							data : JSON.stringify(signupData),
+							dataType : "json",
+							complete : function(data) {
+								
+								console.log(data);
+								if (data.responseJSON.successFlag == "Y") {
+																		
+									alert(data.responseJSON.SuccessMessage);
+									location.reload(true);
+								
+								} else {
+																			
+									alert(data.responseJSON.errorMessage);
+
+								}
+							}
+
+						}); 
+						event.preventDefault();
+						
+						
 				
 				})	
 
