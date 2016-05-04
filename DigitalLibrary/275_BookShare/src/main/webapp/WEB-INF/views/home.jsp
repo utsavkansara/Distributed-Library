@@ -991,47 +991,7 @@
 		</div>
 	</div> --%>
 </body>
+
+
 </html>
 
-<script>
-	$(document).ready(
-			function() {
-
-				$('#login').submit(
-						function(event) {
-							
-							
-
-							var search = {}
-							search["userEmail"] = $("#userEmail").val();
-							search["password"] = $("#password").val();
-
-							$.ajax({
-								type : "POST",
-								contentType : "application/json",
-								url : "/Distributed-Library/login",
-								data : JSON.stringify(search),
-								dataType : 'json',
-								complete : function(data) {
-									
-									if (data.responseJSON.successFlag == "Y") {
-										
-										location.reload(true);
-										/* $("#userEmail").val('');
-										$("#password").val('');
-										
-										$('#modal-login-big').modal('hide'); */
-									} else {
-																				
-										alert(' Please check credentials ');
-
-									}
-								}
-
-							});
-							event.preventDefault();
-
-						})
-
-			})
-</script>

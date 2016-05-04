@@ -33,6 +33,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,10 +59,20 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
+
+
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
+import edu.sjsu.digitalLibrary.prj.jsonview.Views;
+import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
-import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
+import edu.sjsu.digitalLibrary.prj.models.address;
+import edu.sjsu.digitalLibrary.prj.models.RegistrationJsonPojo;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
 import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.category;
@@ -102,6 +113,19 @@ public class FirstController {
         return new ModelAndView("signup", "userdetails", userModel);
 
     }
+    
+  
+    @RequestMapping(value = "/categories",method = RequestMethod.GET)
+    @ResponseBody
+    public List<category> getActiveCategories() {
+    	JPACategoryDAO obj= new JPACategoryDAO();
+    	List<category> categories = obj.getCategories();
+        return categories;
+    }
+    
+    
+    
+    
     
     @RequestMapping(value = "/showuser/{userId}",method = RequestMethod.GET)
     public ModelAndView showBook(@PathVariable int userId) {
@@ -145,8 +169,201 @@ public class FirstController {
         return mv;
     }
     
-   
+    @JsonView(Views.Public.class)
+    @ResponseBody
     @RequestMapping(value = "/signup",method = RequestMethod.POST)
+    public JsonResponse initN1(@RequestBody RegistrationJsonPojo registration) 
+    {
+    	
+        try 
+        {
+        	
+        	Registration registrationModel = new Registration();
+        	
+        	registrationModel.setUserName(registration.getUserName());
+        	registrationModel.setDob(registration.getDob());
+        	registrationModel.setEmailId(registration.getEmailId());
+        	registrationModel.setPhone(registration.getPhone());
+        	registrationModel.setCategory(registration.getCategory());
+        	registrationModel.setParentId(registration.getParentId());
+        	registrationModel.setStreet(registration.getStreet());
+        	registrationModel.setAptNo(registration.getAptNo());
+        	registrationModel.setCity(registration.getCity());
+        	registrationModel.setState(registration.getState());
+        	registrationModel.setCountry(registration.getCountry());
+        	registrationModel.setZip(registration.getZipcode());
+        	registrationModel.setUserPassword(registration.getUserPassword());
+        	registrationModel.setConfirmPassword(registration.getConfirmPassword());
+        	
+        	String msg=null;
+        	JsonResponse jsonResponseAjax = new JsonResponse();
+           
+            //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"id","id", "id can not be empty.");
+           // ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult,"name","name", "name not be empty");
+            //ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "emailId", "emailId", "emailId cant be empty");
+            //ValidationUtils.r
+ 
+            passwordDiff = 1;
+            if(!registrationModel.getUserPassword().equals(registrationModel.getConfirmPassword()))
+            	passwordDiff = -1;
+            
+            
+          ///Address Verification
+        	
+        	
+        	ProcessBuilder p=new ProcessBuilder("curl", "-X","POST",
+                     "https://api.easypost.com/v2/addresses", "-u", "Dp8stkYIT525FJjgvk5bXg:", "-d", "verify_strict[]=delivery", "-d",
+                    "address[street1]="+ registrationModel.getStreet(),  "-d", "address[street2]=" + registrationModel.getAptNo() ,
+                    "-d", "address[city]=" + registrationModel.getCity(),
+                    "-d", "address[state]=" + registrationModel.getState() ,"-d", "address[country]=" + registrationModel.getCountry(),
+                    "-d", "address[zip]=" + registrationModel.getZip());
+        	
+        	
+        	Process process = p.start();
+        	
+        	BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(process.getInputStream()));
+
+        	 BufferedReader stdError = new BufferedReader(new
+                     InputStreamReader(process.getErrorStream()));
+           
+            
+            System.out.println("Addess is:");
+            String s;
+            int count = 0;
+            
+            s = stdInput.readLine();
+            System.out.println("Response for address is: " + s);
+           
+
+           
+            if(process.isAlive())
+            {
+            	process.destroy();
+            	
+            }
+            
+            
+            //converting response to json object
+            JSONObject jsonResponse = new JSONObject(s);
+            
+            JPAUserDAO tempEmail = new JPAUserDAO();
+            
+            /*for (ObjectError e : bindingResult.getAllErrors())
+            	System.out.println("this is error: " + e.getDefaultMessage());*/
+            
+            int parentId = tempEmail.getExistingEmail(registrationModel.getParentId());
+            System.out.println("Parent email is: " + registrationModel.getParentId() + " , id is: " + parentId);
+             
+            if(tempEmail.getExistingEmail(registrationModel.getEmailId()) > 0)
+            {
+            	
+            	jsonResponseAjax.setSuccessFlag("N");
+            	jsonResponseAjax.setErrorMessage("user with this email already exists");                    
+              	return jsonResponseAjax;
+             
+            }	
+            /*if (bindingResult.hasErrors() || ((!registrationModel.getParentId().equals("")) && parentId == 0) || passwordDiff == -1)
+            {
+            	System.out.println(bindingResult);
+            	System.out.println("Error in form: " + registrationModel.getDob());
+                //returning the errors on same page if any errors..
+            	
+                return new ModelAndView("signup", "userdetails", registrationModel);
+            }*/
+            if(jsonResponse.has("error"))
+            {
+            	jsonResponseAjax.setSuccessFlag("N");
+            	jsonResponseAjax.setErrorMessage("Provided Address is Invalid..");                    
+              	return jsonResponseAjax;
+            }
+            else
+            {
+            	
+            	//User Table Entry
+            	System.out.println("user model details here --" +registrationModel.getDob());
+            	
+            	
+            	registrationModel.setActiveUser(1);
+            	//System.out.println(PlayPP.sha1(registrationModel.getPassword()));
+            	registrationModel.setUserPassword(PlayPP.sha1(registrationModel.getUserPassword()));
+            	//Date d = new Date();
+            	
+            	user registerUser = new user();
+            	registerUser.setActive(registrationModel.getActiveUser());
+            	registerUser.setCategory(registrationModel.getCategory());
+            	
+            	DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            	format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+
+            	java.util.Date date = format.parse(registrationModel.getDob());
+
+            	java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            	registerUser.setDob(sqlDate);
+            	registerUser.setEmailId(registrationModel.getEmailId());
+            	registerUser.setName(registrationModel.getUserName());
+            	registerUser.setPassword(registrationModel.getUserPassword());
+            	//change here
+            	registerUser.setParentId(parentId);
+            	registerUser.setPhone(registrationModel.getPhone());
+            	
+            	
+            	
+            	JPAUserDAO obj= new JPAUserDAO();
+            	int newUserId =obj.insert(registerUser);
+            	registerUser.setId(newUserId);
+            	
+            	System.out.println("UserId Added: " + newUserId);
+            	//User Table Entry Ends/////////////////////////////////
+            	//System.out.println("Apt#: " + registrationModel.getAptNo());
+            	
+            	//address Entry
+            	registrationModel.setActive(1);
+            	address newUserAddress = new address();
+            	
+            	newUserAddress.setUserId(newUserId);
+            	newUserAddress.setStreet(registrationModel.getStreet());
+            	newUserAddress.setAptNo(registrationModel.getAptNo());
+            	newUserAddress.setCity(registrationModel.getCity());
+            	newUserAddress.setState(registrationModel.getState());
+            	newUserAddress.setCountry(registrationModel.getCountry());
+            	newUserAddress.setZip(registrationModel.getZip());
+            	newUserAddress.setAttachmentId(registrationModel.getAttachmentId());
+            	newUserAddress.setActive(registrationModel.getActive());
+            	
+            	JPAAddressDAO objAddress = new JPAAddressDAO();
+            	int newAddressId =objAddress.insert(newUserAddress);
+            	newUserAddress.setId(newAddressId);
+            	System.out.println("AddressId Added: " + newAddressId);
+            	//address Entry Ends
+            	
+            	
+            	//Getting regions in User City , If no found ?????
+            	JPARegionDAO jr = new JPARegionDAO();
+            	List<region> rgnNearUser = new ArrayList<region>();
+            	
+            	rgnNearUser = jr.getAllRegions(registrationModel.getCity());
+            	
+            	jsonResponseAjax.setSuccessFlag("Y");
+            	jsonResponseAjax.setSuccessMessage("Login success");
+            	
+            	return jsonResponseAjax;
+          }
+        } catch (Exception e) {
+        	
+        	System.out.println("Exception in FirstController "+e.getMessage());
+            e.printStackTrace();
+            JsonResponse jsonResponseAjax = new JsonResponse();
+            jsonResponseAjax.setSuccessFlag("E");
+            jsonResponseAjax.setErrorMessage("Error Occurred while processing request");                 
+          	return jsonResponseAjax;
+        	
+        }
+        
+    }
+    
+
+    /*@RequestMapping(value = "/signup",method = RequestMethod.POST)
     public ModelAndView initN1(@ModelAttribute("userdetails")Registration registrationModel,  BindingResult bindingResult, 
             HttpServletRequest request,  HttpServletResponse response) 
     {
@@ -322,9 +539,9 @@ public class FirstController {
             return new ModelAndView("signup", "userdetails", registrationModel);
         }
         
-    }
+    }*/
     
-
+    
     
     @RequestMapping(value = "/editprofile",method = RequestMethod.POST)
     public ModelAndView editProfile(@ModelAttribute("userdetails")user userModel1, BindingResult bindingResult, 
