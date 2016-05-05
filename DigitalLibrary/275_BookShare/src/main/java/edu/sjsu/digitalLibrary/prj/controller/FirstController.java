@@ -42,30 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import com.fasterxml.jackson.annotation.JsonView;
-
 import edu.sjsu.digitalLibrary.prj.dao.*;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;

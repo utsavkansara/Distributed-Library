@@ -45,19 +45,20 @@ public class RequestBookController {
   @RequestMapping(value = "/requestbook",method = RequestMethod.GET)
   public Object bookAvailability() {
 	  System.out.println("enter bookavailabiltity");
-	 /*  boolean checkPaymentDetails=checkUserPaymentDetails(int userId)// ***put the user ID coming from the user info
+	  int userID=21;
+	   boolean checkPaymentDetails=checkUserPaymentDetails(userID);// ***put the user ID coming from the user info
 	   if(checkPaymentDetails=false)
 	   {
 		   return "redirect:/paymentdetails";  // ****transfer to the page where you can put the payment details.
-	   }*/
+	   }
 
-
-    	/*if(!sessionService.checkAuth())
+/*
+    	if(!sessionService.checkAuth())
     	{
     			return "redirect:/login";
 
 
-    	}*/
+    	} */
     	JPARequestBookDAO j= new JPARequestBookDAO();
     	int bookID=1001;  // ***Once we get the book information we will send the book over here.
     	System.out.println("Before the bookavialdeatil in requestbookcontroller");
@@ -91,31 +92,12 @@ public class RequestBookController {
 
     }
 
- /* public boolean checkUserPaymentDetails(int userID) {
-  	if(!sessionService.checkAuth())
-  	{
-  			return "redirect:/login";
-
-
-  	}
-  	JPAPaymentDAO j= new JPAPaymentDAO();
+ public boolean checkUserPaymentDetails(int userID) {
+    JPARequestBookDAO i= new JPARequestBookDAO();
   	int bookID=1;  // ***Once we get the book information we will send the book over here.
-  	str=j.userPaymentDetails(userID);
-  	System.out.println("steeerrr"+str);
-  	ModelAndView model = new ModelAndView("requestbook");
-  	System.out.println(str);
-  	   if(str.size() > 0)
-         {
-  		   System.out.println("in checking");
-      	   model.addObject("RequestID", str.get(0).getRequestId());
-      	   model.addObject("Message", str.get(0).getMessage());
-      	   model.addObject("UserId", str.get(0).getUserId().getUserId());
-      	   model.addObject("Time", str.get(0).getRequestBookTime().toString());
-      	   System.out.println(str);
-
-         }
-  	   model.addObject("str", str);
- 		return model;
+  	boolean f=i.userPaymentDetails(userID);
+  	//System.out.println("steeerrr"+str);
+  	return f;  
 
   }
 
