@@ -320,5 +320,22 @@ public class DBCrud<T> {
 		return r;
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	public int checkUserActiveOrders(int userId){
+		
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.order where userId=:sCode and active=1").addEntity(order.class).setParameter("sCode", userId);
+		
+		if(query.list().size()==0)
+        {
+        	 return 0;
+        }
+        else
+        {
+        	return query.list().size();
+        }
+
+	}
 }

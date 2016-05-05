@@ -168,6 +168,32 @@ public class JPARequestBookDAO implements RequestBookDAO {
 		
 	} 
 	
+	//RaunaqCode Starts
+	public int checkUserActiveOrders(int userId)
+	{
+		//region regionDetails= new region();
+		boolean userDetails=false;
+		
+		
+		   try
+		   {
+			   System.out.println("checkUserActiveOrders JPARequestBookDAO ");
+			   DBCrud<payment> db = new DBCrud<payment>();
+			    return db.checkUserActiveOrders(userId);
+			  
+			  
+		   }
+		   catch(Exception e2)
+		   {
+			// TODO Auto-generated catch block
+						e2.printStackTrace();
+		   }
+		   return -1;
+		
+	} 
+	
+	
+	//RaunaqCode Ends
 	
 /*	public List<requestbook> getBookAvailability()
 	{
