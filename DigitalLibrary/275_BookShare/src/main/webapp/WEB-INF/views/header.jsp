@@ -708,6 +708,8 @@
 								dataType : 'json',
 								complete : function(data) {
 									
+									alert(JSON.stringify(data));
+									
 									if (data.responseJSON.successFlag == "Y") {
 										
 										location.reload(true);
@@ -753,8 +755,7 @@
 						signupData["aptNo"] = $("#aptNo").val();
 						signupData["city"] = $("#city").val();
 						signupData["state"] = $("#state").val();
-// 						signupData["country"] = $("#country").val();
-						signupData["country"] = "USA";	
+						signupData["country"] = $("#country").val();
 						signupData["zipcode"] = $("#zipcode").val();
 						signupData["userPassword"] = $("#userPassword").val();
 						signupData["confirmPassword"] = $("#confirmPassword").val();
@@ -766,25 +767,24 @@
 							url : "/Distributed-Library/signup",
 							data : JSON.stringify(signupData),
 							dataType : "json",
-							complete : function(data) {
+							complete : function(response) {
 								
-								console.log(data);
-								if (data.responseJSON.successFlag == "Y") {
+								var data = JSON.parse(response.responseText);
+								
+								if (data.successFlag == "Y") {
 																		
-									alert(data.responseJSON.SuccessMessage);
+									alert(data.successMessage);
 									location.reload(true);
 								
 								} else {
 																			
-									alert(data.responseJSON.errorMessage);
+									alert(data.errorMessage);
 
 								}
 							}
 
 						}); 
-						event.preventDefault();
-						
-						
+						event.preventDefault();						
 				
 				})	
 

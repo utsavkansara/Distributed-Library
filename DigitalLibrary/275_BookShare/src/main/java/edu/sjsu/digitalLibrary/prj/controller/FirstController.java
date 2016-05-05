@@ -322,7 +322,7 @@ public class FirstController {
             	rgnNearUser = jr.getAllRegions(registrationModel.getCity());
             	
             	jsonResponseAjax.setSuccessFlag("Y");
-            	jsonResponseAjax.setSuccessMessage("Login success");
+            	jsonResponseAjax.setSuccessMessage("Signup success");
             	
             	return jsonResponseAjax;
           }
