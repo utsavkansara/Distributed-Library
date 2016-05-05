@@ -47,9 +47,11 @@ public class RequestBookController {
 	  System.out.println("enter bookavailabiltity");
 	  int userID=21;
 	   boolean checkPaymentDetails=checkUserPaymentDetails(userID);// ***put the user ID coming from the user info
-	   if(checkPaymentDetails=false)
+	   System.out.println("In Request book controller ---- Value of checkPaymentDetails " + checkPaymentDetails);
+	   if(checkPaymentDetails==false)
 	   {
-		   return "redirect:/paymentdetails";  // ****transfer to the page where you can put the payment details.
+		   System.out.println("enter the if in checkPaymentDetails");
+		   return "redirect:/paymentDetails";  // ****transfer to the page where you can put the payment details.
 	   }
 
 /*
@@ -93,12 +95,12 @@ public class RequestBookController {
     }
 
  public boolean checkUserPaymentDetails(int userID) {
+	 System.out.println("Enter the *****checkUserPaymentDetails  *****");
     JPARequestBookDAO i= new JPARequestBookDAO();
   	int bookID=1;  // ***Once we get the book information we will send the book over here.
-  	boolean f=i.userPaymentDetails(userID);
+  	boolean userDetails=i.userPaymentDetails(userID);   // userDetails - true limit reached the count more than 2
   	//System.out.println("steeerrr"+str);
-  	return f;  
-
+  	return userDetails;  
   }
 
   /*    public Object uploadrequestbook() {

@@ -12,6 +12,7 @@ import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.order;
+import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
@@ -237,6 +238,23 @@ public class DBCrud<T> {
 		return result;
 	}
 	
+	// Apoorv maxUserOrder
+	
+	public List<payment> userPaymentDetails(int userId) {
+		List<payment> result = new ArrayList<payment>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		System.out.println("Enter the getSubBookdetails in DBCRud" + " **** "  + userId);
+		Query query = session.createSQLQuery("select * from payment where userId=:sCode").addEntity(payment.class).setParameter("sCode", userId);
+		System.out.println("Enter the requestDetails in DBCRud");
+		result = (List<payment>)query.list();
+		session.close();
+		s.close();		
+		System.out.println("----" + result);
+		return result;
+	}
+	
 	public region getRegionInfo(int regionId){
 		System.out.println(" in all Order table " + regionId );
 		s = SessionFactoryObj.getSessionFactory();
@@ -284,6 +302,7 @@ public class DBCrud<T> {
 		s.close();
 		return result;
 	}
+	
 	
 	
 	public List<region> getAllRegions(String city){

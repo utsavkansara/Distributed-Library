@@ -215,7 +215,8 @@ public class MongoCrud {
 			      if(volumeInfo.getPublisher() != null)
 			    	  objBooks.put("publisher", volumeInfo.getPublisher());
 			      
-			      
+			      if(volumeInfo.getIndustryIdentifiers() != null)
+			    	  objBooks.put("isbn", volumeInfo.getIndustryIdentifiers().get(1).getIdentifier());
 			      
 			    	  objBooks.put("price", 0.0);
 			      
@@ -460,6 +461,10 @@ public class MongoCrud {
 				 else
 					 mTemp.setPrice(0);
 				 
+				 if(object.containsField("isbn"))
+					 mTemp.setIsbn(object.get("isbn").toString());
+				 else
+					 mTemp.setIsbn("");
 				 
 				 searchedBooks.add(mTemp);
 			}
@@ -545,7 +550,10 @@ public class MongoCrud {
 				 else
 					 mTemp.setPrice(0);
 				 
-				 
+				 if(object.containsField("isbn"))
+					 mTemp.setIsbn(object.get("isbn").toString());
+				 else
+					 mTemp.setIsbn("");
 				 
 			}
 		} finally {
@@ -646,7 +654,11 @@ public class MongoCrud {
 				 else
 					 mTemp.setPrice(0);
 				 
-
+				 if(object.containsField("isbn"))
+					 mTemp.setIsbn(object.get("isbn").toString());
+				 else
+					 mTemp.setIsbn("");
+				 
 				 searchedBooks.add(mTemp);
 			}
 		} finally {
@@ -685,6 +697,10 @@ public class MongoCrud {
 				 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
 				 mTemp.setPublisher(object.get("publisher").toString());
 				 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 if(object.containsField("isbn"))
+					 mTemp.setIsbn(object.get("isbn").toString());
+				 else
+					 mTemp.setIsbn("");
 				 
 			}
 		} finally {
@@ -700,15 +716,7 @@ public  java.util.List<MongoBook> searchTop5CategoryBooks(String[] categories) t
 	java.util.List<MongoBook> mBooks = new java.util.ArrayList<MongoBook>();
 	mBooks = this.doAdvanceSearch("ALL", "ALL", "ALL", categories);
 	
-	
-
 	Collections.sort(mBooks);
-	//mBooks.sort((o1, o2) -> o1.getRating() > (o2.getRating()) ? 0:1);
-//	for(MongoBook m : mBooks)
-//	{
-//		System.out.println("Books in recomm:" + m.getTitle());
-//	}
-	
 	
 	return mBooks;
 	

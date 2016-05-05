@@ -142,6 +142,18 @@
 					    
 					</tr>
 					
+					
+					<tr class="info">
+					    <td><label>ISBN#</label></td>
+					    <% if(!Book.getIsbn().equals("")){ %>
+					    	<td>${bookdetails.isbn}</td>
+					    <% } else {%>
+							<td>No Info available</td>
+						<% } %>
+					    <td></td>
+					    
+					</tr>
+					
 					<tr class="info">
 					    <td><label>Categories</label></td>
 					    <td>
@@ -153,6 +165,7 @@
 						</td>
 					    <td></td>
 					</tr>
+					
 					
 					
 					<tr class="info">

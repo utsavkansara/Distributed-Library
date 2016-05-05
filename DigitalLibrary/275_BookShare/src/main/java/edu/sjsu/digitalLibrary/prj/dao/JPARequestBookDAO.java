@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
+import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
@@ -138,6 +139,34 @@ public class JPARequestBookDAO implements RequestBookDAO {
 		   }
 			return bookavail;
 	}
+	
+	public boolean userPaymentDetails(int userId)
+	{
+		//region regionDetails= new region();
+		boolean userDetails=false;
+		List<payment> paymentDetails = new ArrayList<payment>();
+		System.out.println("Before userDetailspayments JPARequestBookDAO ");
+		
+		   try
+		   {
+			   System.out.println("Enter the DBCrud in userPaymentDetails JPARequestBookDAO ");
+			   DBCrud<payment> db = new DBCrud<payment>();
+			    paymentDetails=db.userPaymentDetails(userId);
+			   System.out.println("value of the paymentDetails" +"   " + paymentDetails.size());
+			   if(paymentDetails.size()==0)
+			   {
+				   userDetails=false;
+			   }
+			   System.out.println("value of userDetails:" + "  " + userDetails);
+		   }
+		   catch(Exception e2)
+		   {
+			// TODO Auto-generated catch block
+						e2.printStackTrace();
+		   }
+			return userDetails;
+		
+	} 
 	
 	
 /*	public List<requestbook> getBookAvailability()
