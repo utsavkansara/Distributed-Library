@@ -19,7 +19,8 @@
 	<link type="text/css" href="<c:url value="/resources/css/main.min.css" />" rel="stylesheet">
 	<link type="text/css" href="<c:url value="/resources/css/jquery.multiselect.css" />" rel="stylesheet">
 	<link type="text/css" href="<c:url value="/resources/css/jquery.multiselect.filter.css" />" rel="stylesheet">
-		<link type="text/css" href="https://code.jquery.com/ui/1.12.0-rc.2/themes/base/jquery-ui.css" rel="stylesheet">
+	
+	<link type="text/css" href="https://code.jquery.com/ui/1.12.0-rc.2/themes/base/jquery-ui.css" rel="stylesheet">
 	
 	<script src="<c:url value="/resources/js/jquery-1.11.2.min.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui.min.js" />"></script>

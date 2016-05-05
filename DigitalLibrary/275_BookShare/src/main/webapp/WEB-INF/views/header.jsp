@@ -8,64 +8,77 @@
 
 <!-- ============================================== HEADER ============================================== -->
 
-<header class="header"> <nav
-	class="navbar navbar-bookshop navbar-static-top" role="navigation">
-<div class="container">
-	<div class="row">
-		<div class="col-md-5 hidden-xs hidden-sm">
-			<ul class="nav navbar-nav">
-				<li><a href="single-book.html">Online Store</a></li>
-				<li><a href="about.html">About Us</a></li>
-				<li><a href="about.html">Delivery</a></li>
-				<li><a href="contact.html">FAQs</a></li>
-				<li><a href="contact.html">Contacts</a></li>
-			</ul>
-			<!-- /.nav -->
-		</div>
-		<!-- /.col -->
-		<div class="col-md-3 col-xs-10 col-sm-10 navbar-left">
 
-			<p class='text-center'>
-				<a href="#"><span class="icon glyphicon glyphicon-earphone"></span>
-					Contact customer care </a>
-			</p>
 
-		</div>
-		<!-- /.col -->
-		<div class="col-md-4 col-sm-2">
-			<ul class="nav navbar-nav navbar-right">
+<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+	      		<a class="navbar-brand" href="${pageContext.request.contextPath}">
+	        		<img style="max-width:50px; margin-top: -15px;" alt="Brand" src="http://blindlibrary.utah.gov/images/logoBook.gif">
+	      		</a>
+	    	</div>
+	    
+	    	<!-- Brand and toggle get grouped for better mobile display -->
+	    	<div class="navbar-header">
+	      		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+	      		</button>
+	      
+	      		<a class="navbar-brand" href="${pageContext.request.contextPath}">Digital Library</a>
+	    	</div>
+	    
+	    	<!-- Collect the nav links, forms, and other content for toggling -->
+	    	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">	      
+	      		<form class="navbar-form navbar-left" role="search" action="${pageContext.request.contextPath}/search" method="get">
+	        		<div class="form-group">
+	          			<input type="text" class="form-control" placeholder="Search" name="searchbox">
+	        		</div>
+	        		<button type="submit" class="btn btn-default">Submit</button>
+	      		</form>
+	      		
+	      		
+	      		
+	      		
+	      		
 
-				<!-- <li class="hidden-xs hidden-sm"><a href=".menu-toggle-right">Shopping
-						Cart</a></li> -->
-				<li class="hidden-xs hidden-sm"><a href="contact.html">My
-						Account</a></li>
+	      		<ul class="nav navbar-nav navbar-right">
+<%-- 			      	<li><a href="${pageContext.request.contextPath}/advanceSearch">Advance Search</a></li> --%>
+<%-- 			      	<li><a href="${pageContext.request.contextPath}/bookhome">Sell</a></li> --%>
 
-				<c:choose>
+
+					<c:choose>
 					<c:when
 						test="${sessionScope.USERNAME != undefined && sessionScope.USERNAME != null  && sessionScope.USERNAME != '' }">
 						<%-- <c:when test="${sessionScope.USERNAME != ''}"> --%>
-						<li class="hidden-xs hidden-sm"><a href="contact.html">Hey,
-								${sessionScope.USERNAME}</a></li>
+						<li class="dropdown">
+				          	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Hi ${sessionScope.USERNAME} <span class="caret"></span></a>
+				          	<ul class="dropdown-menu" role="menu">
+					            <li><a href="${pageContext.request.contextPath}/showuser/${sessionScope.USERID}">Profile</a></li>
+<%-- 							    <li><a href="${pageContext.request.contextPath}/transactions">View Transactions</a></li> --%>
+<%-- 							    <li><a href="${pageContext.request.contextPath}/requestbook">Make a request</a></li> --%>
+							    <li><a href="${pageContext.request.contextPath}/logout">Signout</a></li>
+				          	</ul>
+			       		</li>
 					</c:when>
 
 					<c:otherwise>
-						<li class="icon icon-small hidden-xs"><a data-toggle="modal"
-							data-target="#modal-login-big" href="#"><i
-								class="icon fa fa-lock"></i></a></li>
-						<li class="icon hidden-lg hidden-sm hidden-md"><a
-							data-toggle="modal" data-target="#modal-login-small" href="#"><i
-								class="icon fa fa-lock"></i></a></li>
+						<li><a data-toggle="modal" data-target="#modal-login-big" href="#">Login/Register</a></li>
 					</c:otherwise>
 				</c:choose>
-
-
-			</ul>
-			<!-- /.nav -->
+				</ul>
+			</div>  
 		</div>
-		<!-- /.col -->
-	</div>
-	<!-- /.row -->
-</div>
+	</nav>
+
+
+
+
+<!-- <header class="header"> <nav
+	class="navbar navbar-bookshop navbar-static-top" role="navigation"> -->
+
 <!-- /.container --> </nav><!-- /.navbar --> <!-- Modal -->
 <div id="modal-login-big" class="modal login fade hidden-xs"
 	tabindex="-1" role="dialog" aria-hidden="true">
@@ -128,7 +141,7 @@
 									<label for="dob" class="sr-only">Date Of Birth</label>
 									<input type="text"
 										class="form-control bookshop-form-control" id="dob"
-										name="dob" placeholder="Enter your date of birth here"
+										name="dob" placeholder="Enter your date of birth in (mm/dd/yyyy) format"
 										required="true">
 									
 								</div>
@@ -149,15 +162,7 @@
 										required="true">
 									
 								</div>
-								
-								<!-- <div class="form-group">
-									<label for="category" class="sr-only">Category</label>
-									<input type="text"
-										class="form-control bookshop-form-control" id="category"
-										name="category" placeholder="Select your desired book categories"
-										required="true">
-									
-								</div> -->
+
 								
 								<div class="form-group">
 									<label for="category" class="sr-only">Category</label>
@@ -351,14 +356,7 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<div class="text-center">
-					<div class="logo-holder">
-						<h1 class="logo">BookShop</h1>
-						<div class="logo-subtitle">
-							<span>World of books</span>
-						</div>
-						<!-- /.logo-subtitle -->
-					</div>
-
+					
 					<form role="form" class="inner-top-50">
 						<div class="form-group">
 							<label for="entername" class="sr-only">Email</label> <input
@@ -398,260 +396,9 @@
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<div class="main-header">
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12 col-sm-4 col-md-4 top-search-holder m-t-10">
-				<!-- ============================================== SEARCH BAR ============================================== -->
-				<form class="search-form" role="search">
-					<div class="form-group">
-						<label class="sr-only" for="page-search">Type your search
-							here</label> <input id="page-search" class="search-input form-control"
-							type="search" placeholder="Search product">
-					</div>
-					<button class="page-search-button">
-						<span class="fa fa-search"> <span class="sr-only">Search</span>
-						</span>
-					</button>
-				</form>
-				<!-- ============================================== SEARCH BAR : END ============================================== -->
-			</div>
-			<!-- /.top-search-holder -->
-
-			<div class="col-xs-12 col-sm-4 col-md-4 text-center logo-holder">
-				<!-- ============================================== LOGO ============================================== -->
-				<a href="/Distributed-Library">
-					<h1 class="logo">BookShop</h1>
-					<div class="logo-subtitle">
-						<span>World of books</span>
-					</div> <!-- /.logo-subtitle -->
-				</a>
-				<!-- ============================================== LOGO : END ============================================== -->
-			</div>
-			<!-- /.logo-holder -->
-
-			<div class="col-xs-12  col-md-2 header-shippment hidden-sm m-t-10">
-				<!-- ============================================== FREE DELIVERY ============================================== -->
-				<div class="media free-delivery hidden-xs ">
-					<span class="media-left"><img
-						src="<c:url value="/resources/images/delivery-icon.png" />"
-						height="48" width="48" alt=""></span>
-					<div class="media-body">
-						<h5 class="media-heading">Free delivery</h5>
-					</div>
-				</div>
-				<!-- ============================================== FREE DELIVERY : END ============================================== -->
-			</div>
-			<!-- /.header-shippment -->
-
-			<div
-				class="col-xs-12 col-sm-4 col-md-2 animate-dropdown1 top-cart-row m-t-10">
-				<!-- ============================================== SHOPPING CART DROPDOWN ============================================== -->
-				<ul class="clearfix shopping-cart-block list-unstyled">
-					<li class="dropdown"><a class="menu-toggle-right clearfix"
-						href=".menu-toggle-right"> <span
-							class="pull-right cart-right-block"> <img
-								src="<c:url value="/resources/images/cart-icon.png" />" alt=""
-								width="46" height="39" />
-						</span> <!-- /.cart-right-block --> <span
-							class="pull-right cart-left-block"> <span
-								class="cart-block-heading">$345.39</span> <span
-								class="hidden-xs">2 items</span>
-						</span> <!-- /.cart-left-block -->
-					</a></li>
-				</ul>
-				<!-- /.list-unstyled -->
-				<!-- ============================================== SHOPPING CART DROPDOWN : END ============================================== -->
-			</div>
-			<!-- /.top-cart-row -->
-		</div>
-		<!-- /.row -->
-
-	</div>
-	<!-- /.container -->
-
-</div>
-<!-- /.main-header --> <!-- ============================================== NAVBAR ============================================== -->
-<div class="header-nav animate-dropdown">
-	<div class="container">
-		<div class="nav-bg-class">
-			<!-- ============================================================= NAVBAR PRIMARY ============================================================= -->
-			<nav class="yamm navbar navbar-primary animate-dropdown"
-				role="navigation">
-			<div class="navbar-header">
-				<button id="btn-navbar-primary-collapse" type="button"
-					class="navbar-toggle" data-toggle="collapse"
-					data-target="#navbar-primary-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-			</div>
-			<!-- /.navbar-header -->
-			<div class="collapse navbar-collapse" id="navbar-primary-collapse">
-				<ul class="nav navbar-nav">
-					<li class="active"><a href="home.html">Books</a></li>
-					<li class="dropdown yamm-fw"><a href="#"
-						class="dropdown-toggle" data-hover="dropdown"
-						data-toggle="dropdown">Textbooks</a>
-						<ul class="dropdown-menu">
-							<li>
-								<div class="yamm-content">
-									<div class="row">
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">History</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Indian Independence</a></li>
-													<li><a href="books.html">French Revolution</a></li>
-													<li><a href="books.html">Industrial Revolution</a></li>
-													<li><a href="books.html">Vietnam War</a></li>
-													<li><a href="books.html">World War I &amp; II</a></li>
-													<li><a href="books.html">Operation Desert Storm</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">Science</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Applied Science</a></li>
-													<li><a href="books.html">Astronomy</a></li>
-													<li><a href="books.html">Biotechnology</a></li>
-													<li><a href="books.html">Chemistry</a></li>
-													<li><a href="books.html">Cognitive Science</a></li>
-													<li><a href="books.html">Cosmology</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">History</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Indian Independence</a></li>
-													<li><a href="books.html">French Revolution</a></li>
-													<li><a href="books.html">Industrial Revolution</a></li>
-													<li><a href="books.html">Vietnam War</a></li>
-													<li><a href="books.html">World War I &amp; II</a></li>
-													<li><a href="books.html">Operation Desert Storm</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">Science</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Applied Science</a></li>
-													<li><a href="books.html">Astronomy</a></li>
-													<li><a href="books.html">Biotechnology</a></li>
-													<li><a href="books.html">Chemistry</a></li>
-													<li><a href="books.html">Cognitive Science</a></li>
-													<li><a href="books.html">Cosmology</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">History</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Indian Independence</a></li>
-													<li><a href="books.html">French Revolution</a></li>
-													<li><a href="books.html">Industrial Revolution</a></li>
-													<li><a href="books.html">Vietnam War</a></li>
-													<li><a href="books.html">World War I &amp; II</a></li>
-													<li><a href="books.html">Operation Desert Storm</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">Science</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Applied Science</a></li>
-													<li><a href="books.html">Astronomy</a></li>
-													<li><a href="books.html">Biotechnology</a></li>
-													<li><a href="books.html">Chemistry</a></li>
-													<li><a href="books.html">Cognitive Science</a></li>
-													<li><a href="books.html">Cosmology</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-									</div>
-								</div>
-
-							</li>
-						</ul></li>
-					<li><a href="books.html">Nook Books</a></li>
-					<li class="hidden-sm"><a href="books.html">Audiobooks</a></li>
-					<li class="hidden-sm hidden-md"><a href="books.html">Magazines</a></li>
-					<li class="hidden-sm hidden-md"><a href="books.html">Movies</a></li>
-					<li><a href="books.html">Music</a></li>
-					<li class="dropdown navbar-right"><a href="#"
-						class="dropdown-toggle" data-hover="dropdown"
-						data-toggle="dropdown">Pages</a>
-						<ul class="dropdown-menu">
-							<li>
-								<div class="yamm-content">
-									<div class="row">
-										<div class="col-md-6 col-sm-6">
-											<ul class="links">
-												<li><a href="home.html">Home</a></li>
-												<li><a href="home-2.html">Home II</a></li>
-												<li><a href="books.html">Books</a></li>
-												<li><a href="books-2.html">Books II</a></li>
-												<li><a href="single-book.html">Book</a></li>
-												<li><a href="blog.html">Blog</a></li>
-												<li><a href="blog-post.html">Blog Post</a></li>
-											</ul>
-										</div>
-										<div class="col-md-6 col-sm-6">
-											<ul class="links">
-												<li><a href="about.html">About</a></li>
-												<li><a href="contact.html">Contact</a></li>
-												<li><a href="contact-2.html">Contact II</a></li>
-												<li><a href="categories.html">Categories</a></li>
-												<li><a href="magazine.html">Magazine</a></li>
-												<li><a href="all-brands.html">All Brands</a></li>
-												<li><a href="error.html">Error</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</li>
 
 
-						</ul></li>
-				</ul>
-				<!-- /.nav -->
-			</div>
-			<!-- /.collapse navbar-collapse --> </nav>
-			<!-- /.yamm -->
-			<!-- ============================================================= NAVBAR PRIMARY : END ============================================================= -->
-		</div>
-		<!-- /.nav-bg-class -->
-	</div>
-	<!-- /.container -->
-
-</div>
-<!-- /.header-nav --> <!-- ============================================== NAVBAR : END ============================================== -->
-</header>
+<!-- </header> -->
 
 
 <!-- ============================================== HEADER : END ============================================== -->
@@ -685,21 +432,18 @@
 				            	  
 				            	  $("#categoryDiv").html(html);
 				  				  $("#category").multiselect();
-
 				         } 
 						
 					}
 					
 				})
 				
-
 				$('#login').submit(
 						function(event) {
 													
 							var search = {}
 							search["userEmail"] = $("#userEmail").val();
 							search["password"] = $("#password").val();
-
 							$.ajax({
 								type : "POST",
 								contentType : "application/json",
@@ -717,13 +461,10 @@
 									} else {
 																				
 										alert(data.responseJSON.ErrorMessage);
-
 									}
 								}
-
 							});
 							event.preventDefault();
-
 						})
 									
 						
@@ -779,18 +520,13 @@
 								} else {
 																			
 									alert(data.errorMessage);
-
 								}
 							}
-
 						}); 
 						event.preventDefault();						
 				
 				})	
-
 			});
 			
-			
-			
-			
+				
 </script>
