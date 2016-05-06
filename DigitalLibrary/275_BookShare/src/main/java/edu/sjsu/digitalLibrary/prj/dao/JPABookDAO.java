@@ -18,6 +18,7 @@ import edu.sjsu.digitalLibrary.prj.dataoperations.MongoCrud;
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.order;
+import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.user;
 
 
@@ -30,7 +31,20 @@ public class JPABookDAO {
 
 	
 	
-	
+	public int getBookParentId(int bookId) {
+		
+		try {
+			DBCrud<subbook> db = new DBCrud<subbook>();
+			return db.getBookParentId(bookId);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	return -1;
+		
+	}
+
 
 public List<MongoBook> doAdvanceSearch(String auth, String publisher, String desc,
 		String[] categories) {

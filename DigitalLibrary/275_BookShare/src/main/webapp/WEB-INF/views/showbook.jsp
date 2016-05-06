@@ -124,7 +124,7 @@
 					<tr class="info">
 					    
 					    <% if(null != session.getAttribute("USERNAME")) {%> 
-					    	<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook" role="button">Make a request</a>
+					    	<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook/${bookdetails.bookId}" role="button">Make a request</a>
 					    <% } %>
 							
 					   

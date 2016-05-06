@@ -58,7 +58,7 @@ public class RequestBookController {
    			
    			
    	   	 	int checkActiveOrders=checkUserActiveOrders(Integer.parseInt(httpSession.getAttribute("USERID").toString()));
-   	   	 	//System.out.println("No's of orders:" + checkActiveOrders);
+   	   	 	System.out.println("No's of orders:" + checkActiveOrders);
    	   	 	if(checkActiveOrders == 2)
    	   	 	{
    	   	 		
@@ -76,15 +76,15 @@ public class RequestBookController {
    		}
    		else
    		{
-   			//System.out.println("No session");
+   			System.out.println("No session");
    			j.setSuccessFlag("L");
    		}
 	  return j;
    	}
 ///////Raunaq Code ends
    	
-  @RequestMapping(value = "/requestbook",method = RequestMethod.GET)
-  public Object bookAvailability() {
+  @RequestMapping(value = "/requestbook/{bookId}",method = RequestMethod.GET)
+  public Object bookAvailability(@PathVariable int bookId) {
 	  System.out.println("enter bookavailabiltity");
 	  int userID=Integer.parseInt(httpSession.getAttribute("USERID").toString());
 	  if(!sessionService.checkAuth())
@@ -97,7 +97,7 @@ public class RequestBookController {
     	
     	
     	JPARequestBookDAO j= new JPARequestBookDAO();
-    	int bookID=1001;  // ***Once we get the book information we will send the book over here.
+    	int bookID=bookId;  
     	
     	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
     	bookAvailDetails=j.getBookOrderDetails(bookID);
@@ -112,7 +112,10 @@ public class RequestBookController {
     	//httpSession.setAttribute("bookSearched", bookAvailDetails);
     	
     	ModelAndView mv = new ModelAndView();
-    	mv.addObject("bookAvailDetails", bookAvailDetails);
+    	if(bookAvailDetails.size() >0)
+    		mv.addObject("bookAvailDetails", bookAvailDetails);
+    	else
+    		mv.addObject("bookAvailDetails", null);
   		mv.setViewName("requestdetails");
   		return mv;
     	 
@@ -181,8 +184,8 @@ public class RequestBookController {
 	  	o.setEndDate(sqlDateEnd);
 	  	
 	  	java.sql.Date sqlDateStart = new java.sql.Date(dStart.getTime());
-	  	//System.out.println(sqlDateStart);
-	  	o.setEndDate(sqlDateStart);
+	  	System.out.println(sqlDateStart);
+	  	o.setStartDate(sqlDateStart);
 	  	
 	  	System.out.println(userId);
 	  	o.setUserId(userId);
@@ -193,10 +196,7 @@ public class RequestBookController {
     	o.setId(id);
     	
     	
-    	ModelAndView mv = new ModelAndView();
-    	
-  		mv.setViewName("showOrders");
-  		return mv;
+    	return "redirect:/showOrders/" + userId;
     	 
 
     }
@@ -227,7 +227,19 @@ public class RequestBookController {
  
  
  
- 
+ @RequestMapping(value = "/showOrders/{userId}",method = RequestMethod.GET)
+ public Object userOrders(@PathVariable int userId) throws ParseException {
+	  System.out.println("enter user order");
+	  JPARequestBookDAO i= new JPARequestBookDAO();
+	  
+	  List<order> userOrders = i.getAllUserOrders(userId);
+	  
+	  ModelAndView mv = new ModelAndView();
+  	
+		mv.setViewName("showOrders");
+		mv.addObject("userOrdersDetails", userOrders);
+		return mv;
+ }
  
  
  ////Raunaq code ends

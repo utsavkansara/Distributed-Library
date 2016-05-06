@@ -24,7 +24,7 @@
 function chooseBook(){
 	var subBookId= document.getElementById('subbookId').value;
 	var startDate = document.getElementById('datepicker').value
-	window.location = "./orderbook/" + subBookId + "/" + startDate;
+	window.location = "../orderbook/" + subBookId + "/" + startDate;
 }
 	
 		function changeMap(subId, latitude, longitude){
@@ -149,9 +149,10 @@ function chooseBook(){
 
 <body>
 
-<div class="container-fluid" style="margin-top:15px">  Book Available in following regions: <br/>
+<div class="container-fluid" style="margin-top:15px"> <br/>
 		<div class="row-fluid">
 			<div class="container-fluid"> 
+			 <% if(null != request.getAttribute("bookAvailDetails")) {%> 
 				<c:forEach items="${bookAvailDetails}" var="bookAvail" varStatus="i"> 
           			<div class="col-md-2">
           			              <a class="btn btn-primary"  href="#" onClick="changeMap(${bookAvail.subId}, ${bookAvail.region_long}, ${bookAvail.region_lat});" role="button" > ${bookAvail.getRegion_name()} </a>
@@ -159,6 +160,11 @@ function chooseBook(){
           						<input type="hidden" id="${bookAvail.subId}End" value="${bookAvail.end_date}"></input>
 					</div>
 				</c:forEach>
+				 <% } else
+					 
+				 {%> 
+				 <label>No Availability</label>
+				  <% }%> 
 			</div>
 		</div>
 </div>

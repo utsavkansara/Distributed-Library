@@ -216,8 +216,12 @@ public class MongoCrud {
 			    	  objBooks.put("publisher", volumeInfo.getPublisher());
 			      
 			      if(volumeInfo.getIndustryIdentifiers() != null)
-			    	  objBooks.put("isbn", volumeInfo.getIndustryIdentifiers().get(1).getIdentifier());
-			      
+			      {
+			    	  if(volumeInfo.getIndustryIdentifiers().size() > 1)
+			    		  objBooks.put("isbn", volumeInfo.getIndustryIdentifiers().get(1).getIdentifier());
+			    	  else
+			    		  objBooks.put("isbn", volumeInfo.getIndustryIdentifiers().get(0).getIdentifier());
+			      }
 			    	  objBooks.put("price", 0.0);
 			      
 			      Object o = com.mongodb.util.JSON.parse(objBooks.toString());

@@ -106,7 +106,7 @@ public class JPARequestBookDAO implements RequestBookDAO {
 	public List<bookAvail> getBookOrderDetails(int bookId)
 	{
 		Date dateNull = null;
-		bookId=21;
+		
 		List<subbook> subBookDetails = new ArrayList<subbook>();
 		
 		subBookDetails=getBooksubId(bookId);
@@ -226,6 +226,20 @@ public class JPARequestBookDAO implements RequestBookDAO {
 		
 	} 
 	
+	
+	public List<order> getAllUserOrders(int userId)
+	{
+		//List<order> userOrders = new ArrayList<order>();
+		try{
+			DBCrud<order> db = new DBCrud<order>();
+			return db.getAllUserOrders(userId);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	return null;	
+	}
 	
 	//RaunaqCode Ends
 	
