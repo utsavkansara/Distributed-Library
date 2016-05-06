@@ -142,6 +142,18 @@
 					    
 					</tr>
 					
+					
+					<tr class="info">
+					    <td><label>ISBN#</label></td>
+					    <% if(!Book.getIsbn().equals("")){ %>
+					    	<td>${bookdetails.isbn}</td>
+					    <% } else {%>
+							<td>No Info available</td>
+						<% } %>
+					    <td></td>
+					    
+					</tr>
+					
 					<tr class="info">
 					    <td><label>Categories</label></td>
 					    <td>
@@ -155,13 +167,13 @@
 					</tr>
 					
 					
+					
 					<tr class="info">
 					    
 					    <% if(null != session.getAttribute("USERNAME")) {%> 
 					    	<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook" role="button">Make a request</a>
-					    <% } else {%>
-							<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/login" role="button">Log in to Buy</a>
-						<% } %>
+					    <% } %>
+							
 					   
 					    
 					</tr>

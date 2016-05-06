@@ -41,6 +41,16 @@ public class MongoBook implements Serializable,Comparable {
     
 	    private double price;
 
+	    private String isbn;
+	    
+		public String getIsbn() {
+			return isbn;
+		}
+
+		public void setIsbn(String isbn) {
+			this.isbn = isbn;
+		}
+
 		public int getBookId() {
 			return bookId;
 		}
