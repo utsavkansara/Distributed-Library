@@ -59,7 +59,8 @@
 					            <li><a href="${pageContext.request.contextPath}/showuser/${sessionScope.USERID}">Profile</a></li>
 <%-- 							    <li><a href="${pageContext.request.contextPath}/transactions">View Transactions</a></li> --%>
 <%-- 							    <li><a href="${pageContext.request.contextPath}/requestbook">Make a request</a></li> --%>
-							    <li><a href="${pageContext.request.contextPath}/logout">Signout</a></li>
+							    <%-- <li><a href="${pageContext.request.contextPath}/logout">Signout</a></li> --%>
+							    	<li><a href="#" onclick="signout()">Signout</a></li>
 				          	</ul>
 			       		</li>
 					</c:when>
@@ -74,7 +75,7 @@
 	</nav>
 
 
-
+<input name="activationCodeHiddenInput" id="activationCodeHiddenInput" value="activationCodeHiddenInput" type="hidden">
 
 <!-- <header class="header"> <nav
 	class="navbar navbar-bookshop navbar-static-top" role="navigation"> -->
@@ -104,7 +105,7 @@
 										address</label> <input type="email"
 										class="form-control bookshop-form-control" id="userEmail"
 										name="userEmail" placeholder="Enter Email ID here"
-										required="true">
+										required="true" onblur="checkUserActivation()">
 							
 								</div>
 								<div class="form-group">
@@ -114,6 +115,14 @@
 										name="password" placeholder="Enter password here"
 										required="true">
 									
+								</div>
+								
+								
+								<div class="form-group" id="activationCodeInputDiv">
+									<label for="activationCodeInput" class="sr-only">Activation Code</label>
+									<input type="text"
+										class="form-control bookshop-form-control" id="activationCodeInput"
+										name="activationCodeInput" placeholder="Enter activation code here">
 								</div>
 
 								<button id="singlebutton" name="singlebutton"
@@ -317,7 +326,7 @@
 								<button id="singlebutton" name="singlebutton"
 									class="btn btn-primary btn-uppercase" type="submit">Register</button>
 								<!-- <button type="button" class="btn btn-primary btn-uppercase">Login</button> -->
-								<a href="#" class='forgot-password'>forgot password</a>
+								<!-- <a href="#" class='forgot-password'>forgot password</a> -->
 							</form>
 
 						</div>
@@ -406,8 +415,10 @@
 <script type="text/javascript">
 	
 	$(document).ready(
-				
+			
 			function() {
+				
+				$("#activationCodeInputDiv").hide();
 				
 				$.ajax({
 					
@@ -440,30 +451,55 @@
 				
 				$('#login').submit(
 						function(event) {
-													
-							var search = {}
-							search["userEmail"] = $("#userEmail").val();
-							search["password"] = $("#password").val();
-							$.ajax({
-								type : "POST",
-								contentType : "application/json",
-								url : "/Distributed-Library/login",
-								data : JSON.stringify(search),
-								dataType : 'json',
-								complete : function(data) {
+							
+							var errorMsg = "";
+							if($("#activationCodeInputDiv").is(":visible")){
+								
+								var x = document.getElementById('activationCodeInput').value;
+								var y = document.getElementById('activationCodeHiddenInput').value;
+								
+								if(x == ""){
+									errorMsg = "Please provide account activation code you received via mail to proceed. \nYou will receive mail shortly if you haven't received yet. \nThanks for your patience.";
+								}else{
 									
-									alert(JSON.stringify(data));
-									
-									if (data.responseJSON.successFlag == "Y") {
-										
-										location.reload(true);
-									
-									} else {
-																				
-										alert(data.responseJSON.ErrorMessage);
+									if(x != y){
+										errorMsg = "Please enter correct Activation code to proceed";
 									}
 								}
-							});
+									
+							}
+							console.log("");
+								
+							if(errorMsg!=""){
+								
+								alert(errorMsg);
+								
+							}else{
+								
+								var search = {}
+								search["userEmail"] = $("#userEmail").val();
+								search["password"] = $("#password").val();
+								$.ajax({
+									type : "POST",
+									contentType : "application/json",
+									url : "/Distributed-Library/login",
+									data : JSON.stringify(search),
+									dataType : 'json',
+									complete : function(data) {
+										
+										if (data.responseJSON.successFlag == "Y") {
+											
+											location.reload(true);
+										
+										} else {
+												
+											alert(data.responseJSON.errorMessage);
+										}
+									}
+								});
+								
+							}
+																																					
 							event.preventDefault();
 						})
 									
@@ -527,6 +563,54 @@
 				
 				})	
 			});
+	
+	function signout(){
+		 
+		$.ajax({
+			
+			type : "GET",
+			contentType : "application/json",
+			url : "/Distributed-Library/logout",
+			complete : function(data) {
+				
+				location.reload(true);
+				
+			}
+			
+		})
+		
+	}
+	
+	function checkUserActivation(){
+		
+		var userData = {};
+		userData["userEmail"] = $("#userEmail").val();
+		
+		$.ajax({
+			
+			type : "POST",
+			contentType : "application/json",
+			url : "/Distributed-Library/checkUserAccountActivation",
+			data : JSON.stringify(userData),
+			dataType : 'json',
+			complete : function(data) {
+				 
+				if(data!=null && data.status==200 && data.responseJSON.successFlag=="Y"){
+					
+					var jsonObj = JSON.parse(data.responseJSON.successMessage);
+					if(jsonObj.flag=="N"){
+						alert(jsonObj.activationCode);
+						$("#activationCodeHiddenInput").val(""+jsonObj.activationCode);	
+						alert($("#activationCodeHiddenInput").val());
+						$("#activationCodeInputDiv").show();
+					}
+					
+				}				
+			}
+			
+		})
+		
+	}
 			
 				
 </script>

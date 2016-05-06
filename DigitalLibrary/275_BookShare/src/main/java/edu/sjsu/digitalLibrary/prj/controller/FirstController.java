@@ -1,36 +1,25 @@
 package edu.sjsu.digitalLibrary.prj.controller;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
-
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,17 +30,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+
+
+import redis.clients.jedis.Jedis;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import edu.sjsu.digitalLibrary.prj.dao.JPAAddressDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPACategoryDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPALandingPageDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPARegionDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
+
 import org.springframework.web.servlet.view.RedirectView;
 import com.fasterxml.jackson.annotation.JsonView;
 import edu.sjsu.digitalLibrary.prj.dao.*;
+
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
-import edu.sjsu.digitalLibrary.prj.models.MongoBook;
-import edu.sjsu.digitalLibrary.prj.models.Registration;
-import edu.sjsu.digitalLibrary.prj.models.address;
-import edu.sjsu.digitalLibrary.prj.models.RegistrationJsonPojo;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
 import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
+import edu.sjsu.digitalLibrary.prj.models.MongoBook;
+import edu.sjsu.digitalLibrary.prj.models.Registration;
+import edu.sjsu.digitalLibrary.prj.models.RegistrationJsonPojo;
+import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
 import edu.sjsu.digitalLibrary.prj.models.region;
@@ -59,7 +61,6 @@ import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
 import edu.sjsu.digitalLibrary.prjservices.SearchServiceImpl;
-import edu.sjsu.digitalLibrary.prjservices.UserRecordService;
  
 @SuppressWarnings("unused")
 @Controller
@@ -98,6 +99,18 @@ public class FirstController {
     	JPACategoryDAO obj= new JPACategoryDAO();
     	List<category> categories = obj.getCategories();
         return categories;
+    }
+    
+    
+    private static final Random random = new Random();
+    private static final String CHARS = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890";
+
+    public static String getToken(int length) {
+        StringBuilder token = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            token.append(CHARS.charAt(random.nextInt(CHARS.length())));
+        }
+        return token.toString();
     }
     
     
@@ -261,7 +274,7 @@ public class FirstController {
             	System.out.println("user model details here --" +registrationModel.getDob());
             	
             	
-            	registrationModel.setActiveUser(1);
+            	registrationModel.setActiveUser(0);
             	//System.out.println(PlayPP.sha1(registrationModel.getPassword()));
             	registrationModel.setUserPassword(PlayPP.sha1(registrationModel.getUserPassword()));
             	//Date d = new Date();
@@ -283,6 +296,8 @@ public class FirstController {
             	//change here
             	registerUser.setParentId(parentId);
             	registerUser.setPhone(registrationModel.getPhone());
+            	registerUser.setActivationCode(getToken(6));
+            	registerUser.setRegionId(0);
             	
             	
             	
