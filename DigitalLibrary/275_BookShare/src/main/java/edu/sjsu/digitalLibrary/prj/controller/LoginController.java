@@ -7,13 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,12 +23,13 @@ import edu.sjsu.digitalLibrary.prj.dao.JPALoginDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
-import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
+//import org.springframework.stereotype.Controller;
  
 
 @RestController
@@ -54,6 +54,35 @@ public class LoginController {
     	return new ModelAndView("login", "logindetails", loginModel);
     }
     
+    
+    @JsonView(Views.Public.class)
+    @ResponseBody
+    @RequestMapping(value="/checkUserAccountActivation", method=RequestMethod.POST)
+    public JsonResponse checkUserAccountActivation(@RequestBody Login loginModel){
+    	
+    	try{
+    	JsonResponse jsonResponse = new JsonResponse();
+    	
+    	JPALoginDAO obj= new JPALoginDAO();
+    	JSONObject jsonObj = obj.validateActivation(loginModel);
+    	
+    	if(!jsonObj.equals(null)){
+    		jsonResponse.setSuccessFlag("Y");
+        	jsonResponse.setSuccessMessage(jsonObj.toString());
+    	}else{
+    		jsonResponse.setSuccessFlag("E");
+    		jsonResponse.setErrorMessage("Error Occurred while processing request");
+    	}
+    	    	
+    	return jsonResponse;
+    	}catch(Exception e){
+    		JsonResponse jsonResponse = new JsonResponse();
+    		jsonResponse.setSuccessFlag("E");
+    		jsonResponse.setErrorMessage("Error Occurred while processing request");                 
+          	return jsonResponse;
+    	}
+    	
+    }
     
     @JsonView(Views.Public.class)
     @RequestMapping(value="/login", method=RequestMethod.POST)
@@ -200,7 +229,7 @@ try {
 //		return null;
 //    }
     
-    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    /*@RequestMapping(value = "/logout",method = RequestMethod.GET)
     public ModelAndView logoutPage(HttpServletRequest request,  HttpServletResponse response) {
     	httpSession = sessionService.getHttpSession();
     	httpSession.removeAttribute("USERID");
@@ -213,6 +242,23 @@ try {
     	response.setHeader("Cache-Control","no-store");
     	response.setDateHeader("Expires", 0);
         return new ModelAndView("login", "logindetails", loginModel);
+    }*/
+    
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    public JsonResponse logoutPage(HttpServletRequest request,  HttpServletResponse response) {
+    	httpSession = sessionService.getHttpSession();
+    	httpSession.removeAttribute("USERID");
+    	httpSession.removeAttribute("USERNAME");
+    	httpSession.invalidate();
+    	sessionService.setHttpSession(null);
+    	System.out.println("in logot");
+    	
+    	JsonResponse jsonResponse = new JsonResponse();
+    	jsonResponse.setSuccessFlag("Y");
+    	jsonResponse.setSuccessMessage("logout success");
+    	return jsonResponse;
     }
+    
     
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.json.JSONObject;
 
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.Login;
@@ -138,6 +139,7 @@ public class DBCrud<T> {
 		System.out.println("jCode"+ login.getPassword());
 		
 		int result,returnedId = 0;
+		boolean activateUser = false;
 		Query query = session.createSQLQuery(
 				"select * from user  where emailId = :sCode and password = :jCode")
 				.addEntity(user.class)
@@ -149,13 +151,68 @@ public class DBCrud<T> {
 				if(result!=0)
 				{
 				returnedId = ((user)query.list().get(0)).getId();
+				int active = ((user)query.list().get(0)).getActive();
+				if(active==0){
+					activateUser = true;
+				}
 				System.out.println("returned id" + returnedId);
 				}
+				
+				result=0;
+				
+		if(activateUser){
+			
+			Query updateQuery = session.createSQLQuery(
+					"update user set active=1 where id = :sCode")
+					.addEntity(user.class)
+					.setParameter("sCode", returnedId);
+					
+					result = updateQuery.executeUpdate();
+					System.out.println(result);
+					session.getTransaction().commit();
+				
+		}
+				
+				
 		
 		session.close();
 		s.close();
 	
 		return returnedId;
+	}
+	
+	
+	public JSONObject validateActivation(Login login){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		
+		System.out.println("sCode"+ login.getUserEmail());
+		
+		int result,returnedId = 0;
+		JSONObject obj = new JSONObject();
+		Query query = session.createSQLQuery(
+				"select * from user  where emailId = :sCode and active = 0")
+				.addEntity(user.class)
+				.setParameter("sCode", login.getUserEmail());
+		
+		
+				result = query.list().size();
+				if(result!=0)
+				{
+				obj.put("flag", "N");
+				obj.put("activationCode", ((user)query.list().get(0)).getActivationCode());
+				((user)query.list().get(0)).getActivationCode();
+				System.out.println("returned id" + returnedId);
+				}else{
+					obj.put("flag", "Y");
+					obj.put("activationCode", "none");
+				}
+		
+		session.close();
+		s.close();
+	
+		return obj;
 	}
 	
 	
