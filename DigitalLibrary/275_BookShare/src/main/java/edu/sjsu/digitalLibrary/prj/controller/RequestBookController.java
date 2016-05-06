@@ -82,7 +82,7 @@ public class RequestBookController {
 	  int userID=Integer.parseInt(httpSession.getAttribute("USERID").toString());
 	  if(!sessionService.checkAuth())
     	{
-    			return "redirect:/login";
+    			return "redirect:/homepage";
 
 
     	} 
@@ -95,7 +95,13 @@ public class RequestBookController {
     	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
     	bookAvailDetails=j.getBookOrderDetails(bookID);
     	
-    	
+    	for(bookAvail b : bookAvailDetails)
+    	{
+    		
+    		System.out.println("Sub Book Id: " + b.getSubId());
+    		System.out.println("Start Date: " + b.getStart_date());
+    		System.out.println("End Date: " + b.getEnd_date());
+    	}
     	ModelAndView mv = new ModelAndView();
     	mv.addObject("bookAvailDetails", bookAvailDetails);
   		mv.setViewName("requestdetails");

@@ -280,21 +280,21 @@ public class DBCrud<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public order getBookAvailability(int bookId){
+	public List<order> getBookAvailability(int bookId){
 		System.out.println(" in all Order table " + bookId );
 		s = SessionFactoryObj.getSessionFactory();
 		session = s.openSession();
 		session.beginTransaction();
 		Query query = session.createSQLQuery("select * from BookShareDB.order where bookId=:sCode and active='1' and endDate>current_date").addEntity(order.class).setParameter("sCode", bookId);
 
-		order  result = new order();
+		List<order>  result = new ArrayList<order>();
 		if(query.list().size()==0)
         {
         	 return null;
         }
         else
         {
-        	 result = (order)query.list().get(0);
+        	 result = (List<order>)query.list();
         }
 
 		System.out.println(" value of result in DBCrud" + result);
