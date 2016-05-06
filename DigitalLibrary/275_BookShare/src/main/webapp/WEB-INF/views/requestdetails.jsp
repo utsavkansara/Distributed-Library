@@ -23,12 +23,15 @@
 	
 function chooseBook(){
 	var subBookId= document.getElementById('subbookId').value;
-	window.location = "./paymentDetails/" + subBookId;
+	var startDate = document.getElementById('datepicker').value
+	window.location = "./orderbook/" + subBookId + "/" + startDate;
 }
 	
 		function changeMap(subId, latitude, longitude){
 			
 			document.getElementById('divChoose').style.visibility='visible';
+			
+			
 			 document.getElementById('subbookId').value = subId;
 			 
 			var p = document.getElementById(''+subId + 'Start').value + '';
@@ -139,13 +142,7 @@ function chooseBook(){
 		
 		
 		
-		////
 		
-		
-		
-		
-		
-		////
       		
 	</script>
 </head>
@@ -173,7 +170,9 @@ function chooseBook(){
 <div id="divChoose" style="visibility: hidden">
 <input type="hidden" id="subbookId" value=""></input>
 <p>Date: <input type="text" id="datepicker"></p>
-<p><a class="btn btn-primary"  href="#" onClick="chooseBook();" role="button" > Choose </a></p>
+<p>
+
+<a class="btn btn-primary"  href="#" onClick="chooseBook();" role="button" > Choose </a></p>
 
 
 </div>

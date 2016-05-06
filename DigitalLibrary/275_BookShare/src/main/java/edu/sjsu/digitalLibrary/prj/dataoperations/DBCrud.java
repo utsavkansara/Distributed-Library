@@ -55,6 +55,13 @@ public class DBCrud<T> {
 			System.out.println("in crud book " + id);
 		}
 		
+		
+		else if(obj instanceof order){
+			System.out.println("in jpa of order");
+			order s = (order)obj;
+			id = s.getId();
+			System.out.println("in crud order " + id);
+		}
 		session.close();
 		s.close();
 		

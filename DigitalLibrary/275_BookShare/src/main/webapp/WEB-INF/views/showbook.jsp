@@ -13,54 +13,7 @@
 		height:350px;
 	}
 	</style> 
-	<script>
-		$(document).ready(function(){
-	 		var geocoder = new google.maps.Geocoder();
-			var address = document.getElementById('address').value;
-    		geocoder.geocode( { 'address': address}, function(results, status) {
-      		if (status == google.maps.GeocoderStatus.OK) {
-    	  		var res = String(results[0].geometry.location).split(",");
-	    	    res[0] = res[0].replace("(","").trim();
-	    	    res[1] = res[1].replace(")","").trim();
-	    	   
-	    	    var latlng = new google.maps.LatLng(res[0], res[1]);
-	    	    var myOptions = {
-	    	      zoom: 15,
-	    	      center: latlng,
-	    	      mapTypeId: google.maps.MapTypeId.ROADMAP
-	    	    };
-	    	    var map = new google.maps.Map(document.getElementById("map_container"),myOptions);
-    	 
-	    	    var marker = new google.maps.Marker({
-	    	      position: latlng, 
-	    	      map: map, 
-	    	      title:address
-	    	    }); 
-      		
-      		} else {
-    	  
-		    	var latlng = new google.maps.LatLng(37.3357192, -121.8867076);
-		  	    var myOptions = {
-		  	      zoom: 15,
-		  	      center: latlng,
-		  	      mapTypeId: google.maps.MapTypeId.ROADMAP
-		  	    };
-		  	    var map = new google.maps.Map(document.getElementById("map_container"),myOptions);
-		  	 
-		  	    var marker = new google.maps.Marker({
-		  	      position: latlng, 
-		  	      map: map, 
-		  	      title:address
-		  	    }); 
-    	  	}
-      
-        	});    
-		});
 
-
-		
-	
-	</script>
 </head>
 
 <body>
@@ -188,23 +141,8 @@
 				</table>
 			</div>
 		</div>
-	    	<div class="table-responsive col-md-6">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Pickup Address</div>
-				<table class="table table-striped">
-					
-		    		<tr>
-					    <td><label>${addressdetails}</label>
-					    <input type="hidden" id="address" value="${addressdetails}"></input></td>
-						
-					</tr>
-
-		    		<tr>
-						<td><div id="map_container" align="center"></div></td>
-					</tr>
-				</table>
-			</div>
-		</div>
+	    	
+		
 	</div>		
 </body>
 </html>

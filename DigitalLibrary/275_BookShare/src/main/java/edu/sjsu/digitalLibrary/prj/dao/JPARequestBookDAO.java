@@ -14,9 +14,26 @@ import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.bookAvail;
+import edu.sjsu.digitalLibrary.prj.models.user;
 
 public class JPARequestBookDAO implements RequestBookDAO {
 
+	
+	public int insert(order or) 
+	{
+		System.out.println("in order jpa");
+		int addressId= 0;
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			addressId = db.Insert(or);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return addressId;
+	}
+	
 	public int insert(requestbook category) {
 		
 		System.out.println("in category jpa request making");
