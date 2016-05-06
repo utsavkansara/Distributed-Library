@@ -42,83 +42,88 @@ public class RequestBookController {
    	@Autowired
    	private CheckSession sessionService;
 
+    ///////Raunaq Code 05/05/2016
+	  
+   	@RequestMapping(value = "/checkOrders",method = RequestMethod.GET)
+    public JsonResponse checkOrders() {
+   		JsonResponse j = new JsonResponse();
+   		if(sessionService.checkAuth()) {
+   			
+   			
+   	   	 	int checkActiveOrders=checkUserActiveOrders(Integer.parseInt(httpSession.getAttribute("USERID").toString()));
+   	   	 	//System.out.println("No's of orders:" + checkActiveOrders);
+   	   	 	if(checkActiveOrders == 2)
+   	   	 	{
+   	   	 		
+   	   	 		j.setSuccessFlag("N");
+   	   	 		j.setErrorMessage("You already have two orders");
+   	   	 	}
+
+   	   	 	else
+   	   	 	{
+   	   	 		j.setSuccessFlag("Y");
+   			 
+   	   	 	}
+   		
+   		
+   		}
+   		else
+   		{
+   			//System.out.println("No session");
+   			j.setSuccessFlag("L");
+   		}
+	  return j;
+   	}
+///////Raunaq Code ends
+   	
   @RequestMapping(value = "/requestbook",method = RequestMethod.GET)
   public Object bookAvailability() {
 	  System.out.println("enter bookavailabiltity");
-	 /*  boolean checkPaymentDetails=checkUserPaymentDetails(int userId)// ***put the user ID coming from the user info
-	   if(checkPaymentDetails=false)
-	   {
-		   return "redirect:/paymentdetails";  // ****transfer to the page where you can put the payment details.
-	   }*/
-
-
-    	/*if(!sessionService.checkAuth())
+	  int userID=Integer.parseInt(httpSession.getAttribute("USERID").toString());
+	  if(!sessionService.checkAuth())
     	{
     			return "redirect:/login";
 
 
-    	}*/
+    	} 
+    	
+    	
+    	
     	JPARequestBookDAO j= new JPARequestBookDAO();
     	int bookID=1001;  // ***Once we get the book information we will send the book over here.
-    	System.out.println("Before the bookavialdeatil in requestbookcontroller");
+    	
     	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
     	bookAvailDetails=j.getBookOrderDetails(bookID);
-    	System.out.println("After the bookavialdeatil in requestbookcontroller");
-    	//System.out.println("steeerrr"+str);
-    	for(int i=0;i<=bookAvailDetails.size()-1; i++)
-    	{
-    		 System.out.println("Request Book Controller ******** for loop");
-    		System.out.println(bookAvailDetails.get(i).getSubId());
-    		System.out.println(bookAvailDetails.get(i).getEnd_date());
-    		System.out.println(bookAvailDetails.get(i).getStart_date());
-    		System.out.println(bookAvailDetails.get(i).getRegionId());
-    		System.out.println(bookAvailDetails.get(i).getRegion_long());
-    		System.out.println(bookAvailDetails.get(i).getRegion_lat());
-    	}
-    	ModelAndView model = new ModelAndView("requestdetails");
-    	/*   if(str.size() > 0)
-           {
-    		   System.out.println("in checking");
-        	   model.addObject("RequestID", str.get(0).getRequestId());
-        	   model.addObject("Message", str.get(0).getMessage());
-        	   model.addObject("UserId", str.get(0).getUserId().getUserId());
-        	   model.addObject("Time", str.get(0).getRequestBookTime().toString());
-        	   System.out.println(str);
-
-           }*/
-    	   model.addObject("str", bookAvailDetails);
-   		return model;
+    	
+    	
+    	ModelAndView mv = new ModelAndView();
+    	mv.addObject("bookAvailDetails", bookAvailDetails);
+  		mv.setViewName("requestdetails");
+  		return mv;
+    	 
 
     }
 
- /* public boolean checkUserPaymentDetails(int userID) {
-  	if(!sessionService.checkAuth())
-  	{
-  			return "redirect:/login";
-
-
-  	}
-  	JPAPaymentDAO j= new JPAPaymentDAO();
+ public boolean checkUserPaymentDetails(int userID) {
+	 System.out.println("Enter the *****checkUserPaymentDetails  *****");
+    JPARequestBookDAO i= new JPARequestBookDAO();
   	int bookID=1;  // ***Once we get the book information we will send the book over here.
-  	str=j.userPaymentDetails(userID);
-  	System.out.println("steeerrr"+str);
-  	ModelAndView model = new ModelAndView("requestbook");
-  	System.out.println(str);
-  	   if(str.size() > 0)
-         {
-  		   System.out.println("in checking");
-      	   model.addObject("RequestID", str.get(0).getRequestId());
-      	   model.addObject("Message", str.get(0).getMessage());
-      	   model.addObject("UserId", str.get(0).getUserId().getUserId());
-      	   model.addObject("Time", str.get(0).getRequestBookTime().toString());
-      	   System.out.println(str);
-
-         }
-  	   model.addObject("str", str);
- 		return model;
-
+  	boolean userDetails=i.userPaymentDetails(userID);   // userDetails - true limit reached the count more than 2
+  	//System.out.println("steeerrr"+str);
+  	return userDetails;  
   }
 
+ 
+///////Raunaq Code 05/05/2016
+ public int checkUserActiveOrders(int userID) {
+	 System.out.println("Enter the *****User Active Orders check  *****");
+    JPARequestBookDAO jpaBookDao= new JPARequestBookDAO();
+    return jpaBookDao.checkUserActiveOrders(userID);
+  	
+  	
+  }
+ 
+ ////Raunaq code ends
   /*    public Object uploadrequestbook() {
 	if(!sessionService.checkAuth())
 	{

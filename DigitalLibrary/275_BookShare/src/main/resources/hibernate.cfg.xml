@@ -40,6 +40,7 @@
 		<mapping class="edu.sjsu.digitalLibrary.prj.models.order"/>
 		<mapping class="edu.sjsu.digitalLibrary.prj.models.region"/>
 		<mapping class="edu.sjsu.digitalLibrary.prj.models.subbook"/>
+		<mapping class="edu.sjsu.digitalLibrary.prj.models.payment"/>
 
 		
     </session-factory>
