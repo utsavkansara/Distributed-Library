@@ -18,6 +18,37 @@ import edu.sjsu.digitalLibrary.prj.models.user;
 
 public class JPARequestBookDAO implements RequestBookDAO {
 
+	public void updateOrder(order or) 
+	{
+		System.out.println("in order jpa fr order update");
+		
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			db.update(or);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public order getOrder(int orderId) 
+	{
+		System.out.println("in order jpa fr feedback update");
+		
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			order o = new order();
+			return db.get(o, orderId);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	public int insert(order or) 
 	{
