@@ -79,7 +79,7 @@ public class RequestBookController {
   @RequestMapping(value = "/requestbook",method = RequestMethod.GET)
   public Object bookAvailability() {
 	  System.out.println("enter bookavailabiltity");
-	  int userID=21;
+	  int userID=Integer.parseInt(httpSession.getAttribute("USERID").toString());
 	  if(!sessionService.checkAuth())
     	{
     			return "redirect:/login";
@@ -91,34 +91,16 @@ public class RequestBookController {
     	
     	JPARequestBookDAO j= new JPARequestBookDAO();
     	int bookID=1001;  // ***Once we get the book information we will send the book over here.
-    	//System.out.println("Before the bookavialdeatil in requestbookcontroller");
+    	
     	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
     	bookAvailDetails=j.getBookOrderDetails(bookID);
-    	//System.out.println("After the bookavialdeatil in requestbookcontroller");
-    	//System.out.println("steeerrr"+str);
-    	for(int i=0;i<=bookAvailDetails.size()-1; i++)
-    	{
-    		 System.out.println("Request Book Controller ******** for loop");
-    		System.out.println(bookAvailDetails.get(i).getSubId());
-    		System.out.println(bookAvailDetails.get(i).getEnd_date());
-    		System.out.println(bookAvailDetails.get(i).getStart_date());
-    		System.out.println(bookAvailDetails.get(i).getRegionId());
-    		System.out.println(bookAvailDetails.get(i).getRegion_long());
-    		System.out.println(bookAvailDetails.get(i).getRegion_lat());
-    	}
-    	ModelAndView model = new ModelAndView("requestdetails");
-    	/*   if(str.size() > 0)
-           {
-    		   System.out.println("in checking");
-        	   model.addObject("RequestID", str.get(0).getRequestId());
-        	   model.addObject("Message", str.get(0).getMessage());
-        	   model.addObject("UserId", str.get(0).getUserId().getUserId());
-        	   model.addObject("Time", str.get(0).getRequestBookTime().toString());
-        	   System.out.println(str);
-
-           }*/
-    	   model.addObject("str", bookAvailDetails);
-   		return model;
+    	
+    	
+    	ModelAndView mv = new ModelAndView();
+    	mv.addObject("bookAvailDetails", bookAvailDetails);
+  		mv.setViewName("requestdetails");
+  		return mv;
+    	 
 
     }
 

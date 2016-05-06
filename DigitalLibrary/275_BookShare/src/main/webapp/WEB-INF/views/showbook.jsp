@@ -172,9 +172,8 @@
 					    
 					    <% if(null != session.getAttribute("USERNAME")) {%> 
 					    	<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook" role="button">Make a request</a>
-					    <% } else {%>
-							<td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/login" role="button">Log in to Buy</a>
-						<% } %>
+					    <% } %>
+							
 					   
 					    
 					</tr>
