@@ -10,8 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "`order`")
 public class order implements Serializable {
 
 	/**
@@ -24,7 +26,7 @@ public class order implements Serializable {
 	@Column(name = "id")
     private int id;
     
-    @Column(name = "userID")
+    @Column(name = "userId")
     private int userId;
 	
     @Column(name = "bookId")

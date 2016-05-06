@@ -55,6 +55,13 @@ public class DBCrud<T> {
 			System.out.println("in crud book " + id);
 		}
 		
+		
+		else if(obj instanceof order){
+			System.out.println("in jpa of order");
+			order s = (order)obj;
+			id = s.getId();
+			System.out.println("in crud order " + id);
+		}
 		session.close();
 		s.close();
 		
@@ -337,21 +344,21 @@ public class DBCrud<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public order getBookAvailability(int bookId){
+	public List<order> getBookAvailability(int bookId){
 		System.out.println(" in all Order table " + bookId );
 		s = SessionFactoryObj.getSessionFactory();
 		session = s.openSession();
 		session.beginTransaction();
 		Query query = session.createSQLQuery("select * from BookShareDB.order where bookId=:sCode and active='1' and endDate>current_date").addEntity(order.class).setParameter("sCode", bookId);
 
-		order  result = new order();
+		List<order>  result = new ArrayList<order>();
 		if(query.list().size()==0)
         {
         	 return null;
         }
         else
         {
-        	 result = (order)query.list().get(0);
+        	 result = (List<order>)query.list();
         }
 
 		System.out.println(" value of result in DBCrud" + result);
@@ -383,7 +390,7 @@ public class DBCrud<T> {
 		s = SessionFactoryObj.getSessionFactory();
 		session = s.openSession();
 		session.beginTransaction();
-		Query query = session.createSQLQuery("select * from BookShareDB.order where userId=:sCode and active=1").addEntity(order.class).setParameter("sCode", userId);
+		Query query = session.createSQLQuery("select * from `order` where userId=:sCode and active=1").addEntity(order.class).setParameter("sCode", userId);
 		
 		if(query.list().size()==0)
         {
@@ -395,4 +402,44 @@ public class DBCrud<T> {
         }
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<order> getAllUserOrders(int userId){
+		List<order> r = new ArrayList<order>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		System.out.println(userId);
+		Query query = session.createSQLQuery("select * from `order` where userId=:sCode ORDER BY Active desc").addEntity(order.class).setParameter("sCode", userId);
+		
+		
+		if(query.list().size() > 0)
+		{
+			
+			r=  (List<order>)query.list();
+		}
+		else
+			r=null;
+		
+		session.close();
+		s.close();
+		
+		return r;
+	}
+	@SuppressWarnings("unchecked")
+	public int getBookParentId(int bookId) {
+		subbook result = new subbook();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		
+		Query query = session.createSQLQuery("select * from subbook where id=:sCode").addEntity(subbook.class).setParameter("sCode", bookId);
+		
+		result = (subbook)query.list().get(0);
+		session.close();
+		s.close();		
+		int id = Integer.parseInt(result.getParentId() + "");
+		return id;
+	}
+	
 }

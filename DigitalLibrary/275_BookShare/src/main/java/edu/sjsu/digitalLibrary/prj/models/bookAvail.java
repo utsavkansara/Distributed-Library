@@ -2,6 +2,9 @@ package edu.sjsu.digitalLibrary.prj.models;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
+
+import org.json.JSONArray;
 
 public class bookAvail implements Serializable {
 	
@@ -11,8 +14,8 @@ public class bookAvail implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int subId;
-	private Date start_date;
-	private Date end_date;
+	private String start_date;
+	private String end_date;
 	private int regionId;
 	private double region_long;
 	private double region_lat;
@@ -28,7 +31,7 @@ public class bookAvail implements Serializable {
 		this.region_name = region_name;
 	}
 
-	public bookAvail(int subId, Date start_date, Date end_date, int regionId, double region_long, double region_lat, String region_name)
+	public bookAvail(int subId, String start_date,String end_date, int regionId, double region_long, double region_lat, String region_name)
 	{
 		this.subId=subId;
 		this.start_date=start_date;
@@ -63,16 +66,16 @@ public class bookAvail implements Serializable {
 	public void setSubId(int subId) {
 		this.subId = subId;
 	}
-	public Date getStart_date() {
+	public String getStart_date() {
 		return start_date;
 	}
-	public void setStart_date(Date start_date) {
+	public void setStart_date(String start_date) {
 		this.start_date = start_date;
 	}
-	public Date getEnd_date() {
+	public String getEnd_date() {
 		return end_date;
 	}
-	public void setEnd_date(Date end_date) {
+	public void setEnd_date(String end_date) {
 		this.end_date = end_date;
 	}
 	public static long getSerialversionuid() {

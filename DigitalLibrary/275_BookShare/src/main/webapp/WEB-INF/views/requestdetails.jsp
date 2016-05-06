@@ -1,6 +1,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="edu.sjsu.digitalLibrary.prj.models.bookAvail" %>
 <jsp:include page="navbar.jsp"></jsp:include>
+
 <html>
 <head>
 	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
@@ -15,23 +17,44 @@
 	}
 	</style> 
 	<script>
+	var dateRange = [];           // array to hold the range
+
 	
 	
 function chooseBook(){
 	var subBookId= document.getElementById('subbookId').value;
-	window.location = "./paymentDetails/" + subBookId;
+	var startDate = document.getElementById('datepicker').value
+	window.location = "../orderbook/" + subBookId + "/" + startDate;
 }
 	
 		function changeMap(subId, latitude, longitude){
+			
 			document.getElementById('divChoose').style.visibility='visible';
+			
+			
 			 document.getElementById('subbookId').value = subId;
-	    	   var geocoder = new google.maps.Geocoder();
+			 
+			var p = document.getElementById(''+subId + 'Start').value + '';
+			var q = document.getElementById(''+subId + 'End').value + '';
+			p= p.replace("[","");
+			p =p.replace("]","");
+			var array = p.split(',');
+			 console.log(array);
+			 
+			 
+			 q= q.replace("[","");
+				q =q.replace("]","");
+				var arrayQ = q.split(',');
+				 console.log(arrayQ);
+			 
+			 manageDates(array,arrayQ);
+			 //alert('bye');
+		
+			 var geocoder = new google.maps.Geocoder();
 				var address = "101 E San Fernando, San Jose, CA, 95112";
 	    		geocoder.geocode( { 'address': address}, function(results, status) {
 	      		if (status == google.maps.GeocoderStatus.OK) {
-	    	  		//var res = String(results[0].geometry.location).split(",");
-		    	    //res[0] = res[0].replace("(","").trim();
-		    	    //res[1] = res[1].replace(")","").trim();
+	    	  		
 		    	   
 		    	    var latlng = new google.maps.LatLng(latitude, longitude);
 		    	    var myOptions = {
@@ -66,28 +89,82 @@ function chooseBook(){
 	      
 	        	}); 
 	    		
+	    	
+	    		
+	    		
+	    		
 	    		
 		}
 		
+		function unavailableRange(date) {
+			
+			
+		    var dateString = jQuery.datepicker.formatDate('yyyy-mm-dd', date);
+		    return [dateRange.indexOf(dateString) == -1];
+		}
 		
-		$(function() {
-		    $( "#datepicker" ).datepicker({ minDate: -20, maxDate: "+1M +10D" });
-		  });
+		$(document).ready(function(){
+			$( "#datepicker" ).datepicker({ minDate: +1, maxDate: "+1M" , dateFormat: "yy-mm-dd",  beforeShowDay: unavailableRange });
+			//alert('ho');
+			
+		});
+			function manageDates(start_date, end_date){
+				
+			//alert('here');
+			dateRange= [];
+			for(var x =0; x < start_date.length; x ++)
+				{
+					var dStart = new Date(start_date[x]);
+					//var dStartFinal =  dStart.getDate();
+					
+					var dEnd = new Date(end_date[x]);
+					//var dEndFinal =  dEnd.getDate();
+					dEnd.setDate(dEnd.getDate() + 1)
+					for (var d = dStart; d <= dEnd; d.setDate(d.getDate() + 1)) {
+					    dateRange.push($.datepicker.formatDate("yyyy-mm-dd", d));
+					}
+					//dateRange.push($.datepicker.formatDate("yyyy-mm-dd", dEnd));
+					var z=0;
+					var d = new Date(start_date[x]);
+					while( z < 6)
+					{
+					    dateRange.push($.datepicker.formatDate("yyyy-mm-dd", d));
+					    d.setDate(d.getDate() - 1);
+					    z++;
+					}
+					
+				}
+			$("#datepicker").datepicker("refresh");
+		}
+		
+		
+		
+		
+		
+		
+		
       		
 	</script>
 </head>
 
 <body>
 
-<div class="container-fluid" style="margin-top:15px">  Book Available in following regions: <br/>
+<div class="container-fluid" style="margin-top:15px"> <br/>
 		<div class="row-fluid">
 			<div class="container-fluid"> 
+			 <% if(null != request.getAttribute("bookAvailDetails")) {%> 
 				<c:forEach items="${bookAvailDetails}" var="bookAvail" varStatus="i"> 
           			<div class="col-md-2">
           			              <a class="btn btn-primary"  href="#" onClick="changeMap(${bookAvail.subId}, ${bookAvail.region_long}, ${bookAvail.region_lat});" role="button" > ${bookAvail.getRegion_name()} </a>
-          				
+          						<input type="hidden" id="${bookAvail.subId}Start" value="${bookAvail.start_date}"></input>
+          						<input type="hidden" id="${bookAvail.subId}End" value="${bookAvail.end_date}"></input>
 					</div>
 				</c:forEach>
+				 <% } else
+					 
+				 {%> 
+				 <label>No Availability</label>
+				  <% }%> 
 			</div>
 		</div>
 </div>
@@ -99,7 +176,9 @@ function chooseBook(){
 <div id="divChoose" style="visibility: hidden">
 <input type="hidden" id="subbookId" value=""></input>
 <p>Date: <input type="text" id="datepicker"></p>
-<p><a class="btn btn-primary"  href="#" onClick="chooseBook();" role="button" > Choose </a></p>
+<p>
+
+<a class="btn btn-primary"  href="#" onClick="chooseBook();" role="button" > Choose </a></p>
 
 
 </div>

@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
@@ -11,9 +14,26 @@ import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.bookAvail;
+import edu.sjsu.digitalLibrary.prj.models.user;
 
 public class JPARequestBookDAO implements RequestBookDAO {
 
+	
+	public int insert(order or) 
+	{
+		System.out.println("in order jpa");
+		int addressId= 0;
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			addressId = db.Insert(or);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return addressId;
+	}
+	
 	public int insert(requestbook category) {
 		
 		System.out.println("in category jpa request making");
@@ -86,47 +106,62 @@ public class JPARequestBookDAO implements RequestBookDAO {
 	public List<bookAvail> getBookOrderDetails(int bookId)
 	{
 		Date dateNull = null;
-		bookId=21;
+		
 		List<subbook> subBookDetails = new ArrayList<subbook>();
 		
 		subBookDetails=getBooksubId(bookId);
 		
 		List<order> tempOrderDetails= new ArrayList<order>();
 		List<bookAvail> bookavail = new ArrayList<bookAvail>();
-		
+		bookAvail b;
+		String sStart;
+		String sEnd;
 		   try
 		   {   
 			   DBCrud<order> db = new DBCrud<order>();
-			   order objOrder=new order();
+			   List<order> objOrder=new ArrayList<order>();
 			   for(subbook s1: subBookDetails)
 			   {
 				   
 				   objOrder=db.getBookAvailability(s1.getId());
+				   region regionDetails= new region();
+				   regionDetails=getRegionDetails(s1.getRegionId());   	
 				   if(objOrder!=null)
 				   {
-				     
-				     tempOrderDetails.add(objOrder);
+					   sStart = "["; 
+					   sEnd = "["; 
+					   JSONObject jo = new JSONObject();
+					   //int i =0;
+					   for(order o : objOrder){
+						  
+						   
+						   if(!sStart.equals("["))
+							   sStart += ",";
+						   
+						   sStart += "" + o.getStartDate().toString() + "";
+						   if(!sEnd.equals("["))
+							   sEnd += ",";
+						   
+						   sEnd +="" + o.getEndDate().toString()+ "";
+						   
+					   }
+					   sStart += "]"; 
+					   sEnd += "]"; 
+					   b = new bookAvail(s1.getId(),sStart,sEnd,s1.getRegionId(),regionDetails.getLongitude(),regionDetails.getLatitude(),regionDetails.getName());
+					   bookavail.add(b);  
+						   
+						   
+				   }
+				   else
+				   {
+					   sStart = "[]"; 
+					   sEnd = "[]"; 
+					    b = new bookAvail(s1.getId(),sStart,sEnd,s1.getRegionId(),regionDetails.getLongitude(),regionDetails.getLatitude(),regionDetails.getName());
+						bookavail.add(b);
 				   }
 			   }
 			  
-			   for(subbook s :subBookDetails)
-			   {
-				      region regionDetails= new region();
-					  regionDetails=getRegionDetails(s.getRegionId());
-				  for(order o : tempOrderDetails)
-				  {
-					  if(o.getBookId()==s.getId())
-					  {
-						  bookAvail b = new bookAvail(o.getBookId(),o.getStartDate(),o.getEndDate(),s.getRegionId(),regionDetails.getLongitude(),regionDetails.getLatitude(),regionDetails.getName());
-						  bookavail.add(b);
-					  }
-					  else
-					  {
-						  bookAvail b = new bookAvail(s.getId(),dateNull,dateNull,s.getRegionId(),regionDetails.getLongitude(),regionDetails.getLatitude(),regionDetails.getName());
-						  bookavail.add(b);
-					  }
-				  }
-			   }
+			   
 			   
 			   
 			   
@@ -191,6 +226,20 @@ public class JPARequestBookDAO implements RequestBookDAO {
 		
 	} 
 	
+	
+	public List<order> getAllUserOrders(int userId)
+	{
+		//List<order> userOrders = new ArrayList<order>();
+		try{
+			DBCrud<order> db = new DBCrud<order>();
+			return db.getAllUserOrders(userId);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	return null;	
+	}
 	
 	//RaunaqCode Ends
 	
