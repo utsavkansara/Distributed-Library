@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.Login;
+import edu.sjsu.digitalLibrary.prj.models.Tokens;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.order;
@@ -62,6 +63,14 @@ public class DBCrud<T> {
 			id = s.getId();
 			System.out.println("in crud order " + id);
 		}
+		
+		else if(obj instanceof Tokens){
+			System.out.println("in DBCrud insert token");
+			Tokens t = (Tokens)obj;
+			id = t.getId();
+			System.out.println("Id of token: " + id);
+		}
+		
 		session.close();
 		s.close();
 		
@@ -102,6 +111,29 @@ public class DBCrud<T> {
 		s.close();
 	}	
 	
+	
+	public void updateUserPassword(int userid, String password){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+
+		int result=0;
+		Query updateQuery = session.createSQLQuery(
+				"update user set password= :sCode where id = :jCode")
+				.setParameter("sCode", password)
+				.setParameter("jCode", userid);
+				
+				result = updateQuery.executeUpdate();
+				System.out.println(result);
+				session.getTransaction().commit();
+		
+		
+		session.close();
+		s.close();
+		
+		System.out.println("----" + result);
+	}
+	
 	public int getExistingEmail(String emailId){
 		s = SessionFactoryObj.getSessionFactory();
 		session = s.openSession();
@@ -118,7 +150,32 @@ public class DBCrud<T> {
 	}
 
 	
-	
+	@SuppressWarnings("unchecked")
+	public Tokens getTokenData(int userid){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+
+		int result=0;
+		Query query = session.createSQLQuery("select * from Tokens where userid = :sCode")
+				.addEntity(Tokens.class)
+				.setParameter("sCode", userid);
+		
+		result = query.list().size();
+		Tokens token = null;
+		if( result !=0 ){
+			token = new Tokens();
+			token.setId(((Tokens)query.list().get(0)).getId());
+			token.setUserid(((Tokens)query.list().get(0)).getUserid());
+			token.setToken(((Tokens)query.list().get(0)).getToken());
+			token.setExpiry_date(((Tokens)query.list().get(0)).getExpiry_date());
+		}
+		session.close();
+		s.close();
+		
+		System.out.println("----" + result);
+		return token;
+	}
 
 		
 	@SuppressWarnings("unchecked")
@@ -190,6 +247,8 @@ public class DBCrud<T> {
 	}
 	
 	
+	
+	
 	public JSONObject validateActivation(Login login){
 		s = SessionFactoryObj.getSessionFactory();
 		session = s.openSession();
@@ -215,6 +274,41 @@ public class DBCrud<T> {
 				}else{
 					obj.put("flag", "Y");
 					obj.put("activationCode", "none");
+				}
+		
+		session.close();
+		s.close();
+	
+		return obj;
+	}
+	
+	public JSONObject checkUser(Login login){
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		
+		System.out.println("sCode"+ login.getUserEmail());
+		
+		int result;
+		JSONObject obj = new JSONObject();
+		Query query = session.createSQLQuery(
+				"select * from user  where emailId = :sCode")
+				.addEntity(user.class)
+				.setParameter("sCode", login.getUserEmail());
+		
+		
+				result = query.list().size();
+				if(result!=0)
+				{
+				obj.put("username", ((user)query.list().get(0)).getName());
+				obj.put("userid", ((user)query.list().get(0)).getId());
+				obj.put("isUserInTheSystem", true);
+				
+				
+				}else{
+					obj.put("username", "none");
+					obj.put("userid", 0);
+					obj.put("isUserInTheSystem", false);
 				}
 		
 		session.close();

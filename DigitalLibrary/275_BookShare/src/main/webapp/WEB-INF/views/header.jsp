@@ -8,7 +8,12 @@
 
 <!-- ============================================== HEADER ============================================== -->
 
-
+<style>
+     #ajaxSpinnerContainer {
+          display: none;
+          z-index: 2147483647;
+     }
+</style>
 
 <nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
@@ -129,7 +134,7 @@
 									class="btn btn-primary btn-uppercase" type="submit">Sign
 									In</button>
 								<!-- <button type="button" class="btn btn-primary btn-uppercase">Login</button> -->
-								<a href="#" class='forgot-password'>forgot password</a>
+								<a href="#" class='forgot-password' onclick="forgotPassword()">forgot password</a>
 							</form>
 
 
@@ -224,7 +229,7 @@
 								
 								<div class="form-group">
 									<label for="state" class="sr-only">State</label>									
-									<select id="state" name="state" style="width:346px; height:38px;" placeholder="select state">
+									<select id="state" name="state" style="width:346px; height:38px;" placeholder="select state" required="true">
 										<option value="" disabled selected>select state</option>
 										<option value="AL">Alabama</option>
 										<option value="AK">Alaska</option>
@@ -407,16 +412,31 @@
 <!-- /.modal -->
 
 
+
 <!-- </header> -->
 
 
 <!-- ============================================== HEADER : END ============================================== -->
 
+
+
+
 <script type="text/javascript">
+
+
+	
 	
 	$(document).ready(
 			
 			function() {
+				
+				$(document)
+		          .ajaxStart(function () {
+		               $("#ajaxSpinnerContainer").show();
+		          })
+		          .ajaxStop(function () {
+		               $("#ajaxSpinnerContainer").hide();
+		          });
 				
 				$("#activationCodeInputDiv").hide();
 				
@@ -520,45 +540,77 @@
 						
 						var categories = categoriesArray.substring(0, categoriesArray.length-1);
 						
-						var signupData = {};
+						var zipcode = $("#zipcode").val();
+						var isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipcode);
 						
-						signupData["userName"] = $("#userName").val();
-						signupData["dob"] = $("#dob").val();
-						signupData["emailId"] = $("#emailId").val();
-						signupData["phone"] = $("#phone").val();
-						signupData["category"] = $("#category").val();
-						signupData["parentId"] = $("#parentId").val();
-						signupData["street"] = $("#street").val();
-						signupData["aptNo"] = $("#aptNo").val();
-						signupData["city"] = $("#city").val();
-						signupData["state"] = $("#state").val();
-						signupData["country"] = $("#country").val();
-						signupData["zipcode"] = $("#zipcode").val();
-						signupData["userPassword"] = $("#userPassword").val();
-						signupData["confirmPassword"] = $("#confirmPassword").val();
-						signupData["category"] = categories;
+						var birthdate = $("#dob").val();
+						var isValidBirthDate = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/.test(birthdate);
 						
-						$.ajax({
-							type : "POST",
-							contentType : "application/json; charset=utf-8",
-							url : "/Distributed-Library/signup",
-							data : JSON.stringify(signupData),
-							dataType : "json",
-							complete : function(response) {
-								
-								var data = JSON.parse(response.responseText);
-								
-								if (data.successFlag == "Y") {
-																		
-									alert(data.successMessage);
-									location.reload(true);
-								
-								} else {
+						var errorMessage = "";
+						
+						
+						if(!isValidZip){
+							errorMessage+= "enter valid zip\n";
+						}
+						
+						if(!isValidBirthDate){
+							errorMessage += "enter valid birthdate\n";
+						}
+						
+						var enteredPassword = $("#userPassword").val();
+						var confirmPassword = $("#confirmPassword").val();
+						
+						if(enteredPassword != confirmPassword){
+							errorMessage += "Your entered password and confirmed password should be same !\n";
+						}
+						
+						if(errorMessage != ""){
+							alert(errorMessage);
+						}else{
+									
+							var signupData = {};
+							
+							signupData["userName"] = $("#userName").val();
+							signupData["dob"] = $("#dob").val();
+							signupData["emailId"] = $("#emailId").val();
+							signupData["phone"] = $("#phone").val();
+							signupData["category"] = $("#category").val();
+							signupData["parentId"] = $("#parentId").val();
+							signupData["street"] = $("#street").val();
+							signupData["aptNo"] = $("#aptNo").val();
+							signupData["city"] = $("#city").val();
+							signupData["state"] = $("#state").val();
+							signupData["country"] = $("#country").val();
+							signupData["zipcode"] = $("#zipcode").val();
+							signupData["userPassword"] = $("#userPassword").val();
+							signupData["confirmPassword"] = $("#confirmPassword").val();
+							signupData["category"] = categories;
+							
+							$.ajax({
+								type : "POST",
+								contentType : "application/json; charset=utf-8",
+								url : "/Distributed-Library/signup",
+								data : JSON.stringify(signupData),
+								dataType : "json",
+								complete : function(response) {
+									
+									var data = JSON.parse(response.responseText);
+									
+									if (data.successFlag == "Y") {
 																			
-									alert(data.errorMessage);
+										alert(data.successMessage);
+										location.reload(true);
+									
+									} else {
+																				
+										alert(data.errorMessage);
+									}
 								}
-							}
-						}); 
+							});	
+							
+							
+						}
+												 
 						event.preventDefault();						
 				
 				})	
@@ -609,6 +661,45 @@
 			}
 			
 		})
+		
+	}
+	
+	function forgotPassword(){
+		
+		var userEmail = $("#userEmail").val();
+		
+		if(userEmail == "" || userEmail == null ){
+			alert("Please enter your email address");
+		}else{
+			
+			var search = {}
+			search["userEmail"] = $("#userEmail").val();
+			
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : "/Distributed-Library/sendEmail",
+				data : JSON.stringify(search),
+				dataType : 'json',
+				complete : function(data) {
+					
+					if (data.responseJSON.successFlag == "Y") {
+						
+						location.reload(true);
+					
+					} else if (data.responseJSON.successFlag == "M") {
+							
+						alert(data.responseJSON.successMessage);
+						location.reload(true);
+						
+					} else if (data.responseJSON.successFlag == "E") {
+							
+						alert(data.responseJSON.errorMessage);
+					}
+				}
+			});
+			
+		}
 		
 	}
 			

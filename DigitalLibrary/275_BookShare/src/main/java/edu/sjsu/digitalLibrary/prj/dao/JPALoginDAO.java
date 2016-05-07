@@ -46,5 +46,23 @@ public JSONObject validateActivation(Login login) {
 		}
 		return obj;
 	}
+
+public JSONObject checkUser(Login login) {
+	
+	System.out.println("in checkUser jpa");
+	JSONObject obj = new JSONObject();
+	try {
+		
+		DBCrud<Login> db = new DBCrud<Login>();
+		obj = db.checkUser(login);
+		
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		obj = null;
+		e1.printStackTrace();
+		
+	}
+	return obj;
+}
 	
 }

@@ -1,22 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page session="true" %>
+<%@ page session="true"%>
 <jsp:include page="imports.jsp" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <body>
 
-		
+
 	<div id="wrapper">
 		<div id="page-content-wrapper" class="st-pusher">
 			<div class="st-pusher-after"></div>
-			
+
 			<!-- ============================================== HEADER ============================================== -->
-			
+
 			<jsp:include page="header.jsp" />
-			
+			<div id="ajaxSpinnerContainer">
+				<img src="<c:url value="/resources/images/Preloader_2.gif" />"
+					id="ajaxSpinnerImage" title="working..." />
+			</div>
 			<!-- ============================================== HEADER : END ============================================== -->
 			<div class="home-page">
 				<div class="content">
@@ -906,7 +909,7 @@
 			<jsp:include page="footer.jsp" />
 
 			<!-- ============================================== FOOTER : END ============================================== -->
-			
+
 		</div>
 		<!-- /.st-pusher -->
 		<!-- ============================================== TOGGLE RIGHT CONTENT ============================================== -->
