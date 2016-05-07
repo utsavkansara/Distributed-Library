@@ -9,9 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 import java.util.TimeZone;
 
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,7 +38,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-
 import redis.clients.jedis.Jedis;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -41,11 +47,6 @@ import edu.sjsu.digitalLibrary.prj.dao.JPACategoryDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPALandingPageDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPARegionDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
-
-import org.springframework.web.servlet.view.RedirectView;
-import com.fasterxml.jackson.annotation.JsonView;
-import edu.sjsu.digitalLibrary.prj.dao.*;
-
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
@@ -296,7 +297,8 @@ public class FirstController {
             	//change here
             	registerUser.setParentId(parentId);
             	registerUser.setPhone(registrationModel.getPhone());
-            	registerUser.setActivationCode(getToken(6));
+            	String activation_code = getToken(6);
+            	registerUser.setActivationCode(activation_code);
             	registerUser.setRegionId(0);
             	
             	
@@ -336,11 +338,50 @@ public class FirstController {
             	
             	rgnNearUser = jr.getAllRegions(registrationModel.getCity());
             	
-            	jsonResponseAjax.setSuccessFlag("Y");
-            	jsonResponseAjax.setSuccessMessage("Signup success");
             	
-            	return jsonResponseAjax;
-          }
+        		String username = registrationModel.getUserName();
+            	
+            	
+            	Properties props = new Properties();
+        		props.put("mail.smtp.host", "smtp.gmail.com");
+        		props.put("mail.smtp.socketFactory.port", "465");
+        		props.put("mail.smtp.socketFactory.class",
+        				"javax.net.ssl.SSLSocketFactory");
+        		props.put("mail.smtp.auth", "true");
+        		props.put("mail.smtp.port", "465");
+
+        		Session session = Session.getDefaultInstance(props,
+        			new javax.mail.Authenticator() {
+        				protected PasswordAuthentication getPasswordAuthentication() {
+        					return new PasswordAuthentication("noreplydigitalbookshare@gmail.com","cmpe295b");
+        				}
+        			});
+
+        		
+
+        			Message message = new MimeMessage(session);
+        			message.setFrom(new InternetAddress("noreplydigitalbookshare@gmail.com"));
+        			message.setRecipients(Message.RecipientType.TO,
+        					InternetAddress.parse(registrationModel.getEmailId()));
+        			message.setSubject("Recover your password");
+        			
+        			message.setText("Dear "+username+"," +
+        					"\n\nHere is Your Activation code : " + activation_code);
+
+        			Transport.send(message);
+
+        			System.out.println("Done");
+        			
+        			JsonResponse jsonResponseObj = new JsonResponse();
+        			
+        			jsonResponseObj.setSuccessFlag("Y");
+        			jsonResponseObj.setSuccessMessage("Sign up success ! Activation code is sent to you via email");
+        	        
+        	        return jsonResponseObj;
+
+      
+        		}
+          
         } catch (Exception e) {
         	
         	System.out.println("Exception in FirstController "+e.getMessage());
