@@ -258,7 +258,16 @@ public class RequestBookController {
 			o.setFeedback(value);
 			jd.updateOrder(o);
 			o = jd.getOrder(id);
-			System.out.println("done" + o.getFeedback());
+			
+			//write feedback in recommendation file
+			
+		    BookController b = new BookController();
+		    int parentId = b.getParentBook(o.getBookId());
+			
+		    int userId=Integer.parseInt(httpSession.getAttribute("USERID").toString());
+		    
+		    jd.inserDataMahout(userId, parentId, value);
+			
 	   	 	return "Y";
 		
 		

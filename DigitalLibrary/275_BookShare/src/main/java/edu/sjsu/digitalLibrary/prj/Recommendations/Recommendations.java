@@ -28,12 +28,13 @@ public class Recommendations {
 	public List<Integer> getBookRecommendationsMahout(int userId, int number){
 		List<Integer> lstBooks = new ArrayList<Integer>();
 		try {
-			//enterData();
-			FileSystemResource resource = new FileSystemResource("/Users/raunaqmathur/project295B/Distributed-Library/DigitalLibrary/275_BookShare/src/main/webapp/WEB-INF/MahoutData/userBookData.csv");
-			DataModel model = new GenericBooleanPrefDataModel( GenericBooleanPrefDataModel.toDataMap(new FileDataModel(resource.getFile())));
 			
-			UserSimilarity similarity = new TanimotoCoefficientSimilarity(model);
-			UserNeighborhood neighborhood = new NearestNUserNeighborhood(10, similarity, model);
+			//FileSystemResource resource = new FileSystemResource("/resources/userBookData.csv");
+			DataModel model = new FileDataModel(new File("/resources/userBookData.csv"));
+			UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+			UserNeighborhood neighborhood = new ThresholdUserNeighborhood(0.1, similarity, model);
+
+			//UserNeighborhood neighborhood = new NearestNUserNeighborhood(10, similarity, model);
 			UserBasedRecommender recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
 			List<RecommendedItem> recommendations = recommender.recommend(userId, number);
 			for (RecommendedItem recommendation : recommendations) {

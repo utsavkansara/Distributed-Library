@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.sjsu.digitalLibrary.prj.Recommendations.WriteData;
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
@@ -270,6 +271,23 @@ public class JPARequestBookDAO implements RequestBookDAO {
 			e.printStackTrace();
 		}
 	return null;	
+	}
+	
+	
+	public boolean inserDataMahout(int userId, int bookId, int feedback)
+	{
+		
+		try{
+			WriteData w = new WriteData();
+			return w.writeData(userId, bookId, feedback);
+			
+			
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	return false;	
 	}
 	
 	//RaunaqCode Ends

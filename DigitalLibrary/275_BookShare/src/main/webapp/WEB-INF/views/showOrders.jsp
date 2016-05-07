@@ -95,8 +95,10 @@ display: block;
 			   type: "POST",
 			   url: "../feedback/" + id + "/" + value,
 			   success: function(res){  
-				   		       
-			      alert('feedback submitted');
+				   $("#" + id +"span").attr('title', 'Feedback already submitted!');
+					for (var a =1;a <= 5; a++)
+						$( "#" + id +'' +  a ).prop( 'disabled', true );
+			      	alert('feedback submitted');
 			   	}
 			});
 		
