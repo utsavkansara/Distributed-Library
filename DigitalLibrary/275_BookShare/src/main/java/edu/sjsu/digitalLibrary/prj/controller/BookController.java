@@ -117,11 +117,19 @@ public class BookController {
     @RequestMapping(value = "/convertToParentBook/{bookId}",method = RequestMethod.GET)
     public Object convertToParentBook(@PathVariable int bookId) {
     	
-    	ModelAndView mv = new ModelAndView();
+    	//ModelAndView mv = new ModelAndView();
+    	
+    	return "redirect:/showbook/" + getParentBook(bookId);
+       
+    }
+    
+    public int getParentBook( int bookId) {
+    	
+    	
     	JPABookDAO j = new JPABookDAO();
     	int parentId = j.getBookParentId(bookId);
-    	System.out.println("book id:" + parentId);
-    	return "redirect:/showbook/" + parentId;
+    	
+    	return parentId;
        
     }
 }

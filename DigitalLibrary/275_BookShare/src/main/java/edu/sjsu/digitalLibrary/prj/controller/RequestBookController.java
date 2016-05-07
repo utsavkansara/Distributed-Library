@@ -242,6 +242,45 @@ public class RequestBookController {
  }
  
  
+ 
+ @ResponseBody
+ @RequestMapping(value = "/feedback/{id}/{value}",method = RequestMethod.POST)
+ public String insertFeedback(@PathVariable int id, @PathVariable int value) {
+		//JsonResponse j = new JsonResponse();
+		if(sessionService.checkAuth()) {
+			order o = new order();
+			
+			
+			JPARequestBookDAO jd = new JPARequestBookDAO();
+			//o.setId(id);
+			
+			o = jd.getOrder(id);
+			o.setFeedback(value);
+			jd.updateOrder(o);
+			o = jd.getOrder(id);
+			
+			//write feedback in recommendation file
+			
+		    BookController b = new BookController();
+		    int parentId = b.getParentBook(o.getBookId());
+			
+		    int userId=Integer.parseInt(httpSession.getAttribute("USERID").toString());
+		    
+		    jd.inserDataMahout(userId, parentId, value);
+			
+	   	 	return "Y";
+		
+		
+		}
+		else
+		{
+			System.out.println("No session");
+			return "N";
+		}
+	  
+	}
+ 
+ 
  ////Raunaq code ends
   /*    public Object uploadrequestbook() {
 	if(!sessionService.checkAuth())
