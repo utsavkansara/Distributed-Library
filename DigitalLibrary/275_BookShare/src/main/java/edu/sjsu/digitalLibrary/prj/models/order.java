@@ -47,6 +47,17 @@ public class order implements Serializable {
 	@Column(name = "active")
     private int active;
 
+	@Column(name = "feedback")
+    private int feedback;
+	
+	public int getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(int feedback) {
+		this.feedback = feedback;
+	}
+
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}

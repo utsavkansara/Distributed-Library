@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.sjsu.digitalLibrary.prj.Recommendations.WriteData;
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
@@ -18,6 +19,37 @@ import edu.sjsu.digitalLibrary.prj.models.user;
 
 public class JPARequestBookDAO implements RequestBookDAO {
 
+	public void updateOrder(order or) 
+	{
+		System.out.println("in order jpa fr order update");
+		
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			db.update(or);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public order getOrder(int orderId) 
+	{
+		System.out.println("in order jpa fr feedback update");
+		
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			order o = new order();
+			return db.get(o, orderId);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	public int insert(order or) 
 	{
@@ -239,6 +271,23 @@ public class JPARequestBookDAO implements RequestBookDAO {
 			e.printStackTrace();
 		}
 	return null;	
+	}
+	
+	
+	public boolean inserDataMahout(int userId, int bookId, int feedback)
+	{
+		
+		try{
+			WriteData w = new WriteData();
+			return w.writeData(userId, bookId, feedback);
+			
+			
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	return false;	
 	}
 	
 	//RaunaqCode Ends
