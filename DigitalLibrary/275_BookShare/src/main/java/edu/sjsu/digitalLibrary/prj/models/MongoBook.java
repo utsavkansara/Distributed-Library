@@ -29,7 +29,9 @@ public class MongoBook implements Serializable,Comparable {
     
 	    private double rating;
     
-	    private List<String> categories;
+		private List<String> categories;
+	    
+	    private String singleCategory;
     
 	    private String image;
 	
@@ -97,6 +99,14 @@ public class MongoBook implements Serializable,Comparable {
 
 		public void setCategories(List<String> categories) {
 			this.categories = categories;
+		}
+		
+		public String getSingleCategory() {
+			return singleCategory;
+		}
+
+		public void setSingleCategory(String singleCategory) {
+			this.singleCategory = singleCategory;
 		}
 
 		public String getImage() {
