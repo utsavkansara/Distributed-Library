@@ -1,56 +1,32 @@
 package edu.sjsu.digitalLibrary.prj.dataoperations;
 
 import java.net.UnknownHostException;
-
-
-
-
-
-
-
-
-
-
-
-import edu.sjsu.digitalLibrary.prj.models.BookId;
-import edu.sjsu.digitalLibrary.prj.models.MongoBook;
-
-
-
-import edu.sjsu.digitalLibrary.prj.models.category;
-
-
-
+import java.util.Collections;
+import java.util.regex.Pattern;
 
 //import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.mongodb.DB;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.books.Books;
 import com.google.api.services.books.Books.Volumes.List;
+import com.google.api.services.books.BooksRequestInitializer;
 import com.google.api.services.books.model.Volume;
 import com.google.api.services.books.model.Volumes;
-import com.google.api.services.books.BooksRequestInitializer;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.MongoException;
-import com.mongodb.ServerAddress;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.regex.Pattern;
+import edu.sjsu.digitalLibrary.prj.models.BookId;
+import edu.sjsu.digitalLibrary.prj.models.MongoBook;
+import edu.sjsu.digitalLibrary.prj.models.category;
 
 public class MongoCrud {
 	public DBCollection dbCollection;
@@ -727,5 +703,46 @@ public  java.util.List<MongoBook> searchTop5CategoryBooks(String[] categories) t
 	
 		
 	}
+
+/*
+ * Added by Jinal
+ */
+public  MongoBook searchBooksInDBWithBookISBN(String ISBN) throws Exception {
+	
+	dbCollection = db.getCollection("book");
+	BasicDBObject query = null;
+	query = new BasicDBObject("isbn", ISBN);
+	BasicDBObject image = null;
+	DBCursor cursor = dbCollection.find(query);
+	BasicDBObject object = null;
+	MongoBook mTemp = new MongoBook();
+	System.out.println("Particular found: " + cursor.count());
+	try {
+		if (cursor.hasNext()) {
+			mTemp = new MongoBook();
+			 object = (BasicDBObject) cursor.next();
+			 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
+			 mTemp.setTitle(object.get("title").toString());
+			 mTemp.setDescription(object.get("description").toString());
+			 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+			 image = (BasicDBObject)object.get("image");
+			 if(image.containsField("smallThumbnail"))
+				 mTemp.setImage(image.get("smallThumbnail").toString());
+			 else
+				 mTemp.setImage("");
+			 
+			 mTemp.setLanguage(object.get("language").toString());
+			 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+			 mTemp.setPublisher(object.get("publisher").toString());
+			 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+			 
+		}
+	} finally {
+		cursor.close();
+
+	}
+		return mTemp;
+}
+
 
 }
