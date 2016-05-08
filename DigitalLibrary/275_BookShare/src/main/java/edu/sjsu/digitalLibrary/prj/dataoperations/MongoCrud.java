@@ -499,10 +499,19 @@ public class MongoCrud {
 				 else
 					 mTemp.setImage("");
 				 
-				 if(object.containsField("categories"))
-					 mTemp.setCategories((java.util.List<String>)object.get("categories"));
-				 else
+				 if(object.containsField("categories")){
+					 java.util.List<String> categories = (java.util.List<String>)object.get("categories");
+					 mTemp.setCategories(categories);
+				 	 if(categories.size()>0){
+				 		mTemp.setSingleCategory(categories.get(0));
+				 	 }else if(categories.size()==0){
+				 		mTemp.setSingleCategory("");
+				 	 }				 	 
+				 }					 
+				 else{
 					 mTemp.setCategories(null);
+					 mTemp.setSingleCategory("");
+				 }					 
 				 
 				 if(object.containsField("authors"))
 					 mTemp.setAuthors((java.util.List<String>)object.get("authors"));
