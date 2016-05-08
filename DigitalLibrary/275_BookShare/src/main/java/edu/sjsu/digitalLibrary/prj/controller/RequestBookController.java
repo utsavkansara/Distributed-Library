@@ -34,7 +34,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
+import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.*;
 import edu.sjsu.digitalLibrary.prj.utils.*;
 import edu.sjsu.digitalLibrary.prjservices.*;
@@ -51,17 +54,17 @@ public class RequestBookController {
 
     ///////Raunaq Code 05/05/2016
 	  
+   	@JsonView(Views.Public.class)
+    @ResponseBody
    	@RequestMapping(value = "/checkOrders",method = RequestMethod.GET)
     public JsonResponse checkOrders() {
    		JsonResponse j = new JsonResponse();
    		if(sessionService.checkAuth()) {
    			
-   			
    	   	 	int checkActiveOrders=checkUserActiveOrders(Integer.parseInt(httpSession.getAttribute("USERID").toString()));
    	   	 	System.out.println("No's of orders:" + checkActiveOrders);
    	   	 	if(checkActiveOrders == 2)
-   	   	 	{
-   	   	 		
+   	   	 	{	
    	   	 		j.setSuccessFlag("N");
    	   	 		j.setErrorMessage("You already have two orders");
    	   	 	}
@@ -72,12 +75,13 @@ public class RequestBookController {
    			 
    	   	 	}
    		
-   		
    		}
    		else
    		{
    			System.out.println("No session");
    			j.setSuccessFlag("L");
+   			j.setErrorMessage("You are not logged in");
+   			
    		}
 	  return j;
    	}

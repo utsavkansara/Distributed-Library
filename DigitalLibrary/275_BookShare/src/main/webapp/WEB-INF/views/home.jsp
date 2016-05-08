@@ -37,7 +37,7 @@
 														<div class="book-shelf">
 															<div class="book-cover slider-book-cover bk-cover m-t-20">
 																<img class="img-responsive" alt=""
-																	src="<c:url value="/resources/images/slider-images/01.png" />"
+																	src="../images/slider-images/01.png"
 																	data-echo="/resources/images/slider-images/01.png">
 																<div class="fade"></div>
 															</div>

@@ -458,64 +458,78 @@ public class MongoCrud {
 		try {
 			if (cursor.hasNext()) {
 				mTemp = new MongoBook();
-				object = (BasicDBObject) cursor.next();
-				mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
-				mTemp.setTitle(object.get("title").toString());
 
-				if (object.containsField("description"))
-					mTemp.setDescription(object.get("description").toString());
-				else
-					mTemp.setDescription("");
-
-				if (object.containsField("description"))
-					mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
-				else
-					mTemp.setRating(0);
-
-				image = (BasicDBObject) object.get("image");
-				if (image != null) {
-					if (image.containsField("smallThumbnail"))
-						mTemp.setImage(image.get("smallThumbnail").toString());
-					else
-						mTemp.setImage("");
-				} else
-					mTemp.setImage("");
-
-				if (object.containsField("categories"))
-					mTemp.setCategories((java.util.List<String>) object.get("categories"));
-				else
-					mTemp.setCategories(null);
-
-				if (object.containsField("authors"))
-					mTemp.setAuthors((java.util.List<String>) object.get("authors"));
-				else
-					mTemp.setAuthors(null);
-
-				if (object.containsField("language"))
-					mTemp.setLanguage(object.get("language").toString());
-				else
-					mTemp.setLanguage("");
-
-				if (object.containsField("pageCount"))
-					mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
-				else
-					mTemp.setPageCount(0);
-
-				if (object.containsField("publisher"))
-					mTemp.setPublisher(object.get("publisher").toString());
-				else
-					mTemp.setPublisher("");
-
-				if (object.containsField("price"))
-					mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
-				else
-					mTemp.setPrice(0);
-
-				if (object.containsField("isbn"))
-					mTemp.setIsbn(object.get("isbn").toString());
-				else
-					mTemp.setIsbn("");
-
+				 object = (BasicDBObject) cursor.next();
+				 mTemp.setBookId(Integer.parseInt(object.get("bookId").toString()));
+				 mTemp.setTitle(object.get("title").toString());
+				 
+				 if(object.containsField("description"))
+					 mTemp.setDescription(object.get("description").toString());
+				 else
+					 mTemp.setDescription("");
+				 
+				 
+				 if(object.containsField("description"))
+					 mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
+				 else
+					 mTemp.setRating(0);
+				 
+				 image = (BasicDBObject)object.get("image");
+				 if(image != null)
+				 {
+					 if(image.containsField("smallThumbnail"))
+						 mTemp.setImage(image.get("smallThumbnail").toString());
+					 else
+						 mTemp.setImage("");
+				 }
+				 else
+					 mTemp.setImage("");
+				 
+				 if(object.containsField("categories")){
+					 java.util.List<String> categories = (java.util.List<String>)object.get("categories");
+					 mTemp.setCategories(categories);
+				 	 if(categories.size()>0){
+				 		mTemp.setSingleCategory(categories.get(0));
+				 	 }else if(categories.size()==0){
+				 		mTemp.setSingleCategory("");
+				 	 }				 	 
+				 }					 
+				 else{
+					 mTemp.setCategories(null);
+					 mTemp.setSingleCategory("");
+				 }					 
+				 
+				 if(object.containsField("authors"))
+					 mTemp.setAuthors((java.util.List<String>)object.get("authors"));
+				 else
+					 mTemp.setAuthors(null);
+				 
+				 
+				 if(object.containsField("language"))
+					 mTemp.setLanguage(object.get("language").toString());
+				 else
+					 mTemp.setLanguage("");
+				 
+				 if(object.containsField("pageCount"))
+					 mTemp.setPageCount(Integer.parseInt(object.get("pageCount").toString()));
+				 else
+					 mTemp.setPageCount(0);
+				 
+				 if(object.containsField("publisher"))
+					 mTemp.setPublisher(object.get("publisher").toString());
+				 else
+					 mTemp.setPublisher("");
+				 
+				 if(object.containsField("price"))
+					 mTemp.setPrice(Double.parseDouble(object.get("price").toString()));
+				 else
+					 mTemp.setPrice(0);
+				 
+				 if(object.containsField("isbn"))
+					 mTemp.setIsbn(object.get("isbn").toString());
+				 else
+					 mTemp.setIsbn("");
+				 
 			}
 		} finally {
 			cursor.close();
