@@ -35,6 +35,11 @@
 	<script src="<c:url value="/resources/js/perfect-scrollbar.min.js" />"></script>
 	<script src="<c:url value="/resources/js/wow.min.js" />"></script>
 	<script src="<c:url value="/resources/js/scripts.js" />"></script>
+	
+	
+		<script src="<c:url value="/resources/EasyAutocomplete/jquery.easy-autocomplete.js" />"></script>
+		<link type="text/css" href="<c:url value="/resources/EasyAutocomplete/easy-autocomplete.min.css" />" rel="stylesheet">
+	
 	<style>
 		.carousel
 		.carousel-inner > .item > img,
