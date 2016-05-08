@@ -16,6 +16,8 @@ import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
+import edu.sjsu.digitalLibrary.prj.models.requestQueue;
+import edu.sjsu.digitalLibrary.prj.models.requestQueueCount;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.user;
@@ -534,6 +536,46 @@ public class DBCrud<T> {
 		s.close();		
 		int id = Integer.parseInt(result.getParentId() + "");
 		return id;
+	}
+	
+	/*
+	 * Added by Jinal for requestQueue
+	 */
+	public List<requestQueueCount> getRequestQueueInfo() {
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery(
+				"Select * from (SELECT q.isbn,count(q.isbn) as countReq,u.regionid FROM BookShareDB.requestQueue q, BookShareDB.user u where q.userid = u.id and isOrdered = 0 group by q.isbn,u.regionid) res where res.countReq > 3");
+		List<Object[]> results = (List<Object[]>) query.list();
+		List<requestQueueCount> listRC = new ArrayList<requestQueueCount>();
+		for (Object[] result : results) {
+			requestQueueCount rc = new requestQueueCount();
+			rc.setIsbn(result[0].toString());
+			rc.setCountReq(Integer.valueOf(result[1].toString()));
+			rc.setRegionId(Integer.valueOf(result[2].toString()));
+			listRC.add(rc);
+		}
+
+		session.close();
+		s.close();
+		System.out.println("Count found----" + listRC);
+		return listRC;
+	}
+
+	public List<requestQueue> getRequestQueueInfoByISBNRegion(String isbn, int regionid) {
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select rq.* from requestQueue rq, user u where rq.isbn = '" + isbn
+				+ "' and rq.userid = u.id and u.regionid= '" + regionid
+				+ "' and rq.isOrdered = 0 order by rq.requestTime").addEntity(requestQueue.class);
+		List<requestQueue> results = (List<requestQueue>) query.list();
+
+		session.close();
+		s.close();
+		System.out.println("Count found----" + results);
+		return results;
 	}
 	
 }

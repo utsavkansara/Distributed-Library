@@ -1,25 +1,13 @@
 package edu.sjsu.digitalLibrary.prj.dao;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.sjsu.digitalLibrary.prj.Recommendations.Recommendations;
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.dataoperations.MongoCrud;
-import edu.sjsu.digitalLibrary.prj.models.BookId;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.region;
-import edu.sjsu.digitalLibrary.prj.models.user;
 
 
 /*
@@ -94,6 +82,20 @@ public class JPARegionDAO {
 					}
 				
 					return null	;
+				}
+				
+				public region getRegion(int regionID) {
+					try {
+
+						DBCrud<region> db = new DBCrud<region>();
+
+						return db.getRegionInfo(regionID);
+
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					return null;
 				}
 				
 }
