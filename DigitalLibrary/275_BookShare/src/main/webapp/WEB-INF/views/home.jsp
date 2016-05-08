@@ -283,7 +283,7 @@
 													<div class="book-cover">
 														<img width="140" height="212" alt=""
 															src="<c:url value="/resources/images/book-covers/01.jpg" />"
-															data-echo="/resources/images/book-covers/01.jpg">
+															data-echo="">
 														<div class="tag">
 															<span>sale</span>
 														</div>

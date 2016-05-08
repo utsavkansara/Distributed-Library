@@ -27,8 +27,8 @@
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-	<task:annotation-driven />
-	
-	<bean id="demoServiceBasicUsageFixedDelay" class="edu.sjsu.digitalLibrary.prj.controller.InventoryScheduler"></bean>
+
+ 	<task:annotation-driven /> 
+ 	<bean id="demoServiceBasicUsageFixedDelay" class="edu.sjsu.digitalLibrary.prj.controller.InventoryScheduler"></bean> 
 
 </beans>
