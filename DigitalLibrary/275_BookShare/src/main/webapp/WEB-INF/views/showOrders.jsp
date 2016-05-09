@@ -95,6 +95,7 @@ display: block;
 			   type: "POST",
 			   url: "../feedback/" + id + "/" + value,
 			   success: function(res){  
+				   
 				   $("#" + id +"span").attr('title', 'Feedback already submitted!');
 					for (var a =1;a <= 5; a++)
 						$( "#" + id +'' +  a ).prop( 'disabled', true );
@@ -111,6 +112,7 @@ display: block;
 		
 		var orderid = ${ord.id};
 		var feedback = ${ord.feedback} ;
+		var active = ${ord.active};
 			if(feedback != '0')	{
 				var id = orderid +'' +  feedback;
 				document.getElementById(id).checked=true;
@@ -119,11 +121,36 @@ display: block;
 					$( "#" + orderid +'' +  a ).prop( 'disabled', true );
 			}
 		
+			if(active == 0){
+				
+				document.getElementById(orderid +"spanCode").style.visibility='hidden';
+		   		document.getElementById(orderid +"spanCodeComplete").style.visibility='visible';
+			}
 	
 	</c:forEach>
 		
 }
-	
+	function confirmCode(orderId){
+		
+		var code = document.getElementById(orderId+'codeInput').value;
+		$.ajax({ 
+			   type: "POST",
+			   url: "../codeConfirm/" + orderId + "/" + code,
+			   success: function(res){  
+				   if(res == 'N')
+					   	document.getElementById(orderId +"label").text='try again later';
+				   else if(res == 'Y'){
+				   		document.getElementById(orderId +"spanCode").style.visibility='hidden';
+				   		document.getElementById(orderId +"spanCodeComplete").style.visibility='visible';
+				   }else if(res == 'Invalid Code!')
+				   			document.getElementById(orderId +"label").text=res;
+				   		else
+				   			document.getElementById(orderId +"label").text='invalid session';				   
+			   	}
+			});
+		
+		
+	}
 	
 	</script>
 </head>
@@ -177,13 +204,21 @@ display: block;
 							
 			                </td>
 			                
+			                 <td>
+			                 <span id="${result.id}spanCode" class="codeConfirmation" >
+			                 	<input id="${result.id}codeInput" name="${result.id}codeInput" type="text" placeholder="Enter confirmation code" class="form-control input-md" value="" /> 
+								<a class="btn btn-primary" href="#" onClick="confirmCode(${result.id});" role="button">Confirm</a> 
+								<br /><label id="${result.id}label" style="font-color:red"></label>			              
+							</span> 			              
+							
+							<span id="${result.id}spanCodeComplete" class="codeConfirmation" style="visibility:hidden">
+			                 	  <label style="font-color:green">Order complete</label>			              
+							</span>
+							</td>
+			                
 				        </tr>
 		             	
-<%-- 	             		<c:if test="${result.sellerFeedback == 0}"> --%>
-<!-- 						   <td colspan="2" align="right"> -->
-<%-- 			                	<a class="btn btn-primary" href="${pageContext.request.contextPath}/feedback/seller/${result.transactionId}" role="button">Feedback</a> --%>
-<!-- 			                </td> -->
-<%-- 						</c:if>	 --%>
+
 						            
 					</c:forEach>					
 				</table>

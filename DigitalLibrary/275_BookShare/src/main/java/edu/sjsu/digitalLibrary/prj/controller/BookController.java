@@ -114,7 +114,7 @@ public class BookController {
     	
     	System.out.println("Book User ID: " +bookModel.getPublisher() );
 		System.out.println("going: " +bookModel.getCategories().size() );
-    	
+		httpSession.setAttribute("isbn", bookModel.getIsbn());
         mv.addObject("bookdetails", bookModel);
         //mv.addObject("addressdetails", "101 E San Fernando, Apt#320, San Jose, CA, 95134");
         mv.setViewName("showbook");
