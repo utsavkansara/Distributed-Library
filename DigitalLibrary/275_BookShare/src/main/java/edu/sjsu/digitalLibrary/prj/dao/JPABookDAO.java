@@ -201,4 +201,50 @@ public List<MongoBook> doAdvanceSearch(String auth, String publisher, String des
 					return null	;
 				}
 				
+//				public List<MongoBook> doAdvanceSearchAJAX(String auth, String publisher, String desc,
+//						String category,String title) {
+//					try {
+//						
+//						
+//						MongoCrud db = new MongoCrud("book");
+//						return db.queryGoogleBooksAJAX(auth, publisher, desc, category,title);
+//						
+//					} catch (Exception e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//							return null;
+//					
+//				}
+				
+				public void getBooksFromGoogleAJAX(String auth, String publisher, String desc,
+						String category,String title, int bookId) {
+					
+					try {
+						MongoCrud db = new MongoCrud("book");
+						db.queryGoogleBooksAJAX(auth, publisher, desc, category,title,bookId);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
+					
+				}
+				
+				public List<MongoBook> doAdvanceSearchAJAX(String auth, String publisher, String desc,
+						String category,String title) {
+					try {
+						
+						
+						MongoCrud db = new MongoCrud("book");
+						return db.doAdvanceSearchAJAX(auth, publisher, desc, category,title);
+						
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+							return null;
+					
+				}
 }

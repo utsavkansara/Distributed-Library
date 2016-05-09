@@ -9,8 +9,10 @@ import org.json.JSONObject;
 
 import edu.sjsu.digitalLibrary.prj.Recommendations.WriteData;
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
+import edu.sjsu.digitalLibrary.prj.models.UserNotification;
 import edu.sjsu.digitalLibrary.prj.models.payment;
 import edu.sjsu.digitalLibrary.prj.models.region;
+import edu.sjsu.digitalLibrary.prj.models.requestQueue;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.order;
@@ -33,6 +35,118 @@ public class JPARequestBookDAO implements RequestBookDAO {
 		}
 		
 	}
+	
+	public List<requestQueue> getRequestQueue(String isbn,int userId)
+	{
+		List<requestQueue> temprequestQueue = new ArrayList<requestQueue>();
+		try {
+			DBCrud<requestQueue> db = new DBCrud<requestQueue>();
+			temprequestQueue=  db.getRequestQueuedetails(isbn,userId);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println("temprequestQueue ----------" + temprequestQueue.size() + isbn + userId);
+		return temprequestQueue;
+	}
+	
+	
+	public user getUserDetails(int userId) 
+	{
+		System.out.println("get USer Details");
+		user u= new user();
+		try {
+			DBCrud<user> db = new DBCrud<user>();
+			System.out.println("userID **** " + userId);
+			u=db.getUserDetails(userId);
+
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return u;
+	}
+	
+
+	
+	public List<UserNotification> getNotification3Days()
+	{
+		List<order> orderInfo = new ArrayList<order>();
+		List<UserNotification> uNotify= new ArrayList<UserNotification>();
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			int numberDays = 2;
+			orderInfo=  db.getOrderInfo(numberDays);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        for(order o: orderInfo){
+        	System.out.println("   order number  "+ o.getId() + "   userId    " + o.getUserId());
+        	int userId=o.getUserId();
+           user u=new user();
+           u=getUserDetails(userId);
+           UserNotification uinfo = new UserNotification( o.getUserId(),  u.getEmailId(), o.getConfirmationNumber(),o.getBookId());
+           uNotify.add(uinfo);
+        }
+		return uNotify;
+	}
+	
+	
+
+	
+	public List<UserNotification> getNotification1Days()
+	{
+		List<order> orderInfo = new ArrayList<order>();
+		List<order> orderExtension = new ArrayList<order>();
+		List<UserNotification> uNotify= new ArrayList<UserNotification>();
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			int numberDays = 1;
+			orderInfo=  db.getOrderInfo(numberDays);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        for(order o: orderInfo){
+          
+        	try {
+    			DBCrud<order> db = new DBCrud<order>();
+    			System.out.println("before --- getCheckorderExtension---");
+    			orderExtension=  db.getCheckorderExtension(o.getBookId());
+    			if(orderExtension.size()==0)
+    			{
+    				db.updateOrderExtension(o.getId());
+    			}
+    		} catch (Exception e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		}
+        }
+		return uNotify;
+	}	
+	
+	// Apoorv
+	
+	public int insert(requestQueue rq) 
+	{
+		System.out.println("in order jpa");
+		int requestQueueId= 0;
+		try {
+			DBCrud<requestQueue> db = new DBCrud<requestQueue>();
+			requestQueueId = db.Insert(rq);
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return requestQueueId;
+	}
+	
+	
 	
 	public order getOrder(int orderId) 
 	{

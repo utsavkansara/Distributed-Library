@@ -789,4 +789,76 @@ public class FirstController {
 
 	}
 
+	@RequestMapping(value = "/openAdvancedSearch", method = RequestMethod.GET)
+	public ModelAndView loginPage() {
+
+		System.out.println("in advance search get");
+
+		int len = 0;
+		JPACategoryDAO jpaCat = new JPACategoryDAO();
+		internalCategory cTemp = new internalCategory();
+
+		List<category> lst = jpaCat.getCategories();
+		String[] catToDisplay = new String[lst.size()];
+		for (category c : lst) {
+			catToDisplay[len] = c.getName();
+
+			len++;
+		}
+
+		httpSession.removeAttribute("SEARCHEDBOOKS");
+		cTemp.setCatName(catToDisplay);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("advanceSearchDetails", cTemp);
+		mv.setViewName("advanceSearch2");
+		return mv;
+	}
+
+	@RequestMapping(value = "/advanceSearchAJAX", method = RequestMethod.GET)
+	public @ResponseBody List<MongoBook> getAdvSearchAJAX(HttpServletRequest request) {
+
+		String title = request.getParameter("title");
+		String author = request.getParameter("author");
+		String publisher = request.getParameter("publisher");
+		String description = request.getParameter("description");
+		String category = request.getParameter("category");
+		List<MongoBook> lb = searchService.doAdvanceSearchAJAX(author, publisher, description, category, title);
+		try {
+			if (lb.size() == 0) {
+				searchService.getBooksFromGoogleAJAX(title, author, publisher, description, category);
+				lb = searchService.doAdvanceSearchAJAX(author, publisher, description, category, title);
+			}
+		} catch (Exception e) {
+			searchService.getBooksFromGoogleAJAX(title, author, publisher, description, category);
+			lb = searchService.doAdvanceSearchAJAX(author, publisher, description, category, title);
+		}
+
+		// searchedBooks = searchService.searchBooksInDB(input);
+		//
+		//
+		// List<MongoBook> lb = searchService.doAdvanceSearch(byAuthTxt,
+		// byPubTxt, byDescTxt, catArray);
+		// // System.out.println("advanceSearch result size " + lb.size());
+		// try {
+		// if (lb.size() == 0) {
+		// searchService.getBooksFromGoogleAdvance(byAuthTxt, byPubTxt,
+		// byDescTxt, catArray);
+		// lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt,
+		// catArray);
+		//
+		// }
+		// } catch (Exception e) {
+		// searchService.getBooksFromGoogleAdvance(byAuthTxt, byPubTxt,
+		// byDescTxt, catArray);
+		// lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt,
+		// catArray);
+		// }
+		//
+		// httpSession.setAttribute("SEARCHEDBOOKS", lb);
+		// ModelAndView mv = new ModelAndView();
+		// mv.addObject("pagedetails", lb);
+		// mv.setViewName("searchResults");
+		return lb;
+	}
+
 }
