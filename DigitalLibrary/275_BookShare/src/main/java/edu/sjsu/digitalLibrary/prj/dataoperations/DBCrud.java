@@ -72,12 +72,114 @@ public class DBCrud<T> {
 			id = t.getId();
 			System.out.println("Id of token: " + id);
 		}
+		else if(obj instanceof requestQueue){
+			System.out.println("in jpa of order");
+			requestQueue s = (requestQueue)obj;
+			id = s.getId();
+			System.out.println("in crud order " + id);
+		}
 		
 		session.close();
 		s.close();
 		
 		return id;
 	}
+	
+	//Apoorv Notification Code Start	
+	
+
+	
+	public user getUserDetails(int userId){
+		System.out.println(" in all usertable table " + userId );
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.user where id=:sCode1").addEntity(user.class).setParameter("sCode1", userId);
+		user  result = new user();
+		if(query.list().size()==0)
+        {
+        	 return null;
+        }
+        else
+        {
+        	System.out.println("enter the else in the getUserDetails function");
+        	 result = (user)query.list().get(0);
+        }
+
+		System.out.println(" value of result in DBCrud" + result);
+		session.close();
+		s.close();
+		return result;
+	}
+	
+	  public List<requestQueue> getRequestQueuedetails( String isbn,int userId)
+	   {
+		  System.out.println(isbn + "   " +userId);
+			List<requestQueue> result = new ArrayList<requestQueue>();
+			s = SessionFactoryObj.getSessionFactory();
+			session = s.openSession();
+			session.beginTransaction();
+			Query query = session.createSQLQuery("select * from BookShareDB.requestQueue where isbn=:sCode2 and userid=:sCode1 and isOrdered=0").addEntity(requestQueue.class).setParameter("sCode1", userId).setParameter("sCode2",isbn);
+			System.out.println("hello");
+			result = (List<requestQueue>)query.list();
+			session.close();
+			s.close();		
+			System.out.println("----" + result);
+			return result;
+	   }
+	
+	
+	
+ public List<order> getOrderInfo( int numberDays)
+ {
+		List<order> result = new ArrayList<order>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.order where endDate=current_date() + "+numberDays+" ").addEntity(order.class);
+		System.out.println("hello");
+		result = (List<order>)query.list();
+		session.close();
+		s.close();		
+		System.out.println("----" + result);
+		return result;
+ }
+	
+ 
+	
+	public List<order> getCheckorderExtension(int bookId) {
+		List<order> result = new ArrayList<order>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		System.out.println("Enter the getCheckorderExtension in DBCRud" + " **** "  + bookId);
+		Query query = session.createSQLQuery("select * from BookShareDB.order where active=1 and bookId=:sCode1 and startDate between current_date() + 1 and current_date() + 7 ").addEntity(order.class).setParameter("sCode1", bookId);
+		System.out.println("Enter the requestDetails in DBCRud");
+		result = (List<order>)query.list();
+		session.close();
+		s.close();		
+		System.out.println("----" + result);
+		return result;
+	}
+	
+	
+	public void updateOrderExtension(int orderNo)
+	{
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		System.out.println("Enter the getCheckorderExtension in DBCRud" + " **** "  + orderNo);
+		Query updateQuery = session.createSQLQuery("update BookShareDB.order set endDate=current_date() + 7 where id=:sCode").addEntity(order.class).setParameter("sCode", orderNo);
+		System.out.println("Enter the updateOrderExtension in DBCRud");
+		System.out.println(updateQuery);
+		int result = updateQuery.executeUpdate();
+		System.out.println(result);
+		session.getTransaction().commit();
+		session.close();
+		s.close();		
+
+	}
+	
 	
 	
 	@SuppressWarnings("unchecked")
