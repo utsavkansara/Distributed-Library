@@ -97,33 +97,61 @@ public class RequestBookController {
 
 
     	} 
-    	
-    	
-    	
-    	JPARequestBookDAO j= new JPARequestBookDAO();
-    	int bookID=bookId;  
-    	
-    	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
-    	bookAvailDetails=j.getBookOrderDetails(bookID);
-    	
-    	for(bookAvail b : bookAvailDetails)
+	  ModelAndView mv = new ModelAndView();
+  	  JPARequestBookDAO j= new JPARequestBookDAO();
+  	  int bookID=bookId; 
+  	  String isbn= (String) httpSession.getAttribute("isbn");
+  	List<subbook> checkBookPresent= j.getBooksubId(bookID);
+  	List<requestQueue>checkRequestQueue=j.getRequestQueue(isbn,userID);
+    // Apoorv Code  	
+	System.out.println("checkRequestQueue " + checkRequestQueue.size());
+	
+    	if(checkBookPresent.size()==0 && checkRequestQueue.size()==0)
     	{
-    		
-    		System.out.println("Sub Book Id: " + b.getSubId());
-    		System.out.println("Start Date: " + b.getStart_date());
-    		System.out.println("End Date: " + b.getEnd_date());
+    		RequestBookController n= new RequestBookController();
+    		System.out.println("enter the check book available in the requestbook controller");
+     	   requestQueue rq=new requestQueue();
+     	   
+     	    java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+     	    java.sql.Timestamp timestamp = new java.sql.Timestamp(new Date().getTime());
+     		rq.setIsbn(isbn);
+     		rq.setIsOrdered(0);
+     		rq.setUserid(userID);
+     		rq.setOrderDate(date);
+     		rq.setRequestTime(timestamp);
+     		int id = j.insert(rq);
+     		System.out.println("value of the id in the requestQueue is" + id);
+     		System.out.println(timestamp); //2014/08/06 15:59:48
+     		
+     		mv.addObject("bookAvailDetails", null);
+       		mv.setViewName("requestdetails");
     	}
-    	//httpSession.setAttribute("bookSearched", bookAvailDetails);
-    	
-    	ModelAndView mv = new ModelAndView();
-    	if(bookAvailDetails.size() >0)
-    		mv.addObject("bookAvailDetails", bookAvailDetails);
     	else
-    		mv.addObject("bookAvailDetails", null);
-  		mv.setViewName("requestdetails");
-  		return mv;
-    	 
+    	{
 
+        	
+        	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
+        	bookAvailDetails=j.getBookOrderDetails(bookID);
+        	
+        	for(bookAvail b : bookAvailDetails)
+        	{
+        		
+        		System.out.println("Sub Book Id: " + b.getSubId());
+        		System.out.println("Start Date: " + b.getStart_date());
+        		System.out.println("End Date: " + b.getEnd_date());
+        	}
+        	//httpSession.setAttribute("bookSearched", bookAvailDetails);
+        	
+        	
+        	if(bookAvailDetails.size() >0)
+        		mv.addObject("bookAvailDetails", bookAvailDetails);
+        	else
+        		mv.addObject("bookAvailDetails", null);
+      		mv.setViewName("requestdetails");
+        	 
+    	}
+
+    	 return mv;
     }
 
   
