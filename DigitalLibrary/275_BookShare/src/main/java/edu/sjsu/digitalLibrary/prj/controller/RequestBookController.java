@@ -138,9 +138,7 @@ public class RequestBookController {
 	  TimeZone zone = TimeZone.getTimeZone("GMT-8");
 	  DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
   		format.setTimeZone(zone);
-	  //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	  //System.out.println("" + startDate);
-	  //@SuppressWarnings("deprecation")
+	 
 	  Date dStart = format.parse(startDate);
 	  
 	
@@ -162,6 +160,13 @@ public class RequestBookController {
 	  	o.setActive(1);
 	  	o.setBookId(bookId);
 	  	o.setConfirmationNumber(confNumber);
+	  	
+	  	confNumber = "";
+	  	randomGenerator = new Random();
+		  for(int x=0;x< 5; x++)
+			  confNumber += randomGenerator.nextInt(9);
+	  	
+		  o.setCode(confNumber);
 	  	
     	
 	  	c = Calendar.getInstance();
@@ -268,46 +273,68 @@ public class RequestBookController {
 		    
 		    jd.inserDataMahout(userId, parentId, value);
 			
-	   	 	return "Y";
+		    if(o.getFeedback() == value)
+	   	 		return "Y";
+			else
+				return "N";
 		
 		
 		}
 		else
 		{
 			System.out.println("No session");
-			return "N";
+			return "NS";
 		}
 	  
 	}
  
  
- ////Raunaq code ends
-  /*    public Object uploadrequestbook() {
-	if(!sessionService.checkAuth())
-	{
-			return "redirect:/login";
+ 
+ @ResponseBody
+ @RequestMapping(value = "/codeConfirm/{id}/{value}",method = RequestMethod.POST)
+ public String codeConfirm(@PathVariable int id, @PathVariable String value) {
+		//JsonResponse j = new JsonResponse();
+		if(sessionService.checkAuth()) {
+			order o = new order();
+			
+			System.out.println("orderID " + id + ", value " + value);
+			JPARequestBookDAO jd = new JPARequestBookDAO();
+			//o.setId(id);
+			
+			o = jd.getOrder(id);
+			//o.setCode(value);
+			System.out.println("DBValue " + o.getCode() + ", ac" + o.getActive());
+			
+			if(o.getCode().equals(value) && o.getActive() == 1){
+				o.setActive(0);
+				jd.updateOrder(o);
+				o = jd.getOrder(id);
+				System.out.println("orderID " + id + ", value " + value);
 
-
+				if(o.getCode().equals(value) && o.getActive() == 0)
+		   	 		return "Y";
+				else
+					return "N";
+			}
+			else
+			{
+				if(o.getCode().equals(value))
+					return "Invalid Code!";
+				else
+					return "Inactive order";
+			}
+			
+			
+			
+		
+		
+		}
+		else
+		{
+			System.out.println("No session");
+			return "NS";
+		}
+	  
 	}
-	JPARequestBookDAO j= new JPARequestBookDAO();
-	str=j.getRequestdetails();
-	System.out.println("steeerrr"+str);
-	ModelAndView model = new ModelAndView("requestbook");
-	System.out.println(str);
-	   if(str.size() > 0)
-     {
-		   System.out.println("in checking");
-  	   model.addObject("BookID", str.get(0).getID());
-  	   model.addObject("Name", str.get(0).getName());
-  	   model.addObject("Isbn", str.get(0).getIsbn);
-  	   //model.addObject("Time", str.get(0).getRequestBookTime().toString());
-  	   System.out.println(str);
-
-     }
-	   model.addObject("str", str);
-		return model;
-
-}*/
-
 
 }
