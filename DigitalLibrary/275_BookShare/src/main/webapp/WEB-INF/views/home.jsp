@@ -1,22 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page session="true" %>
-<jsp:include page="imports.jsp" />
+<%@ page session="true"%>
+<%-- <jsp:include page="imports.jsp" /> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <body>
 
-		
+
 	<div id="wrapper">
 		<div id="page-content-wrapper" class="st-pusher">
 			<div class="st-pusher-after"></div>
-			
+
 			<!-- ============================================== HEADER ============================================== -->
-			
+
 			<jsp:include page="header.jsp" />
-			
+			<div id="ajaxSpinnerContainer">
+				<img src="<c:url value="/resources/images/Preloader_2.gif" />"
+					id="ajaxSpinnerImage" title="working..." />
+			</div>
 			<!-- ============================================== HEADER : END ============================================== -->
 			<div class="home-page">
 				<div class="content">
@@ -34,7 +37,7 @@
 														<div class="book-shelf">
 															<div class="book-cover slider-book-cover bk-cover m-t-20">
 																<img class="img-responsive" alt=""
-																	src="<c:url value="/resources/images/slider-images/01.png" />"
+																	src="../images/slider-images/01.png"
 																	data-echo="/resources/images/slider-images/01.png">
 																<div class="fade"></div>
 															</div>
@@ -280,7 +283,7 @@
 													<div class="book-cover">
 														<img width="140" height="212" alt=""
 															src="<c:url value="/resources/images/book-covers/01.jpg" />"
-															data-echo="/resources/images/book-covers/01.jpg">
+															data-echo="">
 														<div class="tag">
 															<span>sale</span>
 														</div>
@@ -906,7 +909,7 @@
 			<jsp:include page="footer.jsp" />
 
 			<!-- ============================================== FOOTER : END ============================================== -->
-			
+
 		</div>
 		<!-- /.st-pusher -->
 		<!-- ============================================== TOGGLE RIGHT CONTENT ============================================== -->

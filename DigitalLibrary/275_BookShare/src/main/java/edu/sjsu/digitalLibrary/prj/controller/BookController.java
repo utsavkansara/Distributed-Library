@@ -33,6 +33,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,14 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import edu.sjsu.digitalLibrary.prj.dao.*;
+import edu.sjsu.digitalLibrary.prj.jsonview.Views;
+import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
+import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
@@ -113,6 +121,7 @@ public class BookController {
         
        return mv;
     }
+    
     
     @RequestMapping(value = "/convertToParentBook/{bookId}",method = RequestMethod.GET)
     public Object convertToParentBook(@PathVariable int bookId) {

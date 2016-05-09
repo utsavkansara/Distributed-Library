@@ -36,6 +36,8 @@
 		<mapping class="edu.sjsu.digitalLibrary.prj.models.region"/>
 		<mapping class="edu.sjsu.digitalLibrary.prj.models.subbook"/>
 		<mapping class="edu.sjsu.digitalLibrary.prj.models.payment"/>
+		<mapping class="edu.sjsu.digitalLibrary.prj.models.Tokens"/>
+		<mapping class="edu.sjsu.digitalLibrary.prj.models.requestQueue"/>
 
 		
     </session-factory>
