@@ -68,4 +68,19 @@ public class SearchServiceImpl {
 		
 		
 	}
+	
+	 public void getBooksFromGoogleAJAX(String title,String author, String publisher,String description,String category)
+	    {
+	    	
+	    	 bookDAO.getBooksFromGoogleAJAX( title,author,publisher,description,category, getLatestBookId());
+	    	
+	    }
+
+	
+	public List<MongoBook> doAdvanceSearchAJAX(String auth, String publisher, String desc,
+			String category,String title) {
+		return bookDAO.doAdvanceSearchAJAX(auth, publisher, desc, category,title);
+		
+	}
+	
 }

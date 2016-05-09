@@ -9,7 +9,6 @@
         http://www.springframework.org/schema/task/spring-task-3.2.xsd
         http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task-3.0.xsd">
-		
 	<context:component-scan base-package="edu.sjsu" />
 
 	<mvc:resources mapping="/resources/**" location="/resources/theme/"
@@ -28,7 +27,8 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
- 	<task:annotation-driven /> 
- 	<bean id="demoServiceBasicUsageFixedDelay" class="edu.sjsu.digitalLibrary.prj.controller.InventoryScheduler"></bean> 
+	<task:annotation-driven />
+	<bean id="demoServiceBasicUsageFixedDelay"
+		class="edu.sjsu.digitalLibrary.prj.controller.InventoryScheduler"></bean>
 
 </beans>

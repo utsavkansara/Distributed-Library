@@ -50,6 +50,18 @@ public class order implements Serializable {
 	@Column(name = "feedback")
     private int feedback;
 	
+	
+	@Column(name = "code")
+	private String code;
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public int getFeedback() {
 		return feedback;
 	}

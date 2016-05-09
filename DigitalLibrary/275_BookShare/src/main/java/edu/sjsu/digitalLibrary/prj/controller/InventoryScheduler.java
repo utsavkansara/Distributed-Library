@@ -14,21 +14,22 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import edu.sjsu.digitalLibrary.prj.dao.JPARegionDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPARequestBookDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPARequestQueueDAO;
+import edu.sjsu.digitalLibrary.prj.models.UserNotification;
 import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.requestQueue;
 import edu.sjsu.digitalLibrary.prj.models.requestQueueCount;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 
 public class InventoryScheduler {
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 5000000)
 	// @Scheduled(fixedRate = 5000)
 	public void schedulerServiceMethod() {
 		try {
 			System.out.println("Method executed at every 5 seconds. Current time is :: " + new Date());
 			JPARequestQueueDAO reqDao = new JPARequestQueueDAO();
 			JPARegionDAO regionDao = new JPARegionDAO();
-
 			List<requestQueueCount> requestQueue = new ArrayList<requestQueueCount>();
 			requestQueue.addAll(reqDao.getRequestdetails());
 			for (requestQueueCount entry : requestQueue) {
@@ -70,6 +71,49 @@ public class InventoryScheduler {
 			e.printStackTrace();
 		}
 	}
+	
+	@Scheduled(fixedDelay = 50000)
+	public void  notifyUserBefore3Days() 
+	{
+		System.out.println("enter the 3 notification system **********************");
+		 JPARequestBookDAO i= new JPARequestBookDAO();
+		 List<UserNotification>userInfo=i.getNotification3Days();
+		 for(UserNotification u:userInfo)
+		 {
+			 System.out.println(u.getBookId());
+			 System.out.println(u.getOrderCnf());
+			 System.out.println("email" + u.getUserEmail());
+			 System.out.println(u.getUserId());
+			 
+			 //SendEmail e=new SendEmail();
+			 String emailBody = "empty body";
+			// e.generateAndSendEmail(u.getUserEmail(),emailBody,"Order Expiration");
+
+			 
+		 }
+
+	}
+
+	
+	@Scheduled(fixedDelay = 50000)	
+	public void notifyUserBefore1Days() 
+	{
+		System.out.println("enter the 1 notification system======================================================");
+		 JPARequestBookDAO i= new JPARequestBookDAO();
+		 List<UserNotification>userInfo=i.getNotification1Days();
+		 for(UserNotification u:userInfo)
+		 {
+			 System.out.println(u.getBookId());
+			 System.out.println(u.getOrderCnf());
+			 System.out.println(u.getUserEmail());
+			 System.out.println(u.getUserId());
+			 String emailBody="Your order number " + u.getOrderCnf() + " " + "will be extended by 7 days.";
+			 //SendEmail e=new SendEmail();
+			 //System.out.println("Before the send email system --1" + emailBody);
+			// e.generateAndSendEmail(u.getUserEmail(),emailBody);
+		 }
+	}
+	
 
 	private static float getAmazonPurchasePrice(String url) {
 		try {
