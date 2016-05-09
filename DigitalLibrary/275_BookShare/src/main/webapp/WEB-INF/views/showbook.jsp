@@ -69,15 +69,9 @@
 						<button class="btn btn-single btn-uppercase" type="button">Add to cart</button> -->
 						
 						<% if(null != session.getAttribute("USERNAME")) {%> 
-							<button class="btn btn-single btn-sm" type="button" data-toggle="dropdown">
-							<img src="assets/images/add-to-cart.png" alt="">
-							</button>
 							<a class="btn btn-single btn-uppercase" onclick="return makeRequest()" role="button">Make a Request</a>
 					    	<%-- <td colspan="2" align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/requestbook/${bookdetails.bookId}" role="button">Make a request</a> --%>
-					    <% } else {%>
-					    	<button class="btn btn-single btn-sm" type="button" data-toggle="dropdown">
-							<img src="assets/images/add-to-cart.png" alt="">
-							</button>
+					    <% } else {%>					   
 							<a class="btn btn-single" href="#" data-toggle="modal" data-target="#modal-login-big" role="button">Login to make a request</a>
 					    <% }%>
 						

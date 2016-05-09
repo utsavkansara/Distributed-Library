@@ -100,29 +100,7 @@
 
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-		<form class="navbar-form navbar-left" role="search"
-			action="${pageContext.request.contextPath}/search" method="get" style="width: 50%">
-
-			<div class="form-group" style="width: 100%">
-				<table  style="width: 100%">
-				<tr>
-				<td  style="width: 80%">
-					<input type="text" class="form-control formClass"
-					placeholder="Search" name="searchbox" id="searchbox"  style="width: 100%" />
-				</td>
-				<td  style="width: 20%" align="right">
-				<button type="submit" class="btn btn-default"
-				style="margin-top: 12px;width: 90%">Search</button>
-				</td>
-				</tr>
-				</table>
-			
-				
-
-			</div>
-
-			
-		</form>
+		
 		<ul class="nav navbar-nav navbar-right">
 
 			<%--       <li><a href="${pageContext.request.contextPath}/advanceSearch">Advance Search</a></li> --%>
@@ -568,7 +546,7 @@ class="navbar navbar-bookshop navbar-static-top" role="navigation"> -->
 										class="form-control bookshop-form-control" id="parentId"
 										name="parentId"
 										placeholder="Enter email of Family member previously joined"
-										>
+										required="true">
 
 
 

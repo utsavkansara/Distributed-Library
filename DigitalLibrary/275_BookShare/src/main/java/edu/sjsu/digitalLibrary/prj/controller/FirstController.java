@@ -42,6 +42,7 @@ import redis.clients.jedis.Jedis;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import edu.sjsu.digitalLibrary.prj.dao.JPAAddressDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPABookDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPACategoryDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPALandingPageDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPARegionDAO;
@@ -50,7 +51,6 @@ import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
 import edu.sjsu.digitalLibrary.prj.models.JsonResponse;
 import edu.sjsu.digitalLibrary.prj.models.LandingPage;
-import edu.sjsu.digitalLibrary.prj.models.Login;
 import edu.sjsu.digitalLibrary.prj.models.LoginSamplee;
 import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
@@ -625,10 +625,68 @@ public class FirstController {
 		JPALandingPageDAO obj = new JPALandingPageDAO();
 		// landingPage.setBooks(obj.getBooks());
 		landingPage.setCategories(obj.getCategories());
-		System.out.println(landingPage);
-		mv.addObject("pagedetails", landingPage);
-		mv.setViewName("home");
-		return mv;
+		
+	/////check for recommendations
+		
+		if(null != httpSession.getAttribute("USERID")){
+			
+			int userid = (int)httpSession.getAttribute("USERID");
+			JPABookDAO bookTemp = new JPABookDAO();			
+			JPAUserDAO jp = new JPAUserDAO();
+			user tempUser = jp.getUser(userid);
+			
+			int orderCount = bookTemp.getOrderCount((int)httpSession.getAttribute("USERID"));
+			
+			//get Top recommendations from user category based on rating
+//			String[] categories = tempUser.getCategory().split(",");
+			
+			String[] categories = {"Call centers"};
+			
+			System.out.println("categories "+tempUser.getName());
+			System.out.println("categories "+categories[0]);
+			
+			List<MongoBook> recommCatBooks = new ArrayList<MongoBook>();
+			
+			recommCatBooks = bookTemp.searchTop5CategoryBooks(categories);
+			
+			/*System.out.println("auth" + recommCatBooks.get(0).getAuthors().get(0));*/
+			
+		/*	
+			List<Integer> userbasedRecommBookIds = new ArrayList<Integer>();
+			if(orderCount != 0)
+			{
+				//get Apache Mahout recommendations based on previous selections
+				
+				userbasedRecommBookIds = bookTemp.getMahoutRecomm(980);
+				
+			}
+			
+			List<MongoBook> recommendedForYou = new ArrayList<MongoBook>();
+			
+			for(int i=0;i<userbasedRecommBookIds.size();i++){
+				MongoBook bookDetails =  bookTemp.searchBooksInDBByID(String.valueOf(userbasedRecommBookIds.get(i)));
+				recommendedForYou.add(bookDetails);
+			}*/
+			
+			
+			
+			System.out.println("recommendedForYou list size "+recommCatBooks.size());
+			mv.addObject("pagedetails", landingPage);
+		/*	mv.addObject("recommCatBooks", recommCatBooks);
+			mv.addObject("recommendedForYou", recommCatBooks);*/
+			httpSession.setAttribute("recommendedForYou", recommCatBooks);
+			mv.setViewName("home");
+			return mv;
+			
+		}else{
+			
+			System.out.println(landingPage);
+			mv.addObject("pagedetails", landingPage);
+			mv.setViewName("home");
+			return mv;
+			
+		}
+		
 	}
 
 	// method to search
@@ -787,6 +845,78 @@ public class FirstController {
 		String response = "";
 		return searchDAO.getSearchSuggestion(request.getParameter("searchTerm"));
 
+	}
+
+	@RequestMapping(value = "/openAdvancedSearch", method = RequestMethod.GET)
+	public ModelAndView loginPage() {
+
+		System.out.println("in advance search get");
+
+		int len = 0;
+		JPACategoryDAO jpaCat = new JPACategoryDAO();
+		internalCategory cTemp = new internalCategory();
+
+		List<category> lst = jpaCat.getCategories();
+		String[] catToDisplay = new String[lst.size()];
+		for (category c : lst) {
+			catToDisplay[len] = c.getName();
+
+			len++;
+		}
+
+		httpSession.removeAttribute("SEARCHEDBOOKS");
+		cTemp.setCatName(catToDisplay);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("advanceSearchDetails", cTemp);
+		mv.setViewName("advanceSearch2");
+		return mv;
+	}
+
+	@RequestMapping(value = "/advanceSearchAJAX", method = RequestMethod.GET)
+	public @ResponseBody List<MongoBook> getAdvSearchAJAX(HttpServletRequest request) {
+
+		String title = request.getParameter("title");
+		String author = request.getParameter("author");
+		String publisher = request.getParameter("publisher");
+		String description = request.getParameter("description");
+		String category = request.getParameter("category");
+		List<MongoBook> lb = searchService.doAdvanceSearchAJAX(author, publisher, description, category, title);
+		try {
+			if (lb.size() == 0) {
+				searchService.getBooksFromGoogleAJAX(title, author, publisher, description, category);
+				lb = searchService.doAdvanceSearchAJAX(author, publisher, description, category, title);
+			}
+		} catch (Exception e) {
+			searchService.getBooksFromGoogleAJAX(title, author, publisher, description, category);
+			lb = searchService.doAdvanceSearchAJAX(author, publisher, description, category, title);
+		}
+
+		// searchedBooks = searchService.searchBooksInDB(input);
+		//
+		//
+		// List<MongoBook> lb = searchService.doAdvanceSearch(byAuthTxt,
+		// byPubTxt, byDescTxt, catArray);
+		// // System.out.println("advanceSearch result size " + lb.size());
+		// try {
+		// if (lb.size() == 0) {
+		// searchService.getBooksFromGoogleAdvance(byAuthTxt, byPubTxt,
+		// byDescTxt, catArray);
+		// lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt,
+		// catArray);
+		//
+		// }
+		// } catch (Exception e) {
+		// searchService.getBooksFromGoogleAdvance(byAuthTxt, byPubTxt,
+		// byDescTxt, catArray);
+		// lb = searchService.doAdvanceSearch(byAuthTxt, byPubTxt, byDescTxt,
+		// catArray);
+		// }
+		//
+		// httpSession.setAttribute("SEARCHEDBOOKS", lb);
+		// ModelAndView mv = new ModelAndView();
+		// mv.addObject("pagedetails", lb);
+		// mv.setViewName("searchResults");
+		return lb;
 	}
 
 }
