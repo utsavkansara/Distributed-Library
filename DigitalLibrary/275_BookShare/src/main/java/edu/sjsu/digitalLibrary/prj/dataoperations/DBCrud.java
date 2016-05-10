@@ -1,5 +1,6 @@
 package edu.sjsu.digitalLibrary.prj.dataoperations;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import edu.sjsu.digitalLibrary.prj.models.requestQueueCount;
 import edu.sjsu.digitalLibrary.prj.models.requestbook;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 import edu.sjsu.digitalLibrary.prj.models.user;
+import edu.sjsu.digitalLibrary.prj.models.utilityClass;
 
 public class DBCrud<T> {
 	Session session;
@@ -84,6 +86,11 @@ public class DBCrud<T> {
 		
 		return id;
 	}
+	
+	// Apoorv --- Customer choice books
+	
+
+	
 	
 	//Apoorv Notification Code Start	
 	
@@ -679,5 +686,105 @@ public class DBCrud<T> {
 		System.out.println("Count found----" + results);
 		return results;
 	}
+	
+
+	
+	public void updateUserCredit(int userId,float credit)
+	{
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		System.out.println("Enter the getCheckorderExtension in DBCRud" + " **** "  + userId);
+		Query updateQuery = session.createSQLQuery("update BookShareDB.user set creditScore=:sCode2 where id=:sCode1").addEntity(order.class).setParameter("sCode1", userId).setParameter("sCode2",credit);
+		System.out.println("Enter the updateOrderExtension in DBCRud");
+		System.out.println(updateQuery);
+		int result = updateQuery.executeUpdate();
+		System.out.println(result);
+		session.getTransaction().commit();
+		session.close();
+		s.close();		
+
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public List<utilityClass> getAllBookDelay(){
+		//List<utilityClass> r = new ArrayList<utilityClass>();
+		
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+
+Query query = session.createSQLQuery("SELECT userid,DATEDIFF(endDate,CURDATE()) as days from BookShareDB.order where active=1 and DATEDIFF(endDate,CURDATE()) < 0");
+List<Object[]> results = (List<Object[]>) query.list();
+List<utilityClass> listRC = new ArrayList<utilityClass>();
+		if(results.size()!=0)
+			{
+				
+			
+				for (Object[] result : results) {
+					System.out.println(result[0]);
+					System.out.println(result[1]);
+					utilityClass rc = new utilityClass();
+					rc.setVar1(result[0].toString());
+					rc.setVar3(result[1].toString());
+					listRC.add(rc);
+			                  }
+				
+			}
+				else
+				{
+					listRC=null;
+					
+				}
+
+		
+		session.close();
+		s.close();
+		
+		return listRC;
+	}
+	
+	
+	
+	
+	
+	 @SuppressWarnings("unchecked")
+	public List<utilityClass>getBookHighRating()
+	 {
+		
+		System.out.println("DBCRUD ========= getBookHighRating");
+		 //List<utilityClass> result = new ArrayList<utilityClass>();
+			s = SessionFactoryObj.getSessionFactory() ;
+			session = s.openSession();
+			session.beginTransaction();
+			Query query = session.createSQLQuery("select bookId ,avg(feedback) from BookShareDB.order group by bookId desc");
+			List<Object[]> results = (List<Object[]>) query.list();
+			System.out.println("hello");
+			System.out.println("==============result"  + results);
+			List<utilityClass> listRC = new ArrayList<utilityClass>();
+			if(results.size()!=0)
+			{
+				
+				
+				for (Object[] result : results) {
+					utilityClass rc = new utilityClass();
+					rc.setVar1(result[0].toString());
+					listRC.add(rc);
+			                  }
+				
+			}
+				else
+				{
+					listRC=null;
+					
+				}
+	
+			
+			session.close();
+			s.close();		
+			System.out.println("UK -" + listRC.size() );
+			return listRC;
+	 }
 	
 }
