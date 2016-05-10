@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 import edu.sjsu.digitalLibrary.prj.dao.JPARegionDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPARequestBookDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPARequestQueueDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.models.UserNotification;
 import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.requestQueue;
@@ -23,9 +24,12 @@ import edu.sjsu.digitalLibrary.prj.models.requestQueueCount;
 import edu.sjsu.digitalLibrary.prj.models.subbook;
 
 public class InventoryScheduler {
-	@Scheduled(fixedDelay = 5000000)
+	
+	//commneted for testing purpose
+	
+@Scheduled(fixedDelay = 5000000)
 	// @Scheduled(fixedRate = 5000)
-	public void schedulerServiceMethod() {
+/*	public void schedulerServiceMethod() {
 		try {
 			System.out.println("Method executed at every 5 seconds. Current time is :: " + new Date());
 			JPARequestQueueDAO reqDao = new JPARequestQueueDAO();
@@ -72,7 +76,7 @@ public class InventoryScheduler {
 		}
 	}
 	
-	@Scheduled(fixedDelay = 50000)
+	@Scheduled(fixedDelay = 5000000)
 	public void  notifyUserBefore3Days() 
 	{
 		System.out.println("enter the 3 notification system **********************");
@@ -113,7 +117,16 @@ public class InventoryScheduler {
 			// e.generateAndSendEmail(u.getUserEmail(),emailBody);
 		 }
 	}
-	
+	*/
+	///comments for testing purpose
+	//@Scheduled(fixedDelay = 5000)	
+	public void checkUserCreditScore()
+	{
+		JPAUserDAO u = new JPAUserDAO();
+		System.out.println("enter the checkUserCreditScore ");
+		u.updateUserCreditScore();
+	    System.out.println("Updated User creditScore");
+	}
 
 	private static float getAmazonPurchasePrice(String url) {
 		try {

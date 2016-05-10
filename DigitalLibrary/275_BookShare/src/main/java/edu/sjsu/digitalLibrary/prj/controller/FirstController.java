@@ -58,6 +58,7 @@ import edu.sjsu.digitalLibrary.prj.models.RegistrationJsonPojo;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
+import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.searchSuggetion;
 import edu.sjsu.digitalLibrary.prj.models.user;
@@ -136,6 +137,15 @@ public class FirstController {
 
 		return mv;
 	}
+	
+	/// Apoorv for getting books to show when user is not logged in.
+	
+	
+	
+	
+	
+	
+	
 
 	@RequestMapping(value = "/signup/{userId}", method = RequestMethod.GET)
 	public ModelAndView edituser(@PathVariable int userId, HttpServletRequest request) {
@@ -618,7 +628,23 @@ public class FirstController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView initM() {
 
+		// Apoorv code for the getting the data if user is not logged In.
+		JPALandingPageDAO j = new JPALandingPageDAO();
+		List<MongoBook> customerChoice = new ArrayList<MongoBook>();
+        customerChoice=j.getCustomerChoice();
+		System.out.println("=======================Customer choice==============");
+		for(int i=0 ; i<=customerChoice.size()-1; i++)
+		{
+			System.out.println("enter" + i);
+			System.out.println(customerChoice.get(i).getBookId());
+			System.out.println(customerChoice.get(i).getLanguage());
+			System.out.println(customerChoice.get(i).getTitle());
+		}
+		//System.out.println(customerChoice);
+		System.out.println("after the customer choice method");
 		System.out.println("Landing Page");
+		InventoryScheduler n = new InventoryScheduler();
+		n.checkUserCreditScore();
 		ModelAndView mv = new ModelAndView();
 		// getting data
 		landingPage = new LandingPage();
@@ -636,49 +662,22 @@ public class FirstController {
 			user tempUser = jp.getUser(userid);
 			
 			int orderCount = bookTemp.getOrderCount((int)httpSession.getAttribute("USERID"));
-			
-			//get Top recommendations from user category based on rating
-//			String[] categories = tempUser.getCategory().split(",");
-			
 			String[] categories = {"Call centers"};
-			
 			System.out.println("categories "+tempUser.getName());
 			System.out.println("categories "+categories[0]);
 			
 			List<MongoBook> recommCatBooks = new ArrayList<MongoBook>();
 			
 			recommCatBooks = bookTemp.searchTop5CategoryBooks(categories);
-			
-			/*System.out.println("auth" + recommCatBooks.get(0).getAuthors().get(0));*/
-			
-		/*	
-			List<Integer> userbasedRecommBookIds = new ArrayList<Integer>();
-			if(orderCount != 0)
-			{
-				//get Apache Mahout recommendations based on previous selections
-				
-				userbasedRecommBookIds = bookTemp.getMahoutRecomm(980);
-				
-			}
-			
-			List<MongoBook> recommendedForYou = new ArrayList<MongoBook>();
-			
-			for(int i=0;i<userbasedRecommBookIds.size();i++){
-				MongoBook bookDetails =  bookTemp.searchBooksInDBByID(String.valueOf(userbasedRecommBookIds.get(i)));
-				recommendedForYou.add(bookDetails);
-			}*/
-			
-			
-			
 			System.out.println("recommendedForYou list size "+recommCatBooks.size());
 			mv.addObject("pagedetails", landingPage);
-		/*	mv.addObject("recommCatBooks", recommCatBooks);
-			mv.addObject("recommendedForYou", recommCatBooks);*/
 			httpSession.setAttribute("recommendedForYou", recommCatBooks);
 			mv.setViewName("home");
 			return mv;
 			
 		}else{
+			
+
 			
 			System.out.println(landingPage);
 			mv.addObject("pagedetails", landingPage);

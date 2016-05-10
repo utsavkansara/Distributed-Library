@@ -47,8 +47,18 @@ public class user implements Serializable {
     @Column(name = "parentId")
     private int parentId;
     
+    @Column(name = "creditScore")
+    private int creditScore;
     
-    @Column(name = "active")
+    public int getCreditScore() {
+		return creditScore;
+	}
+
+	public void setCreditScore(int creditScore) {
+		this.creditScore = creditScore;
+	}
+
+	@Column(name = "active")
     private int active;
     
     @Column(name = "Password", length = 100)
