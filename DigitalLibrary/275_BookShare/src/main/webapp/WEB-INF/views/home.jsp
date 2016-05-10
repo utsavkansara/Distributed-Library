@@ -3,6 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page session="true"%>
 <%@ page import="edu.sjsu.digitalLibrary.prj.models.MongoBook" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%-- <jsp:include page="imports.jsp" /> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -265,6 +266,8 @@
 						<!-- /.divider -->
 
 						<!-- ============================================== Recommendation for user (if logged in) ============================================== -->
+						
+						<c:if test="${fn:length(recommendedForYou) gt 0}">
 						<section class="best-seller wow fadeInUp">
 						<div id="best-seller" class="module">
 							<div class="module-heading home-page-module-heading">
@@ -320,10 +323,13 @@
 							</div>
 						</div>
 						</section>
+						</c:if>
 						<!-- ============================================== BEST SELLER : END ============================================== -->
 						
 						
 						<!-- ============================================== BEST SELLER (Trending books)============================================== -->
+						
+						<c:if test="${fn:length(recommendedForYou) gt 0}">
 						<section class="best-seller wow fadeInUp">
 						<div id="best-seller" class="module">
 							<div class="module-heading home-page-module-heading">
@@ -379,6 +385,7 @@
 							</div>
 						</div>
 						</section>
+						</c:if>
 						<!-- ============================================== BEST SELLER : END ============================================== -->
 					</div>
 					<!-- /.container -->

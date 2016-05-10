@@ -138,6 +138,11 @@ public class RequestBookController {
         		
         		System.out.println("Sub Book Id: " + b.getSubId());
         		System.out.println("Start Date: " + b.getStart_date());
+        		
+        		String[] s = b.getStart_date().split(",");
+        		
+        		b.setSingle_start_date(s[0].substring(1).replaceAll("]", ""));
+        		
         		System.out.println("End Date: " + b.getEnd_date());
         	}
         	//httpSession.setAttribute("bookSearched", bookAvailDetails);

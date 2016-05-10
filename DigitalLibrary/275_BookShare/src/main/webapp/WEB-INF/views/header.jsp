@@ -51,6 +51,12 @@
 }
 </style>
 
+<style type="text/css">
+	div#map_container{
+		width:550px;
+		height:350px;
+	}
+	</style> 
 
 
 <nav class="navbar navbar-default navbar-fixed-top"
@@ -1481,3 +1487,5 @@ required="true"> -->
 						$("#searchbox").easyAutocomplete(options);
 					});
 </script>
+
+
