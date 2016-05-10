@@ -66,6 +66,7 @@
 <%-- 							    <li><a href="${pageContext.request.contextPath}/transactions">View Transactions</a></li> --%>
 <%-- 							    <li><a href="${pageContext.request.contextPath}/requestbook">Make a request</a></li> --%>
 							    <li><a href="${pageContext.request.contextPath}/logout">Signout</a></li>
+							    <li><a href="${pageContext.request.contextPath}/payment">Payment</a></li>
 				          	</ul>
 			       		</li>
 			       	<% } %>

@@ -62,6 +62,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import edu.sjsu.digitalLibrary.prj.dao.*;
@@ -116,6 +117,15 @@ public class BookController {
 		System.out.println("going: " +bookModel.getCategories().size() );
 		httpSession.setAttribute("isbn", bookModel.getIsbn());
         mv.addObject("bookdetails", bookModel);
+        RequestBookController n= new RequestBookController();
+        boolean pFlag=false;
+        int userId=Integer.parseInt(httpSession.getAttribute("USERID").toString());
+        if(null != httpSession.getAttribute("USERID"))
+        {
+        	pFlag=n.checkUserPaymentDetails(userId);
+        }
+       
+        mv.addObject("checkUserPayment",pFlag);
         //mv.addObject("addressdetails", "101 E San Fernando, Apt#320, San Jose, CA, 95134");
         mv.setViewName("showbook");
         
@@ -131,6 +141,8 @@ public class BookController {
     	return "redirect:/showbook/" + getParentBook(bookId);
        
     }
+    
+ 
     
     public int getParentBook( int bookId) {
     	

@@ -101,10 +101,10 @@ public class RequestBookController {
   	  JPARequestBookDAO j= new JPARequestBookDAO();
   	  int bookID=bookId; 
   	  String isbn= (String) httpSession.getAttribute("isbn");
-  	List<subbook> checkBookPresent= j.getBooksubId(bookID);
-  	List<requestQueue>checkRequestQueue=j.getRequestQueue(isbn,userID);
+  	  List<subbook> checkBookPresent= j.getBooksubId(bookID);
+  	  List<requestQueue>checkRequestQueue=j.getRequestQueue(isbn,userID);
     // Apoorv Code  	
-	System.out.println("checkRequestQueue " + checkRequestQueue.size());
+	  System.out.println("checkRequestQueue " + checkRequestQueue.size());
 	
     	if(checkBookPresent.size()==0 && checkRequestQueue.size()==0)
     	{
@@ -246,7 +246,6 @@ public class RequestBookController {
  public boolean checkUserPaymentDetails(int userID) {
 	 System.out.println("Enter the *****checkUserPaymentDetails  *****");
     JPARequestBookDAO i= new JPARequestBookDAO();
-  	int bookID=1;  // ***Once we get the book information we will send the book over here.
   	boolean userDetails=i.userPaymentDetails(userID);   // userDetails - true limit reached the count more than 2
   	//System.out.println("steeerrr"+str);
   	return userDetails;  

@@ -1,6 +1,7 @@
 package edu.sjsu.digitalLibrary.prj.dao;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.sjsu.digitalLibrary.prj.dataoperations.DBCrud;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
+import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.user;
+import edu.sjsu.digitalLibrary.prj.models.utilityClass;
 
-
+import java.util.List;
 /*
  * Class to perform business functions
  * it implements the DAO of address
@@ -79,7 +82,33 @@ public class JPAUserDAO {
 				}
 		
 	}
-	
+	public void updateUserCreditScore()
+	{
+		List<utilityClass> tempOrderCredit = new ArrayList<utilityClass>();
+		try {
+			DBCrud<order> db = new DBCrud<order>();
+			DBCrud<user> dbor = new DBCrud<user>();
+		     tempOrderCredit=db.getAllBookDelay();
+		     for(utilityClass t:tempOrderCredit)
+		     {
+		    	 System.out.println("updateUserCreditScore +  userid + day delay");
+		    	 System.out.println(t.getVar1() + t.getVar3());
+		    	 int uId= Integer.parseInt(t.getVar1());
+		    	 int j= Integer.parseInt(t.getVar3());
+		    	 j=j*(-1);
+		    	 int credit=j;
+		    	 System.out.println("credit"  + credit);
+		    	 dbor.updateUserCredit(uId,credit);
+		     }
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
+	}
 	
 
 	
