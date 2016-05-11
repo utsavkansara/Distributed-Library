@@ -433,6 +433,24 @@ public class MongoCrud {
 				else
 					mTemp.setIsbn("");
 
+				if (object.containsField("categories")) {
+					java.util.List<String> categories = (java.util.List<String>) object.get("categories");
+					mTemp.setCategories(categories);
+					if (categories.size() > 0) {
+						mTemp.setSingleCategory(categories.get(0));
+					} else if (categories.size() == 0) {
+						mTemp.setSingleCategory("");
+					}
+				} else {
+					mTemp.setCategories(null);
+					mTemp.setSingleCategory("");
+				}
+
+				if (object.containsField("authors"))
+					mTemp.setAuthors((java.util.List<String>) object.get("authors"));
+				else
+					mTemp.setAuthors(null);
+				
 				searchedBooks.add(mTemp);
 			}
 		} finally {
@@ -622,6 +640,24 @@ public class MongoCrud {
 				else
 					mTemp.setIsbn("");
 
+				if (object.containsField("categories")) {
+					java.util.List<String> categories1 = (java.util.List<String>) object.get("categories");
+					mTemp.setCategories(categories1);
+					if (categories1.size() > 0) {
+						mTemp.setSingleCategory(categories1.get(0));
+					} else if (categories1.size() == 0) {
+						mTemp.setSingleCategory("");
+					}
+				} else {
+					mTemp.setCategories(null);
+					mTemp.setSingleCategory("");
+				}
+
+				if (object.containsField("authors"))
+					mTemp.setAuthors((java.util.List<String>) object.get("authors"));
+				else
+					mTemp.setAuthors(null);
+				
 				searchedBooks.add(mTemp);
 			}
 		} finally {
@@ -663,7 +699,23 @@ public class MongoCrud {
 					mTemp.setIsbn(object.get("isbn").toString());
 				else
 					mTemp.setIsbn("");
+				if (object.containsField("categories")) {
+					java.util.List<String> categories = (java.util.List<String>) object.get("categories");
+					mTemp.setCategories(categories);
+					if (categories.size() > 0) {
+						mTemp.setSingleCategory(categories.get(0));
+					} else if (categories.size() == 0) {
+						mTemp.setSingleCategory("");
+					}
+				} else {
+					mTemp.setCategories(null);
+					mTemp.setSingleCategory("");
+				}
 
+				if (object.containsField("authors"))
+					mTemp.setAuthors((java.util.List<String>) object.get("authors"));
+				else
+					mTemp.setAuthors(null);
 			}
 		} finally {
 			cursor.close();

@@ -362,6 +362,7 @@ try {
             		
             		for(int i=0;i<userbasedRecommBookIds.size();i++){
             			MongoBook bookDetails =  bookTemp.searchBooksInDBByID(String.valueOf(userbasedRecommBookIds.get(i)));
+            			System.out.println("author:" + bookDetails.getAuthors().size());
             			recommendedForYou.add(bookDetails);
             		}
             		

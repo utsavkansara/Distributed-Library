@@ -543,15 +543,15 @@ public class FirstController {
 	 */
 
 	@RequestMapping(value = "/editprofile", method = RequestMethod.POST)
-	public ModelAndView editProfile(@ModelAttribute("userdetails") user userModel1, BindingResult bindingResult,
+	public Object editProfile(@ModelAttribute("userdetails") user userModel1, BindingResult bindingResult,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		System.out.println("enter to  edit");
 		if (!sessionService.checkAuth()) {
-			System.out.println("chk class wrked!");
-			LoginSamplee login = new LoginSamplee();
+			
+    		System.out.println("Invalid session");
 
-			return new ModelAndView("login", "logindetails", login);
+			return "redirect:/";
 
 		}
 		try {
