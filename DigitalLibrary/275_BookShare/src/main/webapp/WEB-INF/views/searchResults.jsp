@@ -32,13 +32,7 @@
 <!-- 					<a href="single-book.html">Gregory Berns </a> -->
 							</p>
 			</div>
-			<div class="actions">
-				<span class="book-price price">$${result.getPrice()}</span>
-				<div class="cart-action">
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>
-
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </div>
