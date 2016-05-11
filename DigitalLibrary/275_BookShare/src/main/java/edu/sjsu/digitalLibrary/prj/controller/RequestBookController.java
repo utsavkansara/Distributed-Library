@@ -93,7 +93,7 @@ public class RequestBookController {
 	  int userID=Integer.parseInt(httpSession.getAttribute("USERID").toString());
 	  if(!sessionService.checkAuth())
     	{
-    			return "redirect:/homepage";
+    			return "redirect:/";
 
 
     	} 
@@ -213,7 +213,7 @@ public class RequestBookController {
 	 
 	  if(!sessionService.checkAuth())
     	{
-    			return "redirect:/homepage";
+    			return "redirect:/";
 
 
     	} 
@@ -318,15 +318,16 @@ public class RequestBookController {
  @RequestMapping(value = "/showOrders/{userId}",method = RequestMethod.GET)
  public Object userOrders(@PathVariable int userId) throws ParseException {
 	  
+	 if (!sessionService.checkAuth()) {
+		 System.out.println("invalid session: ");
+			return "redirect:/";
+
+		}
 	 if(userId != Integer.parseInt(httpSession.getAttribute("USERID").toString())){
  		System.out.println("Don't try to sneek other's record: ");
  		return "redirect:/homepage";
  	}
-	 if (!sessionService.checkAuth()) {
-			
-			return "redirect:/homepage";
-
-		}
+	
 	 
 	 	System.out.println("enter user order");
 	  JPARequestBookDAO i= new JPARequestBookDAO();

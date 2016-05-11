@@ -65,6 +65,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import edu.sjsu.digitalLibrary.prj.dao.*;
@@ -115,13 +117,13 @@ public class PaymentController {
 			
     		System.out.println("Invalid session");
 
-			return "redirect:/homepage";
+			return "redirect:/";
 
 		}
     	
     	if(userId != Integer.parseInt(httpSession.getAttribute("USERID").toString())){
     		System.out.println("Don't try to sneek other's record");
-    		return "redirect:/homepage";
+    		return "redirect:/";
     	}
     	
     	ModelAndView mv = new ModelAndView();
@@ -145,9 +147,9 @@ public class PaymentController {
     		payment, HttpServletRequest request) {
     	if (!sessionService.checkAuth()) {
 			
-			
     		System.out.println("Invalid session");
-			return "redirect:/homepage";
+
+			return "redirect:/";
 
 		}
     	int userId = Integer.parseInt(httpSession.getAttribute("USERID").toString());

@@ -374,7 +374,7 @@ public class MongoCrud {
 		java.util.List<MongoBook> searchedBooks = new java.util.ArrayList<MongoBook>();
 		dbCollection = db.getCollection("book");
 
-		Pattern regex = Pattern.compile(searchString);
+		Pattern regex = Pattern.compile(searchString,  Pattern.CASE_INSENSITIVE);
 		BasicDBObject query = null;
 		query = new BasicDBObject("title", regex);
 		BasicDBObject image = null;

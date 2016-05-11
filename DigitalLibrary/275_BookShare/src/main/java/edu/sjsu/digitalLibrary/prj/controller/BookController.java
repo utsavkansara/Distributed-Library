@@ -63,6 +63,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import edu.sjsu.digitalLibrary.prj.dao.*;
@@ -107,8 +108,14 @@ public class BookController {
    	private SearchServiceImpl searchService= new SearchServiceImpl();
    	
     @RequestMapping(value = "/showbook/{bookId}",method = RequestMethod.GET)
-    public ModelAndView showBook(@PathVariable int bookId, HttpServletRequest request) {
-    	
+    public Object showBook(@PathVariable int bookId, HttpServletRequest request) {
+    	if (!sessionService.checkAuth()) {
+			
+    		System.out.println("Invalid session");
+
+			return "redirect:/";
+
+		}
     	ModelAndView mv = new ModelAndView();
     	System.out.println("book id here:" + bookId);
     	bookModel = searchService.searchBooksInDBByID(bookId + "");
