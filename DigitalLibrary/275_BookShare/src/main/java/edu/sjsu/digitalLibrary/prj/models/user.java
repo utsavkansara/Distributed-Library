@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -39,9 +40,20 @@ public class user implements Serializable {
     @Column(name = "dob")
     private Date dob;
     
+    @Transient
+    private String dobStr;
+    
 	
     
-    @Column(name = "category", length = 45)
+    public String getDobStr() {
+		return dobStr;
+	}
+
+	public void setDobStr(String dobStr) {
+		this.dobStr = dobStr;
+	}
+
+	@Column(name = "category", length = 45)
     private String category;
 	
     @Column(name = "parentId")

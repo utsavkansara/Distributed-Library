@@ -120,8 +120,7 @@ public class BookController {
     	System.out.println("book id here:" + bookId);
     	bookModel = searchService.searchBooksInDBByID(bookId + "");
     	
-    	System.out.println("Book User ID: " +bookModel.getPublisher() );
-		System.out.println("going: " +bookModel.getCategories().size() );
+    	
 		httpSession.setAttribute("isbn", bookModel.getIsbn());
         mv.addObject("bookdetails", bookModel);
         RequestBookController n= new RequestBookController();

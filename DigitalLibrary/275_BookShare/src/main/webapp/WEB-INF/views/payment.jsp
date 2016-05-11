@@ -1,23 +1,48 @@
 <%@    taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <jsp:include page="header.jsp" />
+<head>
 
+<script>
+
+
+$(document).ready(function(){
+	
+	
+	if(${paymentDetails.validTillMonth} > 10)
+		$("#validTillMonth").val( ${paymentDetails.validTillMonth});
+	else
+		$("#validTillMonth").val('0' +  ${paymentDetails.validTillMonth});
+	
+	$("#validTillYear").val(${paymentDetails.validTillYear});
+	
+	
+	$("#cardType").val($("#ct").val());
+});
+
+</script>
+
+</head>
 <div class="container">
     <div class="col-sm-6">
         <fieldset>
         	
-        	<form role="form" id="paymentForm" method="post" name="paymentForm" commandname="paymentDetails">
+        	<form role="form" id="paymentForm" action="payment" method="post" name="paymentForm" commandname="paymentDetails">
             <legend>Payment</legend>
+            <input type="hidden" id="vtm" value="${paymentDetails.validTillMonth}"></input>
+			<input type="hidden" id="vty" value="${paymentDetails.validTillYear}"></input>
+			<input type="hidden" id="ct" value="${paymentDetails.cardType}"></input>
+					    		     		    
             <div class="form-group">
                 <label for="name" class="sr-only">Card Holder's Name</label>
                 <div class="controls">
-                    <input type="text" id="name" name="name" class="form-control" pattern="\w+ \w+.*" title="First and last name" Placeholder="Firstname Lastname" required="">
+                    <input type="text" id="name" name="name" class="form-control" pattern="\w+ \w+.*" title="First and last name" Placeholder="Firstname Lastname" required="" value="${paymentDetails.name}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="cardNumber" class="sr-only">Card Number</label>
                 <div class="controls">
                     
-                    	<input type="text" id="cardNumber" name="cardNumber" class="form-control" autocomplete="off" pattern="\d{16}" Placeholder="16 digit Card number" required="">
+                    	<input type="text" id="cardNumber" name="cardNumber" class="form-control" autocomplete="off" pattern="\d{16}" Placeholder="16 digit Card number" required="" value="${paymentDetails.cardNumber}">
         
                 </div>
             </div>
@@ -26,7 +51,7 @@
                 <div class="controls">
                     <div class="row">
                         <div class="col-md-9">
-                            <select class="form-control" name="validTillMonth" id="validTillMonth" name="validTillMonth">
+                            <select class="form-control" name="validTillMonth" id="validTillMonth" name="validTillMonth" >
                                 <option value="01">January</option>
                                 <option value="02">February</option>
                                 <option value="03">March</option>
@@ -56,11 +81,26 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="cardType" class="sr-only">Card Type</label>
+                <div class="controls">
+                    
+                        <div class="col-md-3">
+                            <select class="form-control" name="cardType" id="cardType" name="cardType">
+                                <option value="Visa">Visa</option>
+                                <option value="MasterCard">MasterCard</option>
+                                
+                            </select>
+                        </div>
+                        
+                    
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="cvv" class="sr-only">Card CVV</label>
                 <div class="controls">
                     <div class="row">
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="cvv" name="cvv" autocomplete="off" maxlength="3" pattern="\d{3}" title="Three digits at back of your card" required="">
+                            <input type="text" class="form-control" id="cvv" name="cvv" autocomplete="off" maxlength="3" pattern="\d{3}" title="Three digits at back of your card" value="${paymentDetails.cvv}" />
                         </div>
                         <div class="col-md-8"></div>
                     </div>
