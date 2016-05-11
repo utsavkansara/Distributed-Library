@@ -18,6 +18,49 @@
 
 
 <style>
+.a_demo_two {
+	background-color:#6fba26;
+	padding:10px;
+	position:relative;
+	font-family: 'Open Sans', sans-serif;
+	font-size:12px;
+	text-decoration:none;
+	color:#fff;
+	background-image: linear-gradient(bottom, rgb(100,170,30) 0%, rgb(129,212,51) 100%);
+	box-shadow: inset 0px 1px 0px #b2f17f, 0px 6px 0px #3d6f0d;
+	border-radius: 5px;
+}
+
+.a_demo_two:active {
+	top:7px;
+	background-image: linear-gradient(bottom, rgb(100,170,30) 100%, rgb(129,212,51) 0%);
+	box-shadow: inset 0px 1px 0px #b2f17f, inset 0px -1px 0px #3d6f0d;
+	color: #156785;
+	text-shadow: 0px 1px 1px rgba(255,255,255,0.3);
+	background: rgb(44,160,202);
+}
+
+.a_demo_two::before {
+	background-color:#072239;
+	content:"";
+	display:block;
+	position:absolute;
+	width:100%;
+	height:100%;
+	padding-left:2px;
+	padding-right:2px;
+	padding-bottom:4px;
+	left:-2px;
+	top:5px;
+	z-index:-1;
+	border-radius: 6px;
+	box-shadow: 0px 1px 0px #fff;
+}
+
+.a_demo_two:active::before {
+	top:-2px;
+}
+
 #ajaxSpinnerContainer {
 	display: none;
 	z-index: 2147483647;
@@ -147,8 +190,8 @@
 
 					<%-- <c:when test="${sessionScope.USERNAME != ''}"> --%>
 
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-expanded="false">Hi
+					<li class="dropdown" style="padding-top: 10px"><a href="#" class="dropdown-toggle a_demo_two"
+						data-toggle="dropdown" role="button" aria-expanded="false" style="color: white;background-color: #469831">Hi
 
 							${sessionScope.USERNAME} <span class="caret"></span>
 
@@ -177,8 +220,8 @@
 
 				<c:otherwise>
 
-					<li><a data-toggle="modal" data-target="#modal-login-big"
-						href="#">Login/Register</a></li>
+					<li style="padding-top: 10px"><a data-toggle="modal" data-target="#modal-login-big"
+						href="#" class="dropdown-toggle a_demo_two"  style="color: white;background-color: #469831">Login/Register</a></li>
 
 				</c:otherwise>
 

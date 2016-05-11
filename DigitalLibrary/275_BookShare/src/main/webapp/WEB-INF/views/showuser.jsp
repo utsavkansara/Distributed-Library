@@ -1,93 +1,161 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <jsp:include page="header.jsp" />
-<%@ page import="edu.sjsu.digitalLibrary.prj.models.user" %>
+<%@ page import="edu.sjsu.digitalLibrary.prj.models.user"%>
 <html>
 <head>
-	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.2.min.js"></script>
-	
-	<script>
-	
-		function RedirectToEdit() {
-			var x = document.getElementById('userId').value;
-			if(document.getElementById('redirectTo').value == '')
-							window.location = "../signup/" + x;
-			else
-				window.location = document.getElementById('redirectTo').value + "/" + x;
-		}
-	
-		function RedirectToTransactions() {
-			if(document.getElementById('redirectToTransac').value == '')
-							window.location = "../transactions";
-			else
-				window.location = document.getElementById('redirectToTransac').value;
-	
-		}	
-		
-	</script>
+
+<script>
+	function RedirectToEdit() {
+		var x = document.getElementById('userId').value;
+		if ($('#redirectTo').val() == ""){
+			window.location.href= "../signup/" + x;
+			}
+		else{
+			alert("else");
+			window.location = document.getElementById('redirectTo').value + "/"
+					+ x;}
+		event.preventDefault();
+	}
+
+	function RedirectToTransactions() {
+		if (document.getElementById('redirectToTransac').value == ''){
+			window.location = "../transactions";}
+		else{
+			window.location = document.getElementById('redirectToTransac').value;}
+
+	}
+</script>
 
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="table-responsive col-md-offset-3 col-md-6">
-			<div class="panel panel-primary">
-				<div class="panel-heading">User Details</div>
-				<table class="table">
-            
-		            <tr class="info">
-		                <td><label>Name</label></td>
-		                <td><label>${userdetails.name}</label>
-		                <input type="hidden" id="userId" value="${userdetails.id}"></input>
-		                <input type="hidden" id="redirectTo" value="${redirectTo}"></input>
-		                <input type="hidden" id="redirectToTransac" value="${redirectToTransac}"></input></td>
-		            </tr>
-	           
-		            <tr class="info">
-		                <td><label>Email Id</label></td>
-		                <td><label>${userdetails.emailId}</label></td>
-		            </tr>
-	            
-					
-					
-					<tr class="info">
-					   <td><label>Phone Number</label></td>
-					   <td><label>${userdetails.phone}</label></td>
-					</tr>
-	             
-					<tr class="info">
-					   <td><label>Date of birth</label></td>
-					   <td><label>${userdetails.dob}</label></td>
-					</tr>
-					
-					<tr class="info">
-					   <td><label>Your Interest</label></td>
-					   <td><label>${userdetails.category}</label></td>
-					</tr>
-	            
-		            <% user User = (user)request.getAttribute("userdetails"); 
-					   int ownerId = User.getId(); %>
-	             	
-	             	
-             		<% if(ownerId == Integer.parseInt(session.getAttribute("USERID").toString())){ %>
-		                <td colspan="2" align="center">
-<!-- 			                <input type="submit" class="btn btn-md btn-primary" value="View transactions" onClick="javascript: RedirectToTransactions();"></input> -->
-							<input type="submit" class="btn btn-md btn-primary" value="Edit Profile" onClick="javascript: RedirectToEdit();"></input>
-<%-- 							<a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasbuyer/${userdetails.getId()}" role="button">Feedback as a Buyer</a> --%>
-<%-- 							<a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasseller/${userdetails.getId()}" role="button">Feedback as a Seller</a> --%>
-						</td>
-		        	<% } else {%>
-<!-- 		        		<td colspan="2" align="center"> -->
-<%-- 			                <a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasbuyer/${userdetails.getId()}" role="button">Feedback as a Buyer</a> --%>
-<%-- 			                <a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasseller/${userdetails.getId()}" role="button">Feedback as a Seller</a> --%>
-<!-- 						</td> -->
-					<% } %> 
-					
-					
-		            <tr>
-		                <td colspan="3" align="center"><font color="red"><form:errors /></font></td>
-		            </tr>
-	        	</table>
-	        </div>
-	    </div>
+	<div class="footer-content">
+		<div class="contact-form-container">
+<div id="map">
+				<iframe
+					src="http://images.freecreatives.com/wp-content/uploads/2015/03/Huge-Backgrounds-26.jpg"></iframe>
+			</div>
+			<div class="container">
+				<ul class="breadcrumb text-center">
+					<li><a href="/Distributed-Library">Home</a></li>
+					<li class="active">Profile</li>
+				</ul>
+				<!-- /.breadcrumb -->
+			<div class="container">
+				<div class="row inner-top-md">
+					<div class='col-md-12 center-block'>
+						<div class="contact-block">
+							<div class="contact-form-envelope">
+								<div class="contact-box">
+									<div class="row">
+										<div class="col-md-12 col-sm-12">
+											<div class="contact-form">
+												<form id="contact-form" class='form-horizontal contact-form'>
+													<div class="form-group">
+														<label class="control-label col-sm-3 info-title"
+															for="name">Name</label>
+														<div class="col-sm-9">
+															<label class="control-label info-title">${userdetails.name}</label>
+															<input type="hidden" id="userId"
+																value="${userdetails.id}"></input> <input type="hidden"
+																id="redirectTo" value="${redirectTo}"></input> <input
+																type="hidden" id="redirectToTransac"
+																value="${redirectToTransac}"></input>
+														</div>
+														<!-- /.col -->
+													</div>
+													<!-- /.form-group -->
+													<div class="form-group">
+														<label class="control-label col-sm-3 info-title"
+															for="email">Email</label>
+														<div class="col-sm-9">
+															<label class="control-label info-title">${userdetails.emailId}</label>
+														</div>
+														<!-- /.col -->
+													</div>
+													<!-- /.form-group -->
+
+													<div class="form-group">
+														<label class="control-label col-sm-3 info-title"
+															for="subject">Phone</label>
+														<div class="col-sm-9">
+															<label class="control-label info-title">${userdetails.phone}</label>
+														</div>
+														<!-- /.col -->
+													</div>
+													<!-- /.form-group -->
+
+													<div class="form-group">
+														<label class="control-label col-sm-3 info-title"
+															for="message">Date of birth</label>
+														<div class="col-sm-9">
+															<label class="control-label info-title">${userdetails.dob}</label>
+														</div>
+														<!-- /.col -->
+													</div>
+
+												
+
+													<div class="form-group">
+														<label class="control-label col-sm-3 info-title"
+															for="message">Category</label>
+														<div class="col-sm-9">
+															<label class="control-label info-title">${userdetails.category}</label>
+														</div>
+														<!-- /.col -->
+													</div>
+													<!-- /.form-group -->
+
+													<div class="form-group">
+														<%
+															user User = (user) request.getAttribute("userdetails");
+															int ownerId = User.getId();
+														%>
+
+
+														<%
+															if (ownerId == Integer.parseInt(session.getAttribute("USERID").toString())) {
+														%>
+															<!-- 			                <input type="submit" class="btn btn-md btn-primary" value="View transactions" onClick="javascript: RedirectToTransactions();"></input> -->
+															<input type="submit" class="btn btn-md btn-primary"
+															value="Edit Profile"
+															onClick="javascript: RedirectToEdit();"></input> <%-- 							<a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasbuyer/${userdetails.getId()}" role="button">Feedback as a Buyer</a> --%>
+															<%-- 							<a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasseller/${userdetails.getId()}" role="button">Feedback as a Seller</a> --%>
+													
+														<%
+															} else {
+														%>
+														<!-- 		        		<td colspan="2" align="center"> -->
+														<%-- 			                <a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasbuyer/${userdetails.getId()}" role="button">Feedback as a Buyer</a> --%>
+														<%-- 			                <a class="btn btn-primary" href="${pageContext.request.contextPath}/feedbackasseller/${userdetails.getId()}" role="button">Feedback as a Seller</a> --%>
+														<!-- 						</td> -->
+														<%
+															}
+														%>
+
+														<!-- /.col -->
+													</div>
+													<!-- /.form-group -->
+
+												</form>
+											</div>
+											<!-- /.contact-form -->
+										</div>
+										<!-- /.col -->
+										
+										<!-- /.col -->
+									</div>
+									<!-- /.row -->
+								</div>
+								<!-- /.contact-box -->
+							</div>
+							<!-- /.contact-form-envelope -->
+						</div>
+					</div>
+				</div>
+				<!-- /.row -->
+			</div>
+		</div>
 	</div>
+	
 </body>
 </html>
