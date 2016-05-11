@@ -282,7 +282,7 @@ public class FirstController {
 				registerUser.setCategory(registrationModel.getCategory());
 
 				DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-				format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+				format.setTimeZone(TimeZone.getTimeZone("GMT-8"));
 
 				java.util.Date date = format.parse(registrationModel.getDob());
 
