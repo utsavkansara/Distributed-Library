@@ -1,6 +1,7 @@
 package edu.sjsu.digitalLibrary.prj.controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -185,6 +186,7 @@ public class FirstController {
 			registrationModel.setZip(registration.getZipcode());
 			registrationModel.setUserPassword(registration.getUserPassword());
 			registrationModel.setConfirmPassword(registration.getConfirmPassword());
+			registrationModel.setRegionid(registration.getRegionId());
 
 			String msg = null;
 			JsonResponse jsonResponseAjax = new JsonResponse();
@@ -294,7 +296,7 @@ public class FirstController {
 				registerUser.setPhone(registrationModel.getPhone());
 				String activation_code = getToken(6);
 				registerUser.setActivationCode(activation_code);
-				registerUser.setRegionId(0);
+				registerUser.setRegionId(registrationModel.getRegionid());
 
 				JPAUserDAO obj = new JPAUserDAO();
 				int newUserId = obj.insert(registerUser);
@@ -323,12 +325,6 @@ public class FirstController {
 				newUserAddress.setId(newAddressId);
 				System.out.println("AddressId Added: " + newAddressId);
 				// address Entry Ends
-
-				// Getting regions in User City , If no found ?????
-				JPARegionDAO jr = new JPARegionDAO();
-				List<region> rgnNearUser = new ArrayList<region>();
-
-				rgnNearUser = jr.getAllRegions(registrationModel.getCity());
 
 				String username = registrationModel.getUserName();
 
@@ -920,6 +916,60 @@ public class FirstController {
 		// mv.addObject("pagedetails", lb);
 		// mv.setViewName("searchResults");
 		return lb;
+	}
+
+	@RequestMapping(value = "/getAllRegionsAJAX", method = RequestMethod.GET)
+	public @ResponseBody List<region> getAllRegionsAJAX(HttpServletRequest request) {
+
+		JPARegionDAO regionDAO = new JPARegionDAO();
+		String city = request.getParameter("city");
+		List<region> listRegion = regionDAO.getAllRegions(city);
+		return listRegion;
+
+	}
+
+	@RequestMapping(value = "/validateAddressAJAX", method = RequestMethod.GET)
+	public @ResponseBody String validateAddress(HttpServletRequest request) {
+		ProcessBuilder p = new ProcessBuilder("curl", "-X", "POST", "https://api.easypost.com/v2/addresses", "-u",
+				"Dp8stkYIT525FJjgvk5bXg:", "-d", "verify_strict[]=delivery", "-d",
+				"address[street1]=" + request.getParameter("street1"), "-d",
+				"address[street2]=" + request.getParameter("street2"), "-d",
+				"address[city]=" + request.getParameter("city"), "-d",
+				"address[state]=" + request.getParameter("state"), "-d",
+				"address[country]=" + request.getParameter("country"), "-d",
+				"address[zip]=" + request.getParameter("zip"));
+
+		Process process;
+		try {
+			process = p.start();
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+			System.out.println("Addess is:");
+			String s;
+			int count = 0;
+
+			s = stdInput.readLine();
+			System.out.println("Response for address is: " + s);
+
+			if (process.isAlive()) {
+				process.destroy();
+			}
+
+			JSONObject jsonResponse = new JSONObject(s);
+
+			if (jsonResponse.has("error")) {
+
+				return "N";
+			} else {
+				return "Y";
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "N";
 	}
 
 }

@@ -752,6 +752,12 @@ public class MongoCrud {
 			objBooks = new JSONObject();
 			Volume.VolumeInfo volumeInfo = volume.getVolumeInfo();
 			s.setName(volumeInfo.getTitle());
+			if(volumeInfo.getAuthors()!=null)
+				s.setAuthor(volumeInfo.getAuthors().get(0));
+			else
+				s.setAuthor("");
+			s.setPublisher(volumeInfo.getPublisher());
+
 			searchlist.add(s);
 		}
 		return searchlist;
@@ -932,16 +938,16 @@ public class MongoCrud {
 		// }
 		// Pattern regexCategories = Pattern.compile(auth);
 		BasicDBObject query = new BasicDBObject();
-		if (auth != "ALL")
+		if (!auth.equals("") &&  auth!=null)
 			query = new BasicDBObject("authors", regexAuth);
 
-		if (publisher != "ALL")
+		if (!publisher.equals("") &&  publisher!=null)
 			query.put("publisher", regexPublisher);
 
-		if (desc != "ALL")
+		if (!desc.equals("") &&  desc!=null)
 			query.put("description", regexDesc);
 
-		if (desc != "ALL")
+		if (!title.equals("") &&  title!=null)
 			query.put("title", regexTitle);
 
 		System.out.println("query is:" + query);
