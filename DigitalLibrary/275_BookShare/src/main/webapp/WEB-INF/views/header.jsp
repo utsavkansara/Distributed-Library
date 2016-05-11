@@ -51,6 +51,12 @@
 }
 </style>
 
+<style type="text/css">
+	div#map_container{
+		width:550px;
+		height:350px;
+	}
+	</style> 
 
 
 <nav class="navbar navbar-default navbar-fixed-top"
@@ -160,6 +166,8 @@
 							<%-- <li><a href="${pageContext.request.contextPath}/logout">Signout</a></li> --%>
 
 							<li><a href="#" onclick="signout()">Signout</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/payment/${sessionScope.USERID}">Payment</a></li>
 
 						</ul></li>
 

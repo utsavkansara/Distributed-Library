@@ -101,10 +101,10 @@ public class RequestBookController {
   	  JPARequestBookDAO j= new JPARequestBookDAO();
   	  int bookID=bookId; 
   	  String isbn= (String) httpSession.getAttribute("isbn");
-  	List<subbook> checkBookPresent= j.getBooksubId(bookID);
-  	List<requestQueue>checkRequestQueue=j.getRequestQueue(isbn,userID);
+  	  List<subbook> checkBookPresent= j.getBooksubId(bookID);
+  	  List<requestQueue>checkRequestQueue=j.getRequestQueue(isbn,userID);
     // Apoorv Code  	
-	System.out.println("checkRequestQueue " + checkRequestQueue.size());
+	  System.out.println("checkRequestQueue " + checkRequestQueue.size());
 	
     	if(checkBookPresent.size()==0 && checkRequestQueue.size()==0)
     	{
@@ -132,12 +132,64 @@ public class RequestBookController {
         	
         	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
         	bookAvailDetails=j.getBookOrderDetails(bookID);
-        	
+        	String[] s = null;
+        	Date dTemp = new Date();
+        	String dateTempString="";
+        	TimeZone zone = TimeZone.getTimeZone("GMT-8");
+			  	DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+		  		format.setTimeZone(zone);
         	for(bookAvail b : bookAvailDetails)
         	{
         		
         		System.out.println("Sub Book Id: " + b.getSubId());
         		System.out.println("Start Date: " + b.getStart_date());
+        		
+        		s = null;
+        		 dTemp = new Date();
+        		
+        		if(b.getEnd_date() == null)
+        		{
+        				Calendar c = Calendar.getInstance();
+	      			  	c.setTime(dTemp); 
+	      			  	c.add(Calendar.DATE, 1); 
+	      			  	String output = format.format(c.getTime());
+	      			  	b.setSingle_start_date(output);
+        		}
+        		else
+        		{
+        			
+        		  		s = b.getEnd_date().split(",");
+            			try {
+            				dateTempString = s[0];
+            				if(dateTempString.contains("["))
+            					dateTempString = dateTempString.replace("[", "");
+            				
+            				if(dateTempString.contains("]"))
+            					dateTempString = dateTempString.replace("]", "");
+            				
+							dTemp = format.parse(dateTempString);
+						} catch (ParseException e) {
+							
+							e.printStackTrace();
+						}
+        			
+        			  
+        			  Calendar c = Calendar.getInstance();
+        			  c.setTime(dTemp); 
+        			  c.add(Calendar.DATE, 1); 
+        			  String output = format.format(c.getTime());
+        			  
+        			  try {
+							dTemp = format.parse(output);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        			  
+        			  b.setSingle_start_date(output);
+        		}
+        		
+        		
         		System.out.println("End Date: " + b.getEnd_date());
         	}
         	//httpSession.setAttribute("bookSearched", bookAvailDetails);
@@ -246,7 +298,6 @@ public class RequestBookController {
  public boolean checkUserPaymentDetails(int userID) {
 	 System.out.println("Enter the *****checkUserPaymentDetails  *****");
     JPARequestBookDAO i= new JPARequestBookDAO();
-  	int bookID=1;  // ***Once we get the book information we will send the book over here.
   	boolean userDetails=i.userPaymentDetails(userID);   // userDetails - true limit reached the count more than 2
   	//System.out.println("steeerrr"+str);
   	return userDetails;  
@@ -343,9 +394,19 @@ public class RequestBookController {
 				o = jd.getOrder(id);
 				System.out.println("orderID " + id + ", value " + value);
 
-				if(o.getCode().equals(value) && o.getActive() == 0)
-		   	 		return "Y";
-				else
+				if(o.getCode().equals(value) && o.getActive() == 0){
+		   	 		
+					SendEmail se = new SendEmail();
+					
+					JPAUserDAO jpU = new JPAUserDAO();
+					user u = jpU.getUser(o.getUserId());
+					String subject = "Order complete!";
+					String body="Dear "+u.getName()+"," + "\n\nYour order id: " +  id + " is complete. \nThanks! \nDigitalLibrary Team";
+					
+					se.sendOrderConf(u.getName(), id, u.getEmailId(), subject,body);
+					
+					return "Y";
+				}else
 					return "N";
 			}
 			else

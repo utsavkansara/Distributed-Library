@@ -439,6 +439,7 @@ public class MongoCrud {
 			cursor.close();
 
 		}
+		System.out.println("***"+ mTemp.getDescription());
 		return searchedBooks;
 	}
 
@@ -447,7 +448,8 @@ public class MongoCrud {
 		// java.util.List<MongoBook> searchedBooks = new
 		// java.util.ArrayList<MongoBook>();
 		dbCollection = db.getCollection("book");
-
+		int bookId= Integer.parseInt(searchString);
+		System.out.println("mongoSearch=====" + bookId);
 		BasicDBObject query = null;
 		query = new BasicDBObject("bookId", Integer.parseInt(searchString));
 		BasicDBObject image = null;
@@ -468,7 +470,7 @@ public class MongoCrud {
 				else
 					mTemp.setDescription("");
 
-				if (object.containsField("description"))
+				if (object.containsField("rating"))
 					mTemp.setRating(Double.parseDouble(object.get("rating").toString()));
 				else
 					mTemp.setRating(0);
@@ -530,6 +532,7 @@ public class MongoCrud {
 			cursor.close();
 
 		}
+	
 		return mTemp;
 	}
 

@@ -2,13 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page session="true"%>
+<%@ page import="edu.sjsu.digitalLibrary.prj.models.MongoBook" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%-- <jsp:include page="imports.jsp" /> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <body>
 
-
+<% MongoBook Book = (MongoBook)request.getAttribute("bookdetails"); 
+%>
 	<div id="wrapper">
 		<div id="page-content-wrapper" class="st-pusher">
 			<div class="st-pusher-after"></div>
@@ -37,8 +40,7 @@
 														<div class="book-shelf">
 															<div class="book-cover slider-book-cover bk-cover m-t-20">
 																<img class="img-responsive" alt=""
-																	src="../images/slider-images/01.png"
-																	data-echo="/resources/images/slider-images/01.png">
+																	src="<c:url value="/resources/images/slider-images/01.png" />">
 																<div class="fade"></div>
 															</div>
 															<!-- /.book-cover -->
@@ -89,8 +91,7 @@
 														<div class="book-shelf">
 															<div class="book-cover slider-book-cover bk-cover m-t-20">
 																<img class="img-responsive" alt=""
-																	src="<c:url value="/resources/images/blank.gif" />"
-																	data-echo="/resources/images/slider-images/01.png">
+																	src="<c:url value="/resources/images/blank.gif" />">
 																<div class="fade"></div>
 															</div>
 															<!-- /.book-cover -->
@@ -142,8 +143,7 @@
 														<div class="book-shelf">
 															<div class="book-cover slider-book-cover bk-cover m-t-20">
 																<img class="img-responsive" alt=""
-																	src="<c:url value="/resources/images/blank.gif" />"
-																	data-echo="/resources/images/slider-images/01.png">
+																	src="<c:url value="/resources/images/blank.gif" />">
 																<div class="fade"></div>
 															</div>
 															<!-- /.book-cover -->
@@ -265,25 +265,30 @@
 						</div>
 						<!-- /.divider -->
 
-						<!-- ============================================== BEST SELLER ============================================== -->
+						<!-- ============================================== Recommendation for user (if logged in) ============================================== -->
+						
+						<c:if test="${fn:length(recommendedForYou) gt 0}">
 						<section class="best-seller wow fadeInUp">
 						<div id="best-seller" class="module">
 							<div class="module-heading home-page-module-heading">
 								<h2 class="module-title home-page-module-title">
-									<span>Bestsellers</span>
+									<span>Books recommended for ${sessionScope.USERNAME}</span>
 								</h2>
 							</div>
 							<!-- /.module-heading -->
 							<div class="module-body">
 								<div class="row books full-width">
 									<div class="clearfix text-center">
-										<div class="col-md-3 col-sm-6">
+									
+									
+									<c:forEach items="${recommendedForYou}" var="recommendedBook">
+								        <div class="col-md-3 col-sm-6">
 											<div class="book">
 												<a href="single-book.html">
 													<div class="book-cover">
 														<img width="140" height="212" alt=""
-															src="<c:url value="/resources/images/book-covers/01.jpg" />"
-															data-echo="">
+															src="${recommendedBook.getImage()}"
+															>
 														<div class="tag">
 															<span>sale</span>
 														</div>
@@ -292,16 +297,79 @@
 												<div class="book-details clearfix">
 													<div class="book-description">
 														<h3 class="book-title">
-															<a href="single-book.html">The Brief Wondrous Life of
-																Oscar Wao</a>
+															<a href="${pageContext.request.contextPath}/showbook/${recommendedBook.getBookId()}">${recommendedBook.title}</a>
 														</h3>
 														<p class="book-subtitle">
-															by <a href="single-book.html"> Cormac McCarthy</a>
+															by <c:forEach var="authorValue" items="${recommendedBook.getAuthors()}">
+																	<a href="#">${authorValue}</a><br>
+															   </c:forEach>
 														</p>
 													</div>
 													<div class="text-center">
 														<div class="actions">
-															<span class="book-price price">$14.75</span>
+															<span class="book-price price">$0.0</span>
+															<div class="cart-action">
+<!-- 																<a class="add-to-cart" title="Add to Cart" -->
+<!-- 																	href="javascript:void(0);">Add to Cart</a> -->
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+								    </c:forEach>
+
+								</div>
+							</div>
+						</div>
+						</section>
+						</c:if>
+						<!-- ============================================== BEST SELLER : END ============================================== -->
+						
+						
+						<!-- ============================================== BEST SELLER (Trending books)============================================== -->
+						
+						<c:if test="${fn:length(recommendedForYou) gt 0}">
+						<section class="best-seller wow fadeInUp">
+						<div id="best-seller" class="module">
+							<div class="module-heading home-page-module-heading">
+								<h2 class="module-title home-page-module-title">
+									<span>Trending books</span>
+								</h2>
+							</div>
+							<!-- /.module-heading -->
+							<div class="module-body">
+								<div class="row books full-width">
+									<div class="clearfix text-center">
+									
+									
+									<c:forEach items="${recommendedForYou}" var="recommendedBook">
+								        <div class="col-md-3 col-sm-6">
+											<div class="book">
+												<a href="single-book.html">
+													<div class="book-cover">
+														<img width="140" height="212" alt=""
+															src="${recommendedBook.getImage()}"
+															>
+														<div class="tag">
+															<span>sale</span>
+														</div>
+													</div>
+												</a>
+												<div class="book-details clearfix">
+													<div class="book-description">
+														<h3 class="book-title">
+															<a href="${pageContext.request.contextPath}/showbook/${recommendedBook.getBookId()}">${recommendedBook.title}</a>
+														</h3>
+														<p class="book-subtitle">
+															by <c:forEach var="authorValue" items="${recommendedBook.getAuthors()}">
+																	<a href="#">${authorValue}</a><br>
+															   </c:forEach>
+														</p>
+													</div>
+													<div class="text-center">
+														<div class="actions">
+															<span class="book-price price">$0.0</span>
 															<div class="cart-action">
 																<a class="add-to-cart" title="Add to Cart"
 																	href="javascript:void(0);">Add to Cart</a>
@@ -311,142 +379,13 @@
 												</div>
 											</div>
 										</div>
-
-										<div class="col-md-3 col-sm-6">
-											<div class="book">
-												<a href="single-book.html"><div class="book-cover">
-														<img width="140" height="212" alt=""
-															src="<c:url value="/resources/images/blank.gif" />"
-															data-echo="/resources/images/book-covers/02.jpg">
-													</div></a>
-												<div class="book-details clearfix">
-													<div class="book-description">
-														<h3 class="book-title">
-															<a href="single-book.html">Doctor Sleep </a>
-														</h3>
-														<p class="book-subtitle">
-															by <a href="single-book.html"> Stephen King</a>
-														</p>
-													</div>
-													<div class="text-center">
-														<div class="actions">
-															<span class="book-price price">$14.45</span>
-															<div class="cart-action">
-																<a class="add-to-cart" title="Add to Cart"
-																	href="single-book.html">Add to Cart</a>
-
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-3 col-sm-6">
-											<div class="book">
-												<a href="single-book.html"><div class="book-cover">
-														<img width="140" height="212" alt=""
-															src="<c:url value="/resources/images/blank.gif" />"
-															data-echo="/resources/images/book-covers/03.jpg">
-													</div></a>
-												<div class="book-details clearfix">
-													<div class="book-description">
-														<h3 class="book-title">
-															<a href="single-book.html">Wonder Hardcover</a>
-														</h3>
-														<p class="book-subtitle">
-															by <a href="single-book.html"> R. J. Palacio</a>
-														</p>
-													</div>
-													<div class="text-center">
-														<div class="actions">
-															<span class="book-price price">$9.59</span>
-															<div class="cart-action">
-																<a class="add-to-cart" title="Add to Cart"
-																	href="single-book.html">Add to Cart</a>
-
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-3 col-sm-6">
-											<div class="book">
-												<a href="single-book.html"><div class="book-cover">
-														<img width="140" height="212" alt=""
-															src="<c:url value="/resources/images/blank.gif" />"
-															data-echo="/resources/images/book-covers/04.jpg">
-													</div></a>
-												<div class="book-details clearfix">
-													<div class="book-description">
-														<h3 class="book-title">
-															<a href="single-book.html">The Brief Wondrous Life of
-																Oscar</a>
-														</h3>
-														<p class="book-subtitle">
-															by <a href="single-book.html"> Hezy Theme</a>
-														</p>
-													</div>
-													<div class="text-center">
-														<div class="actions">
-															<span class="book-price price">$12.00</span>
-															<div class="cart-action">
-																<a class="add-to-cart" title="Add to Cart"
-																	href="single-book.html">Add to Cart</a>
-
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-3 col-sm-6">
-											<div class="book">
-												<a href="single-book.html"><div class="book-cover">
-														<img width="140" height="212" alt=""
-															src="<c:url value="/resources/images/blank.gif" />"
-															data-echo="/resources/images/book-covers/05.jpg">
-													</div></a>
-												<div class="book-details clearfix">
-													<div class="book-description">
-														<h3 class="book-title">
-															<a href="single-book.html">How Dogs Love Us: A
-																Neuroscientist and His Dog </a>
-														</h3>
-														<p class="book-subtitle">
-															by <a href="single-book.html"> Gregory Berns </a>
-														</p>
-													</div>
-													<div class="text-center">
-														<div class="actions">
-															<span class="book-price price">$7.95</span>
-															<div class="cart-action">
-																<a class="add-to-cart" title="Add to Cart"
-																	href="single-book.html">Add to Cart</a>
-
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<div
-										class="view-more-holder col-md-12 center-block text-center inner-top-xs">
-										<a role="button" class="btn btn-primary btn-uppercase"
-											href="#">view more </a>
-									</div>
-
-
+								    </c:forEach>
 
 								</div>
 							</div>
 						</div>
 						</section>
+						</c:if>
 						<!-- ============================================== BEST SELLER : END ============================================== -->
 					</div>
 					<!-- /.container -->
@@ -587,7 +526,6 @@
 											<div class="book-cover bk-cover product-book-cover">
 												<img class="img-responsive" alt=""
 													src="<c:url value="/resources/images/blank.gif" />"
-													data-echo="/resources/images/book-covers/06.jpg"
 													width="182" height="273">
 												<div class="fade"></div>
 											</div>
@@ -598,7 +536,6 @@
 											<div class="book-cover bk-cover product-book-cover">
 												<img class="img-responsive" alt=""
 													src="<c:url value="/resources/images/blank.gif" />"
-													data-echo="/resources/images/book-covers/07.jpg"
 													width="182" height="273">
 												<div class="fade"></div>
 											</div>
@@ -609,7 +546,6 @@
 											<div class="book-cover bk-cover product-book-cover">
 												<img class="img-responsive" alt=""
 													src="<c:url value="/resources/images/blank.gif" />"
-													data-echo="/resources/images/book-covers/08.jpg"
 													width="182" height="273">
 												<div class="fade"></div>
 											</div>
@@ -620,7 +556,6 @@
 											<div class="book-cover bk-cover product-book-cover">
 												<img class="img-responsive" alt=""
 													src="<c:url value="/resources/images/blank.gif" />"
-													data-echo="/resources/images/book-covers/09.jpg"
 													width="182" height="273">
 												<div class="fade"></div>
 											</div>
@@ -760,7 +695,7 @@
 												<div class='image'>
 													<img class="img-responsive"
 														src="<c:url value="/resources/images/blank.gif" />"
-														data-echo="/resources/images/product1.jpg" alt="">
+														alt="">
 												</div>
 												<!-- /.image -->
 												<div class='caption'>
@@ -782,7 +717,7 @@
 												<div class='image'>
 													<img class="img-responsive"
 														src="<c:url value="/resources/images/blank.gif" />"
-														data-echo="/resources/images/product2.jpg" alt="">
+														alt="">
 												</div>
 												<!-- /.image -->
 												<div class='caption'>
@@ -804,7 +739,7 @@
 												<div class='image'>
 													<img class="img-responsive"
 														src="<c:url value="/resources/images/blank.gif" />"
-														data-echo="/resources/images/product3.jpg" alt="">
+														 alt="">
 												</div>
 												<!-- /.image -->
 												<div class='caption'>
@@ -845,7 +780,7 @@
 										<div class="col-md-5 col-sm-5 blog-image">
 											<a href="#"><img
 												src="<c:url value="/resources/images/blank.gif" />"
-												data-echo="/resources/images/blog/1.jpg" alt=""
+												 alt=""
 												class="blog1" width="199" height="177"></a>
 										</div>
 										<div class="col-md-7 col-sm-7 blog-info">
@@ -871,7 +806,7 @@
 										<div class="col-md-5 col-sm-5 blog-image">
 											<a href="#"><img
 												src="<c:url value="/resources/images/blank.gif" />"
-												data-echo="/resources/images/blog/2.jpg" alt=""
+												 alt=""
 												class="blog2" width="199" height="177"></a>
 										</div>
 										<div class="col-md-7 col-sm-7 blog-info">
