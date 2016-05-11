@@ -326,8 +326,8 @@ try {
             		JPAUserDAO jp = new JPAUserDAO();
             		System.out.println("Welcome sir: " + l);
             		loginModel.setId(l);
-            		httpSession.setAttribute("USERID", loginModel.getId());
-            		user tempUser = jp.getUser(loginModel.getId());
+            		httpSession.setAttribute("USERID", l);
+            		user tempUser = jp.getUser(l);
             		httpSession.setAttribute("USERNAME", tempUser.getName());
             		sessionService.setHttpSession(httpSession);
             		System.out.println("my userid in session is" + httpSession.getAttribute("USERID"));
@@ -362,6 +362,7 @@ try {
             		
             		for(int i=0;i<userbasedRecommBookIds.size();i++){
             			MongoBook bookDetails =  bookTemp.searchBooksInDBByID(String.valueOf(userbasedRecommBookIds.get(i)));
+            			System.out.println("author:" + bookDetails.getAuthors().size());
             			recommendedForYou.add(bookDetails);
             		}
             		
