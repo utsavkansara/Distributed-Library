@@ -83,7 +83,7 @@ import edu.sjsu.digitalLibrary.prj.models.user;
 import edu.sjsu.digitalLibrary.prj.utils.CheckSession;
 import edu.sjsu.digitalLibrary.prj.utils.PlayPP;
 import edu.sjsu.digitalLibrary.prjservices.SearchServiceImpl;
-import edu.sjsu.digitalLibrary.prjservices.UserRecordService;
+
  
 @SuppressWarnings("unused")
 @Controller
