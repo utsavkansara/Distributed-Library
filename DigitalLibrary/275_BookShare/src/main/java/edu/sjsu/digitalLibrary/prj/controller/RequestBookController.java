@@ -132,16 +132,63 @@ public class RequestBookController {
         	
         	List<bookAvail> bookAvailDetails =new ArrayList<bookAvail>();
         	bookAvailDetails=j.getBookOrderDetails(bookID);
-        	
+        	String[] s = null;
+        	Date dTemp = new Date();
+        	String dateTempString="";
+        	TimeZone zone = TimeZone.getTimeZone("GMT-8");
+			  	DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+		  		format.setTimeZone(zone);
         	for(bookAvail b : bookAvailDetails)
         	{
         		
         		System.out.println("Sub Book Id: " + b.getSubId());
         		System.out.println("Start Date: " + b.getStart_date());
         		
-        		String[] s = b.getStart_date().split(",");
+        		s = null;
+        		 dTemp = new Date();
         		
-        		b.setSingle_start_date(s[0].substring(1).replaceAll("]", ""));
+        		if(b.getEnd_date() == null)
+        		{
+        				Calendar c = Calendar.getInstance();
+	      			  	c.setTime(dTemp); 
+	      			  	c.add(Calendar.DATE, 1); 
+	      			  	String output = format.format(c.getTime());
+	      			  	b.setSingle_start_date(output);
+        		}
+        		else
+        		{
+        			
+        		  		s = b.getEnd_date().split(",");
+            			try {
+            				dateTempString = s[0];
+            				if(dateTempString.contains("["))
+            					dateTempString = dateTempString.replace("[", "");
+            				
+            				if(dateTempString.contains("]"))
+            					dateTempString = dateTempString.replace("]", "");
+            				
+							dTemp = format.parse(dateTempString);
+						} catch (ParseException e) {
+							
+							e.printStackTrace();
+						}
+        			
+        			  
+        			  Calendar c = Calendar.getInstance();
+        			  c.setTime(dTemp); 
+        			  c.add(Calendar.DATE, 1); 
+        			  String output = format.format(c.getTime());
+        			  
+        			  try {
+							dTemp = format.parse(output);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        			  
+        			  b.setSingle_start_date(output);
+        		}
+        		
         		
         		System.out.println("End Date: " + b.getEnd_date());
         	}
