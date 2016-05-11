@@ -281,7 +281,7 @@ public class FirstController {
 				registerUser.setCategory(registrationModel.getCategory());
 
 				DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-				format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+				format.setTimeZone(TimeZone.getTimeZone("GMT-8"));
 
 				java.util.Date date = format.parse(registrationModel.getDob());
 
@@ -542,15 +542,15 @@ public class FirstController {
 	 */
 
 	@RequestMapping(value = "/editprofile", method = RequestMethod.POST)
-	public ModelAndView editProfile(@ModelAttribute("userdetails") user userModel1, BindingResult bindingResult,
+	public Object editProfile(@ModelAttribute("userdetails") user userModel1, BindingResult bindingResult,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		System.out.println("enter to  edit");
 		if (!sessionService.checkAuth()) {
-			System.out.println("chk class wrked!");
-			LoginSamplee login = new LoginSamplee();
+			
+    		System.out.println("Invalid session");
 
-			return new ModelAndView("login", "logindetails", login);
+			return "redirect:/";
 
 		}
 		try {
