@@ -16,7 +16,7 @@
 			</ul>
 
 			<div class="divider">
-			      <img class="img-responsive" src="<c:url value="assets/images/shadow.png" />" alt="">
+<%-- 			      <img class="img-responsive" src="<c:url value="assets/images/shadow.png" />" alt=""> --%>
 			</div><!-- /.divider -->
 		</div>
 		<div class="row inner-top-xs single-book-block">
@@ -34,7 +34,7 @@
                 <div class="addthis_native_toolbox inner-top-vs"></div>
 			</div>
 			<div class="list-unstyled link-block inner-top-50">
-				<a href="#customer-reviews" class='customer-review'><i class="icon fa fa-comment"></i><span class="customer-review">Customer Reviews(7) &darr; </span></a>
+<!-- 				<a href="#customer-reviews" class='customer-review'><i class="icon fa fa-comment"></i><span class="customer-review">Customer Reviews(7) &darr; </span></a> -->
 			</div>
 		</div>
 		<div class="col-md-7 col-sm-7">
@@ -59,7 +59,7 @@
 
 			<div class="row">
 				<div class="col-md-3">
-					<p class="single-book-price">$15.99</p>
+<!-- 					<p class="single-book-price">$15.99</p> -->
 				</div>
 				<div class="col-md-9">
 					<div class="add-cart-button btn-group">
@@ -86,275 +86,12 @@
 			</div>
 		</div>			    <!-- /.primary block -->
 
-				<div class="divider inner-top-xs">
-                    <img src="assets/images/shadow.png" class="img-responsive" alt=""/>
-				</div>
+			
 
-				 <div class="module wow fadeInUp">
-				    <div class="module-heading home-page-module-heading">
-				        <h2 class="module-title home-page-module-title"><span>Related Products</span></h2>
-				        <p class="see-all-link"><a href="#">See All</a> &rarr;</p>
-				    </div>
-				    <div class="module-body">
-					    <div class="row text-center">
-					     <!-- .related product -->
-					     <div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/01.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">The Brief Wondrous Life of  Oscar Wao</a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">Cormac McCarthy</a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$14.75</span>
+				 
+				
 
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/02.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">Doctor Sleep </a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">Stephen King</a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$14.45</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/03.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">Wonder Hardcover</a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">R. J. Palacio</a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$9.59</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/04.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">The Brief Wondrous  Life of Oscar</a></h3>
-				<p class="book-subtitle">by <a href="single-book.html"> Hezy Theme</a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$12.00</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/05.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">How Dogs Love Us: A  Neuroscientist and His Dog </a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">Gregory Berns </a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$7.95</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/10.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">From Kant to Husserl</a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">Cormac McCarthy </a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$101.00</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/11.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">Doctor Sleep</a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">Stephen King</a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$19.45</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="col-md-3 col-sm-4">
-	<div class="book">
-		<a href="single-book.html"><div class="book-cover">
-			<img width="140" height="212" alt="" src="assets/images/blank.gif" data-echo="assets/images/book-covers/12.jpg">
-		</div></a>
-		<div class="book-details clearfix">
-			<div class="book-description">
-				<h3 class="book-title"><a href="single-book.html">Wonder Hardcover</a></h3>
-				<p class="book-subtitle">by <a href="single-book.html">R.J.Palacio</a></p>
-			</div>
-			<div class="actions">
-				<span class="book-price price">$7.11</span>
-				<div class="cart-action"> 
-					<a class="add-to-cart" title="Add to Cart" href="javascript:void(0);">Add to Cart</a>       
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>					    <!-- /.related product -->
-					    </div>
-					</div>
-				 </div>
-
-				 <div class="divider inner-top-xs">
-                    <img src="assets/images/shadow.png" class="img-responsive" alt="" />
-				</div>
-
-				<div class="module wow fadeInUp" id="customer-reviews">
-				    <div class="module-heading home-page-module-heading margin-top-10">
-				        <h2 class="module-title home-page-module-title "><span>Customer Reviews(3)</span></h2>
-				        
-				    </div>
-				    <!-- .customer reviews -->
-					    <div class="module-body inner-top-xs" id="reviews">
-	<ul class="list-unstyled review-list">
-		<li class="box effect">
-			<section class="paper">
-				<div class="tape"></div>
-				<div class="head"></div>
-				<div class="row review-content">
-					<div class="col-md-2 col-sm-2">
-						<div class="customer-image-text"><span>hezy</span></div>
-
-					</div>
-					<div class="col-md-10 col-sm-10">
-						<h5 class="customer-name inner-right-xs">Hezy Theme</h5>
-						<p class="posted-date">21 Jun,2015 3:34 pm</p>
-						<p class="text">I have a jQuery diamond wipe animation plugin that works on much the same principles - just need to find the time to write it up and publish it.<br>
-							Again, the result of a designer making crazy demands, but it's pleasantly surprising how much  we can do today, where once all you could say was "I'm sorry.
-							, the web just doesn't work like that..."</p>
-							<a href="#" class="reply-review">Reply</a> 
-						</div>
-					</div>
-					<div class="bottom"></div>
-				</section>
-			</li>
-
-			<li>
-				<section class="paper">
-					<div class="tape"></div>
-					<div class="head"></div>
-					<div class="row review-content">
-						<div class="col-md-2 col-sm-2">
-							<div class="customer-image-text"><img src="assets/images/customers/1.jpg" alt=""></div>
-
-						</div>
-						<div class="col-md-10 col-sm-10">
-							<h5 class="customer-name inner-right-xs">Kris Morgan</h5>
-							<p class="posted-date">21 Jun,2015 3:34 pm</p>
-							<p class="text">I have a jQuery diamond wipe animation plugin that works on much the same principles - just need to find the time to write it up and publish it.
-								Again, the result of a designer making crazy demands, but it's pleasantly surprising how much we can do today, where once all you could say was "I'm sorry.
-								, the web just doesn't work like that..."</p>
-								<a href="#" class="reply-review">Reply</a> 
-							</div>
-						</div>
-						<div class="bottom"></div>
-
-					</section>
-				</li>
-
-
-				<li>
-					<section class="paper">
-						<div class="tape"></div>
-						<div class="head"></div>
-						<div class="row review-content">
-							<div class="col-md-2 col-sm-2">
-								<div class="customer-image-text"><img src="assets/images/customers/2.jpg" alt=""></div>
-
-							</div>
-							<div class="col-md-10 col-sm-10">
-								<h5 class="customer-name inner-right-xs">Arsen Cox</h5>
-								<p class="posted-date">21 Jun,2015 3:34 pm</p>
-								<p class="text">I have a jQuery diamond wipe animation plugin that works on much the same principles - just need to find the time to write it up and publish it.
-									Again, the result of a designer making crazy demands, but it's pleasantly surprising how much we can do today, where once all you could say was "I'm sorry.
-									, the web just doesn't work like that..."</p>
-									<a href="#" class="reply-review">Reply</a> 
-								</div>
-							</div>
-							<div class="bottom"></div>
-						</section>
-					</li>
-
-
-
-				</ul>
-			</div>					<!-- /.customer reviews -->
-				</div>
+			
 
 			</div><!-- /.col -->
 			<div class="col-md-3 col-md-pull-9">
@@ -382,34 +119,34 @@
 	</div>
 	<div class="sidebar-module-body clearfix">
 		<ul class="list-unstyled">
-			<li><a href="single-book.html">Art, Architecture &amp; Photography</a></li>
-			<li><a href="single-book.html">Bibles &amp; Bible Studies</a></li>
-			<li><a href="single-book.html">Biographies</a></li>
-			<li><a href="single-book.html">Business &amp; Money</a></li>
-			<li><a href="single-book.html">Children's Books</a></li>
-			<li><a href="single-book.html">Computing &amp; Internet</a></li>
-			<li><a href="single-book.html">Cookbooks, Food &amp; Wine</a></li>
-			<li><a href="single-book.html">Crafts &amp; Hobbies</a></li>
-			<li><a href="single-book.html">Diet &amp; Health</a></li>
-			<li><a href="single-book.html">Education &amp; Teaching</a></li>
-			<li><a href="single-book.html">Fiction &amp; Literature</a></li>
-			<li><a href="single-book.html">Graphic Novels</a></li>
-			<li><a href="single-book.html">History</a></li>
-			<li><a href="single-book.html">Home &amp; Garden</a></li>
-			<li><a href="single-book.html">Humor</a></li>
-			<li><a href="single-book.html">Libros en espa?ol</a></li>
-			<li><a href="single-book.html">Medicine</a></li>
-			<li><a href="single-book.html">Mystery &amp; Crime</a></li>
-			<li><a href="single-book.html">Nonfiction</a></li>
-			<li><a href="single-book.html">Politics &amp; Current Events</a></li>
-			<li><a href="single-book.html">Psychology</a></li>
-			<li><a href="single-book.html">Religion</a></li>
-			<li><a href="single-book.html">Reference</a></li>
-			<li><a href="single-book.html">Romance</a></li>
-			<li><a href="single-book.html">Science &amp; Nature</a></li>
-			<li><a href="single-book.html">Science Fiction &amp; Fantasy</a></li>
-			<li><a href="single-book.html">Self-Improvement</a></li>
-			<li><a href="single-book.html">Sports &amp; Adventure</a></li>
+			<li><a href="#">Art, Architecture &amp; Photography</a></li>
+			<li><a href="#">Bibles &amp; Bible Studies</a></li>
+			<li><a href="#">Biographies</a></li>
+			<li><a href="#">Business &amp; Money</a></li>
+			<li><a href="#">Children's Books</a></li>
+			<li><a href="#">Computing &amp; Internet</a></li>
+			<li><a href="#">Cookbooks, Food &amp; Wine</a></li>
+			<li><a href="#">Crafts &amp; Hobbies</a></li>
+			<li><a href="#">Diet &amp; Health</a></li>
+			<li><a href="#">Education &amp; Teaching</a></li>
+			<li><a href="#">Fiction &amp; Literature</a></li>
+			<li><a href="#">Graphic Novels</a></li>
+			<li><a href="#">History</a></li>
+			<li><a href="#">Home &amp; Garden</a></li>
+			<li><a href="#">Humor</a></li>
+			<li><a href="#">Libros en espa?ol</a></li>
+			<li><a href="#">Medicine</a></li>
+			<li><a href="#">Mystery &amp; Crime</a></li>
+			<li><a href="#">Nonfiction</a></li>
+			<li><a href="#">Politics &amp; Current Events</a></li>
+			<li><a href="#">Psychology</a></li>
+			<li><a href="#">Religion</a></li>
+			<li><a href="#">Reference</a></li>
+			<li><a href="#">Romance</a></li>
+			<li><a href="#">Science &amp; Nature</a></li>
+			<li><a href="#">Science Fiction &amp; Fantasy</a></li>
+			<li><a href="#">Self-Improvement</a></li>
+			<li><a href="#">Sports &amp; Adventure</a></li>
 
 		</ul>
 	</div>
@@ -422,21 +159,21 @@
 	</div>
 	<div class="sidebar-module-body clearfix">
 		<ul class="list-unstyled">
-			<li><a href="single-book.html">Art, Architecture &amp; Photography</a></li>
-			<li><a href="single-book.html">Bibles &amp; Bible Studies</a></li>
-			<li><a href="single-book.html">Biographies</a></li>
-			<li><a href="single-book.html">Business &amp; Money</a></li>
-			<li><a href="single-book.html">Children's Books</a></li>
-			<li><a href="single-book.html">Computing &amp; Internet</a></li>
-			<li><a href="single-book.html">Cookbooks, Food &amp; Wine</a></li>
-			<li><a href="single-book.html">Crafts &amp; Hobbies</a></li>
-			<li><a href="single-book.html">Diet &amp; Health</a></li>
-			<li><a href="single-book.html">Education &amp; Teaching</a></li>
-			<li><a href="single-book.html">Fiction &amp; Literature</a></li>
-			<li><a href="single-book.html">Graphic Novels</a></li>
-			<li><a href="single-book.html">History</a></li>
-			<li><a href="single-book.html">Home &amp; Garden</a></li>
-			<li><a href="single-book.html">Humor</a></li>
+			<li><a href="#">Art, Architecture &amp; Photography</a></li>
+			<li><a href="#">Bibles &amp; Bible Studies</a></li>
+			<li><a href="#">Biographies</a></li>
+			<li><a href="#">Business &amp; Money</a></li>
+			<li><a href="#">Children's Books</a></li>
+			<li><a href="#">Computing &amp; Internet</a></li>
+			<li><a href="#">Cookbooks, Food &amp; Wine</a></li>
+			<li><a href="#">Crafts &amp; Hobbies</a></li>
+			<li><a href="#">Diet &amp; Health</a></li>
+			<li><a href="#">Education &amp; Teaching</a></li>
+			<li><a href="#">Fiction &amp; Literature</a></li>
+			<li><a href="#">Graphic Novels</a></li>
+			<li><a href="#">History</a></li>
+			<li><a href="#">Home &amp; Garden</a></li>
+			<li><a href="#">Humor</a></li>
 
 		</ul>
 	</div>
