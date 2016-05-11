@@ -762,7 +762,8 @@
 						</div>
 					</div>
 					</section>
-
+	<div id="map">
+								</div>
 					<!-- ============================================== FROM BLOG ============================================== -->
 					<section class="blog wow fadeInUp">
 					<div id="blog" class="module container">
