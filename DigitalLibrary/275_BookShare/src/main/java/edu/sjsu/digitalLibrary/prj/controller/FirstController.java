@@ -59,7 +59,6 @@ import edu.sjsu.digitalLibrary.prj.models.RegistrationJsonPojo;
 import edu.sjsu.digitalLibrary.prj.models.address;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
-import edu.sjsu.digitalLibrary.prj.models.order;
 import edu.sjsu.digitalLibrary.prj.models.region;
 import edu.sjsu.digitalLibrary.prj.models.searchSuggetion;
 import edu.sjsu.digitalLibrary.prj.models.user;
@@ -282,7 +281,7 @@ public class FirstController {
 				registerUser.setCategory(registrationModel.getCategory());
 
 				DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-				format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+				format.setTimeZone(TimeZone.getTimeZone("GMT-8"));
 
 				java.util.Date date = format.parse(registrationModel.getDob());
 
@@ -344,7 +343,11 @@ public class FirstController {
 				Message message = new MimeMessage(session);
 				message.setFrom(new InternetAddress("noreplydigitalbookshare@gmail.com"));
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(registrationModel.getEmailId()));
-				message.setSubject("Recover your password");
+				message.setSubject("Your Digital Library account activation code");
+				
+				message.setText("Dear "+username+"," +
+    					"\n\nHere is Your Activation code : " + activation_code+
+    					"\n\nRegards,\n\nDigital Book Share Team\n\nPLEASE DO NOT REPLY TO THIS EMAIL");
 
 				message.setText("Dear " + username + "," + "\n\nHere is Your Activation code : " + activation_code);
 
@@ -539,15 +542,15 @@ public class FirstController {
 	 */
 
 	@RequestMapping(value = "/editprofile", method = RequestMethod.POST)
-	public ModelAndView editProfile(@ModelAttribute("userdetails") user userModel1, BindingResult bindingResult,
+	public Object editProfile(@ModelAttribute("userdetails") user userModel1, BindingResult bindingResult,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		System.out.println("enter to  edit");
 		if (!sessionService.checkAuth()) {
-			System.out.println("chk class wrked!");
-			LoginSamplee login = new LoginSamplee();
+			
+    		System.out.println("Invalid session");
 
-			return new ModelAndView("login", "logindetails", login);
+			return "redirect:/";
 
 		}
 		try {
@@ -624,63 +627,79 @@ public class FirstController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView initM() {
 
-		// Apoorv code for the getting the data if user is not logged In.
-		JPALandingPageDAO j = new JPALandingPageDAO();
-		List<MongoBook> customerChoice = new ArrayList<MongoBook>();
-        customerChoice=j.getCustomerChoice();
-		System.out.println("=======================Customer choice==============");
-		for(int i=0 ; i<=customerChoice.size()-1; i++)
-		{
-			System.out.println("enter" + i);
-			System.out.println(customerChoice.get(i).getBookId());
-			System.out.println(customerChoice.get(i).getLanguage());
-			System.out.println(customerChoice.get(i).getTitle());
-		}
-		//System.out.println(customerChoice);
-		System.out.println("after the customer choice method");
-		System.out.println("Landing Page");
-		InventoryScheduler n = new InventoryScheduler();
-		n.checkUserCreditScore();
 		ModelAndView mv = new ModelAndView();
-		// getting data
-		landingPage = new LandingPage();
-		JPALandingPageDAO obj = new JPALandingPageDAO();
-		// landingPage.setBooks(obj.getBooks());
-		landingPage.setCategories(obj.getCategories());
 		
 	/////check for recommendations
 		
-		if(null != httpSession.getAttribute("USERID")){
+		if(null == httpSession.getAttribute("USERID")){
 			
-			int userid = (int)httpSession.getAttribute("USERID");
-			JPABookDAO bookTemp = new JPABookDAO();			
-			JPAUserDAO jp = new JPAUserDAO();
-			user tempUser = jp.getUser(userid);
 			
-			int orderCount = bookTemp.getOrderCount((int)httpSession.getAttribute("USERID"));
-			String[] categories = {"Call centers"};
-			System.out.println("categories "+tempUser.getName());
-			System.out.println("categories "+categories[0]);
+			// Apoorv code for the getting the data if user is not logged In.
+			JPALandingPageDAO j = new JPALandingPageDAO();
+			List<MongoBook> customerChoice = new ArrayList<MongoBook>();
+	        customerChoice=j.getCustomerChoice();
+			System.out.println("=======================Customer choice==============");
+			for(int i=0 ; i<=customerChoice.size()-1; i++)
+			{
+				System.out.println("enter" + i);
+				System.out.println(customerChoice.get(i).getBookId());
+				System.out.println(customerChoice.get(i).getLanguage());
+				System.out.println(customerChoice.get(i).getTitle());
+			}
 			
-			List<MongoBook> recommCatBooks = new ArrayList<MongoBook>();
+			httpSession.setAttribute("recommendedForYou", customerChoice);
 			
-			recommCatBooks = bookTemp.searchTop5CategoryBooks(categories);
-			System.out.println("recommendedForYou list size "+recommCatBooks.size());
-			mv.addObject("pagedetails", landingPage);
-			httpSession.setAttribute("recommendedForYou", recommCatBooks);
-			mv.setViewName("home");
-			return mv;
+			
+		
 			
 		}else{
 			
-
+			InventoryScheduler n = new InventoryScheduler();
+			n.checkUserCreditScore();
+			JPAUserDAO jp = new JPAUserDAO();
 			
-			System.out.println(landingPage);
-			mv.addObject("pagedetails", landingPage);
-			mv.setViewName("home");
-			return mv;
+		/////check for recommendations
+			
+			int userid = (int) httpSession.getAttribute("USERID");
+			
+			user tempUser = jp.getUser(userid);
+    		
+    		
+    		JPABookDAO bookTemp = new JPABookDAO();
+    		
+    		int orderCount = bookTemp.getOrderCount(userid);
+    		
+    		//get Top recommendations from user category based on rating
+    		String[] categories = tempUser.getCategory().split(",");
+    		
+    		List<MongoBook> recommCatBooks = new ArrayList<MongoBook>();
+    		
+    		recommCatBooks = bookTemp.searchTop5CategoryBooks(categories);
+    		
+    		
+    		List<Integer> userbasedRecommBookIds = new ArrayList<Integer>();
+    		if(orderCount != 0)
+    		{
+    			//get Apache Mahout recommendations based on previous selections
+    			
+    			userbasedRecommBookIds = bookTemp.getMahoutRecomm(980);
+    			
+    		}
+    		
+    		List<MongoBook> recommendedForUser = new ArrayList<MongoBook>();
+    		
+    		for(int i=0;i<userbasedRecommBookIds.size();i++){
+    			MongoBook bookDetails =  bookTemp.searchBooksInDBByID(String.valueOf(userbasedRecommBookIds.get(i)));
+    			recommendedForUser.add(bookDetails);
+    		}
+    		
+    		httpSession.setAttribute("recommendedForUser", recommendedForUser);
+    		httpSession.setAttribute("recommCatBooks", recommCatBooks);
+			
 			
 		}
+		mv.setViewName("home");
+		return mv;
 		
 	}
 
