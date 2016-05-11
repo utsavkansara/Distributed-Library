@@ -357,6 +357,13 @@ try {
             			
             		}
             		
+            		List<MongoBook> recommendedForYou = new ArrayList<MongoBook>();
+            		
+            		for(int i=0;i<userbasedRecommBookIds.size();i++){
+            			MongoBook bookDetails =  bookTemp.searchBooksInDBByID(String.valueOf(userbasedRecommBookIds.get(i)));
+            			recommendedForYou.add(bookDetails);
+            		}
+            		
 //            		for(int m : userbasedRecommBookIds)
 //            		{
 //            			System.out.println("User based recomm:" + m);
