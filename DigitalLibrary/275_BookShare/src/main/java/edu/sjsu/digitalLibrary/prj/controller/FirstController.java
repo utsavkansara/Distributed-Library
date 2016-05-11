@@ -348,7 +348,11 @@ public class FirstController {
 				Message message = new MimeMessage(session);
 				message.setFrom(new InternetAddress("noreplydigitalbookshare@gmail.com"));
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(registrationModel.getEmailId()));
-				message.setSubject("Recover your password");
+				message.setSubject("Your Digital Library account activation code");
+				
+				message.setText("Dear "+username+"," +
+    					"\n\nHere is Your Activation code : " + activation_code+
+    					"\n\nRegards,\n\nDigital Book Share Team\n\nPLEASE DO NOT REPLY TO THIS EMAIL");
 
 				message.setText("Dear " + username + "," + "\n\nHere is Your Activation code : " + activation_code);
 

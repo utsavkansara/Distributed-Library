@@ -11,7 +11,7 @@
 			
 			<input name="message" id="message" value="${message}" type="hidden">
 			<input name="id" id="id" value="${id}" type="hidden">
-			<input name="flag" id="flag" value="${flag}" type="hidden">
+			<input name="flag" id="flag" value="${Flag}" type="hidden">
 			<hr>
 			<!-- Text input-->
 			<div class="form-group">
@@ -51,12 +51,16 @@ $(document).ready(function() {
 	var flag = document.getElementById('flag').value;
 	var msg = document.getElementById('message').value;
 	var z = document.getElementById('id').value;
-
+	alert(flag);
+	alert(msg);
 	if(x != null && x!="" && flag=="S"){
 		alert(msg);
 		document.location.href="/Distributed-Library";
 	}
 	else if(x != null && x!="" && flag=="E"){
+		alert(msg);
+		document.location.href="/Distributed-Library";
+	}else if(msg != null && msg!="" && (flag=="" || flag == null)){
 		alert(msg);
 		document.location.href="/Distributed-Library";
 	}
