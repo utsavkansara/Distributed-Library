@@ -812,8 +812,8 @@ List<utilityClass> listRC = new ArrayList<utilityClass>();
 		session.beginTransaction();
 		
 		Query query = session.createSQLQuery("select * from payment where userId=:sCode").addEntity(payment.class).setParameter("sCode", userId);
-		
-		if(query.list().size()!=0){
+		System.out.println("q size: " + query.list().size());
+		if(query.list().size() > 0){
 			result = (payment)query.list().get(0);
 		}
 		
