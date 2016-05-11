@@ -133,7 +133,7 @@
 		<div class="module inner-top-50 wow fadeInUp" id="best-seller">
 			<div class="module-heading  home-page-module-heading">
 				<h2 class="module-title home-page-module-title">
-					<span>Best Sellers</span>
+					<span>Advance Search Results</span>
 				</h2>
 			</div>
 			<!-- /.module-heading -->
@@ -210,13 +210,8 @@
 					'							</p>'+
 					'						</div>'+
 					'						<div class=\'actions\'>'+
-					'							<span class=\'book-price price\'>'+data[i].isbn+'</span>'+
+					'							<span class=\'book-price price\'>ISBN: '+data[i].isbn+'</span>'+
 					''+
-					'							<div class=\'cart-action\'>'+
-					'								<a class=\'add-to-cart\' title=\'Add to Cart\''+
-					'									href=\'javascript:void(0);\'>Add to Cart</a>'+
-					''+
-					'							</div>'+
 					'						</div>'+
 					'					</div>'+
 					'				</div>'+

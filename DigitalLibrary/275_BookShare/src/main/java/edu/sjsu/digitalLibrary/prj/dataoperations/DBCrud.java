@@ -79,6 +79,13 @@ public class DBCrud<T> {
 			System.out.println("in crud order " + id);
 		}
 
+
+		else if(obj instanceof payment){
+			System.out.println("in jpa of payment");
+			payment s = (payment)obj;
+			id = s.getId();
+			System.out.println("in crud payment " + id);
+		}
 		session.close();
 		s.close();
 
@@ -796,6 +803,7 @@ public class DBCrud<T> {
 	}
 	
 	@SuppressWarnings("unchecked")
+
 	public float getTotalOrderQueue() {
 		float totalQueue = 0;
 		s = SessionFactoryObj.getSessionFactory();
@@ -822,4 +830,23 @@ public class DBCrud<T> {
 		System.out.println("Count found----" + results);
 		return results;
 	}
+	public payment getPaymentDetails(int userId) {
+		payment result = new payment();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		
+		Query query = session.createSQLQuery("select * from payment where userId=:sCode").addEntity(payment.class).setParameter("sCode", userId);
+		System.out.println("q size: " + query.list().size());
+		if(query.list().size() > 0){
+			result = (payment)query.list().get(0);
+		}
+		
+		session.close();
+		s.close();		
+		
+		return result;
+	}
+	
+	
 }

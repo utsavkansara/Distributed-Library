@@ -264,155 +264,20 @@
 
 					<li class="hidden-sm"><a
 						href="${pageContext.request.contextPath}/openAdvancedSearch">Advanced
-							Search</a></li>
-					<li class="active"><a href="home.html">Books</a></li>
-					<li class="dropdown yamm-fw"><a href="#"
-						class="dropdown-toggle" data-hover="dropdown"
-						data-toggle="dropdown">Textbooks</a>
-						<ul class="dropdown-menu">
-							<li>
-								<div class="yamm-content">
-									<div class="row">
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">History</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Indian Independence</a></li>
-													<li><a href="books.html">French Revolution</a></li>
-													<li><a href="books.html">Industrial Revolution</a></li>
-													<li><a href="books.html">Vietnam War</a></li>
-													<li><a href="books.html">World War I &amp; II</a></li>
-													<li><a href="books.html">Operation Desert Storm</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">Science</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Applied Science</a></li>
-													<li><a href="books.html">Astronomy</a></li>
-													<li><a href="books.html">Biotechnology</a></li>
-													<li><a href="books.html">Chemistry</a></li>
-													<li><a href="books.html">Cognitive Science</a></li>
-													<li><a href="books.html">Cosmology</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">History</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Indian Independence</a></li>
-													<li><a href="books.html">French Revolution</a></li>
-													<li><a href="books.html">Industrial Revolution</a></li>
-													<li><a href="books.html">Vietnam War</a></li>
-													<li><a href="books.html">World War I &amp; II</a></li>
-													<li><a href="books.html">Operation Desert Storm</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">Science</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Applied Science</a></li>
-													<li><a href="books.html">Astronomy</a></li>
-													<li><a href="books.html">Biotechnology</a></li>
-													<li><a href="books.html">Chemistry</a></li>
-													<li><a href="books.html">Cognitive Science</a></li>
-													<li><a href="books.html">Cosmology</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">History</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Indian Independence</a></li>
-													<li><a href="books.html">French Revolution</a></li>
-													<li><a href="books.html">Industrial Revolution</a></li>
-													<li><a href="books.html">Vietnam War</a></li>
-													<li><a href="books.html">World War I &amp; II</a></li>
-													<li><a href="books.html">Operation Desert Storm</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-
-										<div class="col-md-2 col-sm-6">
-											<div class="section">
-												<h5 class="title">Science</h5>
-												<ul class="links list-unstyled">
-													<li><a href="books.html">Applied Science</a></li>
-													<li><a href="books.html">Astronomy</a></li>
-													<li><a href="books.html">Biotechnology</a></li>
-													<li><a href="books.html">Chemistry</a></li>
-													<li><a href="books.html">Cognitive Science</a></li>
-													<li><a href="books.html">Cosmology</a></li>
-												</ul>
-											</div>
-											<!-- /.section -->
-										</div>
-										<!-- /.col -->
-									</div>
-								</div>
-
-							</li>
-						</ul></li>
-					<li><a href="books.html">Nook Books</a></li>
-					<li class="hidden-sm"><a href="books.html">Audiobooks</a></li>
-					<li class="hidden-sm hidden-md"><a href="books.html">Magazines</a></li>
-					<li class="hidden-sm hidden-md"><a href="books.html">Movies</a></li>
-					<li><a href="books.html">Music</a></li>
-					<li class="dropdown navbar-right"><a href="#"
-						class="dropdown-toggle" data-hover="dropdown"
-						data-toggle="dropdown">Pages</a>
-						<ul class="dropdown-menu">
-							<li>
-								<div class="yamm-content">
-									<div class="row">
-										<div class="col-md-6 col-sm-6">
-											<ul class="links">
-												<li><a href="home.html">Home</a></li>
-												<li><a href="home-2.html">Home II</a></li>
-												<li><a href="books.html">Books</a></li>
-												<li><a href="books-2.html">Books II</a></li>
-												<li><a href="single-book.html">Book</a></li>
-												<li><a href="blog.html">Blog</a></li>
-												<li><a href="blog-post.html">Blog Post</a></li>
-											</ul>
-										</div>
-										<div class="col-md-6 col-sm-6">
-											<ul class="links">
-												<li><a href="about.html">About</a></li>
-												<li><a href="contact.html">Contact</a></li>
-												<li><a href="contact-2.html">Contact II</a></li>
-												<li><a href="categories.html">Categories</a></li>
-												<li><a href="magazine.html">Magazine</a></li>
-												<li><a href="all-brands.html">All Brands</a></li>
-												<li><a href="error.html">Error</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</li>
-
-
-						</ul></li>
+							Search</a></li>		
+							
+					<c:if test="${sessionScope.USERID != null}">
+						<li class="hidden-sm"><a
+						href="${pageContext.request.contextPath}/payment/${sessionScope.USERID}"> Payment Details </a></li>	
+						
+						<li class="hidden-sm"><a
+						href="${pageContext.request.contextPath}/showuser/${sessionScope.USERID}"> My Profile </a></li>
+						
+						<li class="hidden-sm"><a
+						href="${pageContext.request.contextPath}/showOrders/${sessionScope.USERID}"> My Orders </a></li>	
+					</c:if>			
+					
+					
 				</ul>
 				<!-- /.nav -->
 			</div>
@@ -604,20 +469,6 @@ class="navbar navbar-bookshop navbar-static-top" role="navigation"> -->
 									<label for="category" class="sr-only">Category</label>
 
 									<div id="categoryDiv">
-
-										<!-- <select id="category" name="category" multiple="multiple" style="width:346px; height:38px;">
-
-<option value="1">Option 1</option>
-
-<option value="2">Option 2</option>
-
-<option value="3">Option 3</option>
-
-<option value="4">Option 4</option>
-
-<option value="5">Option 5</option>
-
-</select> -->
 
 									</div>
 
@@ -1449,10 +1300,16 @@ required="true"> -->
 			complete : function(data) {
 
 				location.reload(true);
+				
+				document.location.href="/Distributed-Library";
 
 			}
+		
+		
 
 		})
+		
+		event.PreventDefault();
 
 	}
 

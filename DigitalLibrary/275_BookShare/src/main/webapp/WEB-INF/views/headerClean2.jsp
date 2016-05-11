@@ -98,64 +98,7 @@
 
 	<!-- Collect the nav links, forms, and other content for toggling -->
 
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-		
-		<ul class="nav navbar-nav navbar-right">
-
-			<%--       <li><a href="${pageContext.request.contextPath}/advanceSearch">Advance Search</a></li> --%>
-
-			<%--       <li><a href="${pageContext.request.contextPath}/bookhome">Sell</a></li> --%>
-
-
-
-
-
-			<c:choose>
-
-				<c:when
-					test="${sessionScope.USERNAME != undefined && sessionScope.USERNAME != null  && sessionScope.USERNAME != '' }">
-
-					<%-- <c:when test="${sessionScope.USERNAME != ''}"> --%>
-
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-expanded="false">Hi
-
-							${sessionScope.USERNAME} <span class="caret"></span>
-
-					</a>
-
-						<ul class="dropdown-menu" role="menu">
-
-							<li><a
-								href="${pageContext.request.contextPath}/showuser/${sessionScope.USERID}">Profile</a></li>
-
-							<%--     <li><a href="${pageContext.request.contextPath}/transactions">View Transactions</a></li> --%>
-
-							<%--     <li><a href="${pageContext.request.contextPath}/requestbook">Make a request</a></li> --%>
-
-							<%-- <li><a href="${pageContext.request.contextPath}/logout">Signout</a></li> --%>
-
-							<li><a href="#" onclick="signout()">Signout</a></li>
-
-						</ul></li>
-
-				</c:when>
-
-
-
-				<c:otherwise>
-
-					<li><a data-toggle="modal" data-target="#modal-login-big"
-						href="#">Login/Register</a></li>
-
-				</c:otherwise>
-
-			</c:choose>
-
-		</ul>
-
-	</div>
+	
 
 </div>
 

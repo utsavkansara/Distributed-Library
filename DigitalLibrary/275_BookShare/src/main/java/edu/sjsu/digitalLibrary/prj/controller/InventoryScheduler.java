@@ -27,7 +27,6 @@ public class InventoryScheduler {
 	
 	//commneted for testing purpose
 	
-@Scheduled(fixedDelay = 5000000)
 	// @Scheduled(fixedRate = 5000)
 /*	public void schedulerServiceMethod() {
 		try {
