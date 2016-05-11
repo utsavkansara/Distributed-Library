@@ -225,13 +225,13 @@
 							
 					<c:if test="${sessionScope.USERID != null}">
 						<li class="hidden-sm"><a
-						href="${pageContext.request.contextPath}/payments"> Payment Details </a></li>	
+						href="${pageContext.request.contextPath}/payment/${sessionScope.USERID}"> Payment Details </a></li>	
 						
 						<li class="hidden-sm"><a
-						href="${pageContext.request.contextPath}/payments"> My Profile </a></li>
+						href="${pageContext.request.contextPath}/showuser/${sessionScope.USERID}"> My Profile </a></li>
 						
 						<li class="hidden-sm"><a
-						href="${pageContext.request.contextPath}/payments"> My Orders </a></li>	
+						href="${pageContext.request.contextPath}/showOrders/${sessionScope.USERID}"> My Orders </a></li>	
 					</c:if>			
 					
 					
