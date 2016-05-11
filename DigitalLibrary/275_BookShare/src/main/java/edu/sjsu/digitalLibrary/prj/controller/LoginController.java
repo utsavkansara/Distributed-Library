@@ -80,6 +80,8 @@ public class LoginController {
     	JPATokenDAO tokenDao = new JPATokenDAO();
     	tokenModel = tokenDao.getTokenData(userId);
     	
+    	System.out.println("id :"+tokenModel.getId());
+    	
     	ModelAndView model = new ModelAndView();
     	
     	Date date = new Date();
@@ -90,7 +92,7 @@ public class LoginController {
         System.out.println(new java.sql.Timestamp(currentDate.getTime()));
         System.out.println(tokenModel.getExpiry_date());
         
-        if(new java.sql.Timestamp(currentDate.getTime()).after(tokenModel.getExpiry_date())){
+        if(tokenModel==null || new java.sql.Timestamp(currentDate.getTime()).after(tokenModel.getExpiry_date())){
         	model.addObject("Flag", "E");
         	model.addObject("message", "This link is expired !!");
         	model.addObject("resetpassword", tokenModel);
@@ -99,6 +101,7 @@ public class LoginController {
           	return model;
         }
     	
+        
     	model.addObject("id", tokenModel.getId());
     	model.addObject("resetpassword", tokenModel);
       	model.setViewName("resetPassword"); 

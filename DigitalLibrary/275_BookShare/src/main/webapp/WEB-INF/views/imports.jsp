@@ -35,7 +35,7 @@
 	<script src="<c:url value="/resources/js/perfect-scrollbar.min.js" />"></script>
 	<script src="<c:url value="/resources/js/wow.min.js" />"></script>
 	<script src="<c:url value="/resources/js/scripts.js" />"></script>
-	<script src="<c:url value="/resources/js/jquery.card.js" />"></script>
+
 <!-- 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> -->
 	
 		<script src="<c:url value="/resources/EasyAutocomplete/jquery.easy-autocomplete.js" />"></script>

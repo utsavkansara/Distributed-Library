@@ -4,6 +4,7 @@
 
 <body>
 
+
 <div class="container-fluid">
 
 	<form class="form-horizontal col-md-offset-4 col-md-4" id="userhome" action="signup" method="post" commandName="userdetails">

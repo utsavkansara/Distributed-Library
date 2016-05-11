@@ -90,5 +90,15 @@ public class JPARequestQueueDAO {
 		return null;
 	}
 
-
+	public List<requestQueue> getRequestQueueTop10(){
+		try {
+			DBCrud<requestQueue> db = new DBCrud<requestQueue>();
+			return db.getRequestQueueTop10();
+		}
+		catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+	}
 }

@@ -43,10 +43,12 @@ import redis.clients.jedis.Jedis;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import edu.sjsu.digitalLibrary.prj.dao.JPAAddressDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPAAdminDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPABookDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPACategoryDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPALandingPageDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPARegionDAO;
+import edu.sjsu.digitalLibrary.prj.dao.JPARequestQueueDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPASearchDAO;
 import edu.sjsu.digitalLibrary.prj.dao.JPAUserDAO;
 import edu.sjsu.digitalLibrary.prj.jsonview.Views;
@@ -57,6 +59,7 @@ import edu.sjsu.digitalLibrary.prj.models.MongoBook;
 import edu.sjsu.digitalLibrary.prj.models.Registration;
 import edu.sjsu.digitalLibrary.prj.models.RegistrationJsonPojo;
 import edu.sjsu.digitalLibrary.prj.models.address;
+import edu.sjsu.digitalLibrary.prj.models.adminHome;
 import edu.sjsu.digitalLibrary.prj.models.category;
 import edu.sjsu.digitalLibrary.prj.models.internalCategory;
 import edu.sjsu.digitalLibrary.prj.models.region;
@@ -592,6 +595,15 @@ public class FirstController {
 			x.setActive(1);
 			x.setCategory(userModel1.getCategory());
 			x.setDob(userModel1.getDob());
+			String dobStr= userModel1.getDobStr();
+			DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+			format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+
+			java.util.Date date = format.parse(dobStr);
+
+			java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+			x.setDob(sqlDate);
+
 			x.setName(userModel1.getName());
 			x.setPassword(userModel1.getPassword());
 			x.setPhone(userModel1.getPhone());
@@ -985,6 +997,26 @@ public class FirstController {
 			e.printStackTrace();
 		}
 		return "N";
+	}
+	
+	@RequestMapping(value = "/openAdmin", method = RequestMethod.GET)
+	public ModelAndView openAdmin() {
+
+		System.out.println("in admin ");
+		adminHome aH = new adminHome();
+		JPAAdminDAO adminDAO = new JPAAdminDAO();
+		JPARequestQueueDAO reqQueueDAO = new JPARequestQueueDAO();
+		aH.setTotalUser(adminDAO.getTotalUsers());
+		aH.setTotalBooks(adminDAO.getTotalBooks());
+		aH.setTotalRequests(adminDAO.getTotalQueue());
+		aH.setTotalOrders(adminDAO.getTotalOrders());
+		System.out.println((adminDAO.getTotalQueueProcessed()/adminDAO.getTotalQueue())*100);
+		aH.setTotalQueuePer((adminDAO.getTotalQueueProcessed()/adminDAO.getTotalQueue())*100);
+		aH.setListQueue(reqQueueDAO.getRequestQueueTop10());
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("adminDetails", aH);
+		mv.setViewName("adminHome");
+		return mv;
 	}
 
 }
