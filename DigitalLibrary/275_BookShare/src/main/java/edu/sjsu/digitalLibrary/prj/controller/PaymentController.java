@@ -145,6 +145,9 @@ public class PaymentController {
     @RequestMapping(value = "/payment",method = RequestMethod.POST)
     public Object paymentPost(@ModelAttribute("paymentDetails")payment
     		payment, HttpServletRequest request) {
+    	
+    	System.out.println("hereeee");
+    	
     	if (!sessionService.checkAuth()) {
 			
     		System.out.println("Invalid session");
@@ -171,7 +174,8 @@ public class PaymentController {
 	    	py.setCardType(payment.getCardType());
 	    	py.setCvv(payment.getCvv());
 	    	py.setName(payment.getName());
-	    	py.setValidTill(payment.getValidTill());
+	    	py.setValidTillMonth(payment.getValidTillMonth());
+	    	py.setValidTillYear(payment.getValidTillYear());
 	    	py.setActive(1);
 	    	jpPy.update(py);
 	    	mv.addObject("paymentDetails",py);

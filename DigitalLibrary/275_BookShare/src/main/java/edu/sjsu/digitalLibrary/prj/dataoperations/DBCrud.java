@@ -813,7 +813,10 @@ List<utilityClass> listRC = new ArrayList<utilityClass>();
 		
 		Query query = session.createSQLQuery("select * from payment where userId=:sCode").addEntity(payment.class).setParameter("sCode", userId);
 		
-		result = (payment)query.list().get(0);
+		if(query.list().size()!=0){
+			result = (payment)query.list().get(0);
+		}
+		
 		session.close();
 		s.close();		
 		
