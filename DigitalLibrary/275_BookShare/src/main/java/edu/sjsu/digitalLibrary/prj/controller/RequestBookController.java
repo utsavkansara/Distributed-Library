@@ -317,7 +317,18 @@ public class RequestBookController {
  
  @RequestMapping(value = "/showOrders/{userId}",method = RequestMethod.GET)
  public Object userOrders(@PathVariable int userId) throws ParseException {
-	  System.out.println("enter user order");
+	  
+	 if(userId != Integer.parseInt(httpSession.getAttribute("USERID").toString())){
+ 		System.out.println("Don't try to sneek other's record: ");
+ 		return "redirect:/homepage";
+ 	}
+	 if (!sessionService.checkAuth()) {
+			
+			return "redirect:/homepage";
+
+		}
+	 
+	 	System.out.println("enter user order");
 	  JPARequestBookDAO i= new JPARequestBookDAO();
 	  
 	  List<order> userOrders = i.getAllUserOrders(userId);
