@@ -27,7 +27,6 @@ public class InventoryScheduler {
 	
 	//commneted for testing purpose
 	
-@Scheduled(fixedDelay = 5000000)
 	// @Scheduled(fixedRate = 5000)
 /*	public void schedulerServiceMethod() {
 		try {
@@ -118,6 +117,54 @@ public class InventoryScheduler {
 		 }
 	}
 	*/
+@Scheduled(fixedDelay = 50000)
+public void schedulerServiceMethod() {
+	try {
+		System.out.println("Inventory every 5 seconds. Current time is :: " + new Date());
+		JPARequestQueueDAO reqDao = new JPARequestQueueDAO();
+		JPARegionDAO regionDao = new JPARegionDAO();
+		List<requestQueueCount> requestQueue = new ArrayList<requestQueueCount>();
+		requestQueue.addAll(reqDao.getRequestdetails());
+		for (requestQueueCount entry : requestQueue) {
+			CreateSignature c = new CreateSignature();
+			float bookPrice = 15;//getAmazonPurchasePrice(c.signURL(String.valueOf(entry.getIsbn())).toString());
+			if (bookPrice > 0) {
+				region rObj = regionDao.getRegion(entry.getRegionId());
+				int no_of_book = entry.getCountReq() / 4;
+				float total_cost = no_of_book * bookPrice;
+				if (total_cost < rObj.getFunding_region()) {
+					rObj.setFunding_region((int) (rObj.getFunding_region() - total_cost));
+					reqDao.updateRegion(rObj);
+					for (int i = 0; i < no_of_book; i++) {
+						subbook subbook = new subbook();
+						subbook.setActive(1);
+						subbook.setParentId(reqDao.getBookIdByISBN(entry.getIsbn()));
+						subbook.setRegionId(entry.getRegionId());
+						reqDao.insertSubBook(subbook);
+						List<requestQueue> listreqQueue = reqDao.getRequestQueueInfoByISBNRegion(entry.getIsbn(),
+								entry.getRegionId());
+						int len = 0;
+						if(listreqQueue.size()<4){
+							len = listreqQueue.size();
+						}
+						else{
+							len = 4;
+						}
+						for (int j = 0; j < len; j++) {
+							requestQueue rq = listreqQueue.get(j);
+							rq.setIsOrdered(1);
+							reqDao.update(rq);
+						}
+					}
+
+				}
+			}
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
+
 	///comments for testing purpose
 	//@Scheduled(fixedDelay = 5000)	
 	public void checkUserCreditScore()

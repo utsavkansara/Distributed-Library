@@ -31,10 +31,7 @@ public class Tokens implements Serializable {
 	@Column(name = "password")
 	private String newPassword;
 
-
-
-
-
+	
 	public int getId() {
 		return id;
 	}

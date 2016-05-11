@@ -157,17 +157,27 @@ public class PaymentController {
 		}
     	int userId = Integer.parseInt(httpSession.getAttribute("USERID").toString());
     	
+    	System.out.println("payment name:" + payment.getName());
+    	System.out.println("payment crd no:" + payment.getCardNumber());
+    	System.out.println("payment name:" + payment.getCardType());
+    	System.out.println("payment name:" + payment.getCvv());
+    	System.out.println("payment name:" + payment.getUserId());
+    	System.out.println("payment name:" + payment.getId());
+    	System.out.println("payment name:" + payment.getValidTillMonth());
+    	System.out.println("payment name:" + payment.getValidTillYear());
     	
     	ModelAndView mv = new ModelAndView();
     	JPAPaymentDAO jpPy = new JPAPaymentDAO();
     	payment py = jpPy.get(userId);
     	
     	
-    	if(py == null)
+    	if(py.getId() == 0)
     	{
-    		//py = new payment();
+    		System.out.println("All null:" );
+    		payment.setUserId(userId);
+    		payment.setActive(1);
     		jpPy.insert(payment);
-    		mv.addObject("paymentDetails",payment);
+    		//mv.addObject("paymentDetails",payment);
     	}
     	else{
 	    	py.setCardNumber(payment.getCardNumber());
@@ -176,17 +186,18 @@ public class PaymentController {
 	    	py.setName(payment.getName());
 	    	py.setValidTillMonth(payment.getValidTillMonth());
 	    	py.setValidTillYear(payment.getValidTillYear());
+	    	py.setUserId(userId);
 	    	py.setActive(1);
 	    	jpPy.update(py);
-	    	mv.addObject("paymentDetails",py);
+	    	//mv.addObject("paymentDetails",py);
     	}
     	
     	
         
         
-        mv.setViewName("payment");
+    	return "redirect:/";
         
-       return mv;
+      
     }
     
     
