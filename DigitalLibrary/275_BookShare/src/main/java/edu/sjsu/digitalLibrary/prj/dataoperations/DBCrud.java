@@ -687,6 +687,18 @@ public class DBCrud<T> {
 		return results;
 	}
 	
+	public List<region> getAllRegionsAJAX(){
+		List<region> r = new ArrayList<region>();
+		s = SessionFactoryObj.getSessionFactory();
+		session = s.openSession();
+		session.beginTransaction();
+		Query query = session.createSQLQuery("select * from BookShareDB.region where active='1'").addEntity(region.class);
+		r = (List<region>)query.list();
+		session.close();
+		s.close();
+		return r;
+	}
+	
 
 	
 	public void updateUserCredit(int userId,float credit)
