@@ -119,10 +119,11 @@ public class InventoryScheduler {
 	}
 	*/
 	///comments for testing purpose
-	//@Scheduled(fixedDelay = 5000)	
+	@Scheduled(fixedDelay = 5000)	
 	public void checkUserCreditScore()
 	{
 		JPAUserDAO u = new JPAUserDAO();
+
 		System.out.println("enter the checkUserCreditScore ");
 		u.updateUserCreditScore();
 	    System.out.println("Updated User creditScore");

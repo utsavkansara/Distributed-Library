@@ -654,8 +654,8 @@ public class FirstController {
 			
 		}else{
 			
-			InventoryScheduler n = new InventoryScheduler();
-			n.checkUserCreditScore();
+			//InventoryScheduler n = new InventoryScheduler();
+			//n.checkUserCreditScore();
 			JPAUserDAO jp = new JPAUserDAO();
 			
 		/////check for recommendations

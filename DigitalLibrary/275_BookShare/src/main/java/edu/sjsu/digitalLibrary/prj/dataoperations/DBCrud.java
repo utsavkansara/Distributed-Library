@@ -737,7 +737,7 @@ List<Object[]> results = (List<Object[]>) query.list();
 List<utilityClass> listRC = new ArrayList<utilityClass>();
 		if(results.size()!=0)
 			{
-				
+				System.out.println("enter the fr loop");
 			
 				for (Object[] result : results) {
 					System.out.println(result[0]);
