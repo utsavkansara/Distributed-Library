@@ -394,9 +394,19 @@ public class RequestBookController {
 				o = jd.getOrder(id);
 				System.out.println("orderID " + id + ", value " + value);
 
-				if(o.getCode().equals(value) && o.getActive() == 0)
-		   	 		return "Y";
-				else
+				if(o.getCode().equals(value) && o.getActive() == 0){
+		   	 		
+					SendEmail se = new SendEmail();
+					
+					JPAUserDAO jpU = new JPAUserDAO();
+					user u = jpU.getUser(o.getUserId());
+					String subject = "Order complete!";
+					String body="Dear "+u.getName()+"," + "\n\nYour order id: " +  id + " is complete. \nThanks! \nDigitalLibrary Team";
+					
+					se.sendOrderConf(u.getName(), id, u.getEmailId(), subject,body);
+					
+					return "Y";
+				}else
 					return "N";
 			}
 			else
