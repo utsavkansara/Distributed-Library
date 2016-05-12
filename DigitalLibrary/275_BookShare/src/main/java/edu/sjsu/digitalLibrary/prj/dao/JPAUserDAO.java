@@ -89,6 +89,13 @@ public class JPAUserDAO {
 			DBCrud<order> db = new DBCrud<order>();
 			DBCrud<user> dbor = new DBCrud<user>();
 		     tempOrderCredit=db.getAllBookDelay();
+		     if(tempOrderCredit==null)
+		     {
+		    	System.out.println("No such delay");
+		     }
+		     
+		     else{
+		     
 		     for(utilityClass t:tempOrderCredit)
 		     {
 		    	 System.out.println("updateUserCreditScore +  userid + day delay");
@@ -99,8 +106,8 @@ public class JPAUserDAO {
 		    	 int credit=j;
 		    	 System.out.println("credit"  + credit);
 		    	 dbor.updateUserCredit(uId,credit);
+		      }
 		     }
-			
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

@@ -353,7 +353,7 @@ try {
             		{
             			//get Apache Mahout recommendations based on previous selections
             			
-            			userbasedRecommBookIds = bookTemp.getMahoutRecomm(980);
+            			userbasedRecommBookIds = bookTemp.getMahoutRecomm(l);
             			
             		}
             		

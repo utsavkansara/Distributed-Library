@@ -680,20 +680,25 @@ public class DBCrud<T> {
 		session = s.openSession();
 		session.beginTransaction();
 
-		Query query = session.createSQLQuery(
-				"SELECT userid,DATEDIFF(endDate,CURDATE()) as days from BookShareDB.order where active=1 and DATEDIFF(endDate,CURDATE()) < 0");
-		List<Object[]> results = (List<Object[]>) query.list();
-		List<utilityClass> listRC = new ArrayList<utilityClass>();
-		if (results.size() != 0) {
 
-			for (Object[] result : results) {
-				System.out.println(result[0]);
-				System.out.println(result[1]);
-				utilityClass rc = new utilityClass();
-				rc.setVar1(result[0].toString());
-				rc.setVar3(result[1].toString());
-				listRC.add(rc);
-			}
+Query query = session.createSQLQuery("SELECT userid,DATEDIFF(endDate,CURDATE()) as days from BookShareDB.order where active=1 and DATEDIFF(endDate,CURDATE()) < 0");
+List<Object[]> results = (List<Object[]>) query.list();
+List<utilityClass> listRC = new ArrayList<utilityClass>();
+		if(results.size()!=0)
+			{
+				System.out.println("enter the fr loop");
+			
+				for (Object[] result : results) {
+					System.out.println(result[0]);
+					System.out.println(result[1]);
+					utilityClass rc = new utilityClass();
+					rc.setVar1(result[0].toString());
+					rc.setVar3(result[1].toString());
+					listRC.add(rc);
+			                  }
+				
+
+		
 
 		} else {
 			listRC = null;
